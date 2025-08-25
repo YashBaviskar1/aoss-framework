@@ -11,44 +11,98 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [lastResponse, setLastResponse] = useState(null);
+  const [lastQuery, setLastQuery] = useState("");
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
+
     const userMsg = { role: "user", content: input };
     setMessages((prev) => [...prev, userMsg]);
-    setInput("");
+    setLastQuery(input); // store query
+    setInput(""); // clear box
     setLoading(true);
 
-    // Fake agent response simulating backend structure
-    setTimeout(() => {
-      const response = {
-        plan: [
-          "sudo apt install htop",
-          "htop"
-        ],
-        results: [
-          {
-            command: "sudo apt install htop",
-            status: "✅ Success",
-            stdout: "Reading package lists...\nBuilding dependency tree..."
-          },
-          {
-            command: "htop",
-            status: "❌ Failed",
-            stdout: "Terminal cannot launch htop properly."
-          }
-        ]
-      };
+    try {
+      const res = await fetch("http://127.0.0.1:8000/get_commands", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ question: input, execute: true }),
+      });
 
-      const agentMsg = {
-        role: "agent",
-        content: response
-      };
+      if (!res.ok) {
+        throw new Error(`Server returned ${res.status}`);
+      }
 
+      const data = await res.json();
+
+      const agentMsg = { role: "agent", content: data };
       setMessages((prev) => [...prev, agentMsg]);
-      setLastResponse(response);
+
+      // Show plan in summary (with pending status)
+      setLastResponse({
+        results: data.plan.map((cmd) => ({
+          command: cmd,
+          status: "⏳ Pending",
+          stdout: "",
+        })),
+      });
+    } catch (err) {
+      console.error(err);
+      const agentMsg = { role: "agent", content: { plan: [] } };
+      setMessages((prev) => [...prev, agentMsg]);
+
+      setLastResponse({
+        results: [
+          { command: "Error", status: "❌ Failed", stdout: err.message },
+        ],
+      });
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
+  };
+
+  // 🔹 Executes commands from backend (/agent)
+  const Execute = async () => {
+    if (!lastQuery) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch("http://127.0.0.1:8000/agent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ question: lastQuery, execute: true }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server returned ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      // Add execution result to chat
+      const agentMsg = { role: "agent", content: data };
+      setMessages((prev) => [...prev, agentMsg]);
+
+      // Update Execution Summary with real results
+      setLastResponse({
+        results: data.results,
+      });
+    } catch (err) {
+      console.error(err);
+      setLastResponse({
+        results: [
+          { command: "Error", status: "❌ Failed", stdout: err.message },
+        ],
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -60,7 +114,9 @@ export default function Chat() {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Cpu className="w-5 h-5 text-primary-content" />
           </div>
-          <h1 className="font-semibold text-base-content">AOSS Orchestrator Chat</h1>
+          <h1 className="font-semibold text-base-content">
+            AOSS Orchestrator Chat
+          </h1>
         </div>
 
         {/* Chat Messages */}
@@ -122,7 +178,7 @@ export default function Chat() {
             <input
               type="text"
               className="flex-1 input input-bordered rounded-full text-white placeholder-white"
-              placeholder='e.g. "Scale web servers to handle 5x load"'
+              placeholder='e.g. "Install Python"'
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
@@ -145,7 +201,7 @@ export default function Chat() {
             <tr>
               <th className="border px-4 py-2 text-left">Execution Series</th>
               <th className="border px-4 py-2 text-left">Status</th>
-              <th className="border px-4 py-2 text-left">Server Logging </th>
+              <th className="border px-4 py-2 text-left">Server Logging</th>
             </tr>
           </thead>
           <tbody>
@@ -155,6 +211,11 @@ export default function Chat() {
                 <td className="border px-4 py-2">{res.status}</td>
                 <td className="border px-4 py-2">
                   <pre className="whitespace-pre-wrap">{res.stdout}</pre>
+                  {res.stderr && (
+                    <pre className="whitespace-pre-wrap text-red-400">
+                      {res.stderr}
+                    </pre>
+                  )}
                 </td>
               </tr>
             ))}
@@ -167,6 +228,13 @@ export default function Chat() {
             )}
           </tbody>
         </table>
+
+        {/* Execute Button */}
+        <div className="mt-4 flex gap-3">
+          <button className="btn btn-primary" onClick={Execute}>
+            Execute
+          </button>
+        </div>
       </div>
     </div>
   );
