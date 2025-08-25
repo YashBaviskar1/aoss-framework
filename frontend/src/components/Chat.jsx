@@ -18,8 +18,8 @@ export default function Chat() {
 
     const userMsg = { role: "user", content: input };
     setMessages((prev) => [...prev, userMsg]);
-    setLastQuery(input); // store query
-    setInput(""); // clear box
+    setLastQuery(input);
+    setInput("");
     setLoading(true);
 
     try {
@@ -32,16 +32,11 @@ export default function Chat() {
         body: JSON.stringify({ question: input, execute: true }),
       });
 
-      if (!res.ok) {
-        throw new Error(`Server returned ${res.status}`);
-      }
-
+      if (!res.ok) throw new Error(`Server returned ${res.status}`);
       const data = await res.json();
 
-      const agentMsg = { role: "agent", content: data };
-      setMessages((prev) => [...prev, agentMsg]);
+      setMessages((prev) => [...prev, { role: "agent", content: data }]);
 
-      // Show plan in summary (with pending status)
       setLastResponse({
         results: data.plan.map((cmd) => ({
           command: cmd,
@@ -51,9 +46,7 @@ export default function Chat() {
       });
     } catch (err) {
       console.error(err);
-      const agentMsg = { role: "agent", content: { plan: [] } };
-      setMessages((prev) => [...prev, agentMsg]);
-
+      setMessages((prev) => [...prev, { role: "agent", content: { plan: [] } }]);
       setLastResponse({
         results: [
           { command: "Error", status: "❌ Failed", stdout: err.message },
@@ -64,11 +57,10 @@ export default function Chat() {
     }
   };
 
-  // 🔹 Executes commands from backend (/agent)
   const Execute = async () => {
     if (!lastQuery) return;
-
     setLoading(true);
+
     try {
       const res = await fetch("http://127.0.0.1:8000/agent", {
         method: "POST",
@@ -79,20 +71,11 @@ export default function Chat() {
         body: JSON.stringify({ question: lastQuery, execute: true }),
       });
 
-      if (!res.ok) {
-        throw new Error(`Server returned ${res.status}`);
-      }
-
+      if (!res.ok) throw new Error(`Server returned ${res.status}`);
       const data = await res.json();
 
-      // Add execution result to chat
-      const agentMsg = { role: "agent", content: data };
-      setMessages((prev) => [...prev, agentMsg]);
-
-      // Update Execution Summary with real results
-      setLastResponse({
-        results: data.results,
-      });
+      setMessages((prev) => [...prev, { role: "agent", content: data }]);
+      setLastResponse({ results: data.results });
     } catch (err) {
       console.error(err);
       setLastResponse({
@@ -107,7 +90,7 @@ export default function Chat() {
 
   return (
     <div className="min-h-screen bg-base-100 flex">
-      {/* Left: Chat Window */}
+      {/* Left: Chat Section */}
       <div className="w-1/2 flex flex-col border-r border-base-300">
         {/* Header */}
         <div className="bg-base-200 border-b border-base-300 px-6 py-4 flex items-center space-x-3">
@@ -119,8 +102,8 @@ export default function Chat() {
           </h1>
         </div>
 
-        {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+        {/* Chat Messages: scrollable */}
+        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4" style={{ maxHeight: "calc(100vh - 160px)" }}>
           {messages.map((msg, idx) => (
             <div
               key={idx}
@@ -172,7 +155,7 @@ export default function Chat() {
           )}
         </div>
 
-        {/* Input Box */}
+        {/* Input */}
         <div className="border-t border-base-300 bg-base-100 px-6 py-4">
           <div className="flex items-center gap-3">
             <input
@@ -193,41 +176,45 @@ export default function Chat() {
         </div>
       </div>
 
-      {/* Right: Output Table */}
-      <div className="w-1/2 p-6 overflow-y-auto">
+      {/* Right: Execution Summary Table */}
+      <div className="w-1/2 p-6 flex flex-col">
         <h2 className="text-lg font-semibold mb-4">Execution Summary</h2>
-        <table className="table-auto w-full border border-base-300">
-          <thead className="bg-base-200">
-            <tr>
-              <th className="border px-4 py-2 text-left">Execution Series</th>
-              <th className="border px-4 py-2 text-left">Status</th>
-              <th className="border px-4 py-2 text-left">Server Logging</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lastResponse?.results?.map((res, idx) => (
-              <tr key={idx} className="odd:bg-base-100 even:bg-base-200">
-                <td className="border px-4 py-2 font-mono">{res.command}</td>
-                <td className="border px-4 py-2">{res.status}</td>
-                <td className="border px-4 py-2">
-                  <pre className="whitespace-pre-wrap">{res.stdout}</pre>
-                  {res.stderr && (
-                    <pre className="whitespace-pre-wrap text-red-400">
-                      {res.stderr}
-                    </pre>
-                  )}
-                </td>
-              </tr>
-            ))}
-            {!lastResponse && (
+
+        {/* Table: scrollable */}
+        <div className="flex-1 overflow-y-auto" style={{ maxHeight: "calc(100vh - 140px)" }}>
+          <table className="table-auto w-full border border-base-300">
+            <thead className="bg-base-200">
               <tr>
-                <td className="border px-4 py-2 text-center" colSpan={3}>
-                  No commands executed yet.
-                </td>
+                <th className="border px-4 py-2 text-left">Execution Series</th>
+                <th className="border px-4 py-2 text-left">Status</th>
+                <th className="border px-4 py-2 text-left">Server Logging</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {lastResponse?.results?.map((res, idx) => (
+                <tr key={idx} className="odd:bg-base-100 even:bg-base-200">
+                  <td className="border px-4 py-2 font-mono">{res.command}</td>
+                  <td className="border px-4 py-2">{res.status}</td>
+                  <td className="border px-4 py-2">
+                    <pre className="whitespace-pre-wrap">{res.stdout}</pre>
+                    {res.stderr && (
+                      <pre className="whitespace-pre-wrap text-red-400">
+                        {res.stderr}
+                      </pre>
+                    )}
+                  </td>
+                </tr>
+              ))}
+              {!lastResponse && (
+                <tr>
+                  <td className="border px-4 py-2 text-center" colSpan={3}>
+                    No commands executed yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {/* Execute Button */}
         <div className="mt-4 flex gap-3">
