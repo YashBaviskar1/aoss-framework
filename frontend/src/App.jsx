@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import About from "./components/About";
 import Docs from "./components/Docs";
 import LandingPage from "./components/LandingPage";
+import Chat from "./components/Chat";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/docs" element={<Docs />} />
+          <Route path = "/chat" element = {<Chat/>}/>
         </Routes>
       </div>
     </Router>

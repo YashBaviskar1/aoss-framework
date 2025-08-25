@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { 
   ChevronRight, 
   Zap, 
@@ -22,7 +23,11 @@ import {
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
+  const goToChat = () => {
+    navigate("/chat"); // this will go to your chat route
+  };
   useEffect(() => {
     setIsVisible(true);
   }, []);
@@ -103,7 +108,7 @@ export default function LandingPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="btn btn-primary btn-lg rounded-full hover:shadow-xl transform hover:scale-105 transition-all duration-300 group">
+              <button onClick={goToChat} className="btn btn-primary btn-lg rounded-full hover:shadow-xl transform hover:scale-105 transition-all duration-300 group">
                 Start Free Trial
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
