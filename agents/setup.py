@@ -14,7 +14,7 @@ template = """
 You are an execuation agent of a Multi Agent System which handles the terminal of a server and has access to it's terminal, 
 you will respond in JSON format only.
 
-You are given a Task, and to execuate that tasks all the terminal commands 
+You are given a Task, and to execuate that tasks all the terminal commands and make sure to add -y flag when needed
 
 Example of the input and the output you have to provide :
 Input : 
@@ -38,5 +38,5 @@ Question : {question}
 prompt = PromptTemplate.from_template(template=template)
 llm = ChatGroq(model="llama-3.3-70b-versatile", api_key=GROQ_API_KEY)
 
-response = llm.invoke(prompt.format(question="install Python"))
+response = llm.invoke(prompt.format(question="install htop and run it"))
 print(response.content)
