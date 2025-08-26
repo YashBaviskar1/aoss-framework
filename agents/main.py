@@ -5,12 +5,23 @@ import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
-
+from fastapi.middleware.cors import CORSMiddleware
 # Load API key
 load_dotenv()
-
+origins = [
+    "http://localhost:3000",   # CRA default
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",   # Vite default
+    "http://127.0.0.1:5173",
+]
 app = FastAPI(title="Multi-Agent Execution API")
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # or ["*"] to allow all (not recommended for prod)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Init LLM (Groq)
 llm = ChatGroq(
     model="llama-3.3-70b-versatile",
@@ -59,12 +70,14 @@ import subprocess
 def run_commands(commands):
     results = []
     for cmd in commands:
-        print(f"\n💻 Running: {cmd}")  # Show in your FastAPI console
+        print(f"\n💻 Running: {cmd}")  
         result = subprocess.run(
             ["wsl", "bash", "-c", f"cd /home/ygb && {cmd}"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
+            encoding="utf-8",
+            errors="replace"
         )
         
         # Mirror output live to your console
@@ -122,4 +135,22 @@ def agent(query: Query):
     else:
         return {
             "plan": commands
+        }
+
+@app.post("/get_commands")
+def get_commands(query: Query):
+    # Ask LLM to convert query -> commands
+    response = llm.invoke(prompt.format(question=query.question))
+
+    try:
+        # Parse JSON from LLM response
+        commands = eval(response.content)["Commands"]
+        print(commands)
+        return {
+            "plan": commands
+        }
+    except Exception:
+        return {
+            "error": "Model returned invalid JSON",
+            "raw_response": response.content
         }
