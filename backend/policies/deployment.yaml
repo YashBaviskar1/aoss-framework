@@ -1,0 +1,20 @@
+deployment_policies:
+  - id: DEP-001
+    rule: "No deployments on weekends/after hours without explicit approval"
+    severity: medium
+    category: deployment
+
+  - id: DEP-002
+    rule: "All deployments must use version-controlled artifacts"
+    severity: high
+    category: deployment
+
+  - id: DEP-003
+    rule: "Rollback plan must exist before deployment"
+    severity: high
+    category: deployment
+
+  - id: DEP-004
+    rule: "Canary/rolling deployments required in production"
+    severity: critical
+    category: deployment

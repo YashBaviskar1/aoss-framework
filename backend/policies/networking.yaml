@@ -1,0 +1,15 @@
+networking_policies:
+  - id: NET-001
+    rule: "All internal services must use TLS for communication"
+    severity: critical
+    category: networking
+
+  - id: NET-002
+    rule: "No direct public access to private subnets"
+    severity: high
+    category: networking
+
+  - id: NET-003
+    rule: "Routing changes must preserve high-availability"
+    severity: medium
+    category: networking

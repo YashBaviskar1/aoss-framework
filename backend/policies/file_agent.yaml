@@ -1,0 +1,13 @@
+allowed:
+  - ls
+  - pwd
+  - cat
+  - head
+  - tail
+  - echo
+forbidden:
+  - rm
+  - mv /
+  - shutdown
+  - reboot
+  - apt-get remove

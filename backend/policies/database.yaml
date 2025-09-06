@@ -1,0 +1,20 @@
+database_policies:
+  - id: DB-001
+    rule: "All DB connections must go through TLS"
+    severity: critical
+    category: database
+
+  - id: DB-002
+    rule: "Backups must be encrypted and retained for at least 30 days"
+    severity: high
+    category: database
+
+  - id: DB-003
+    rule: "No direct writes allowed on production DB without audit log"
+    severity: high
+    category: database
+
+  - id: DB-004
+    rule: "DB credentials must come from secrets manager, not plain text"
+    severity: critical
+    category: database
