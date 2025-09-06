@@ -1,0 +1,15 @@
+FROM python:3.12.2-slim
+
+WORKDIR /app
+
+# Copy monitoring scripts into container
+COPY ./monitoring ./monitoring
+
+# Install Python dependencies
+RUN pip install --no-cache-dir psutil
+
+# Set default monitoring interval
+ENV MONITOR_INTERVAL=60
+
+# Run the runner module
+CMD ["python", "-m", "monitoring.runner"]

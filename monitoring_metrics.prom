@@ -1,0 +1,4 @@
+system_cpu_percent 7.8
+system_memory_percent 76.0
+system_disk_percent 40.8
+service_status{name="unknown"} 0
