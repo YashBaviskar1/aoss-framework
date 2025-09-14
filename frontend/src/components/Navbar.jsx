@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import UserMenu from "./UserMenu";
 
-function Navbar() {
+function Navbar({ toggleDocs }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -17,7 +19,7 @@ function Navbar() {
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
       isScrolled 
-        ? "bg-base-300 backdrop-blur-md shadow-sm border-b border-base-300/30" 
+        ? "bg-base-100/90 backdrop-blur-md shadow-sm border-b border-base-300/30" 
         : "bg-transparent backdrop-blur-md"
     }`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
@@ -40,7 +42,7 @@ function Navbar() {
         </div>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex space-x-8 font-medium">
+        <ul className="hidden md:flex space-x-8 font-medium items-center">
           <li>
             <Link 
               to="/" 
@@ -66,8 +68,8 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <Link 
-              to="/docs" 
+            <button 
+              onClick={toggleDocs}
               className={`transition-colors duration-200 hover:text-primary px-3 py-2 rounded-lg ${
                 isScrolled 
                   ? "text-base-content/80 hover:bg-base-200/50" 
@@ -75,7 +77,7 @@ function Navbar() {
               }`}
             >
               Docs
-            </Link>
+            </button>
           </li>
           <li>
             <Link 
@@ -90,16 +92,21 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <Link 
-              to="/login" 
-              className={`btn btn-sm rounded-full px-6 transition-all duration-300 ${
-                isScrolled 
-                  ? "btn-primary" 
-                  : "bg-white/20 text-white backdrop-blur-sm border-white/20 hover:bg-white/30"
-              }`}
-            >
-              Login
-            </Link>
+            <SignedOut>
+              <Link 
+                to="/login" 
+                className={`btn btn-sm rounded-full px-6 transition-all duration-300 ${
+                  isScrolled 
+                    ? "btn-primary" 
+                    : "bg-white/20 text-white backdrop-blur-sm border-white/20 hover:bg-white/30"
+                }`}
+              >
+                Login
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <UserMenu />
+            </SignedIn>
           </li>
         </ul>
 
@@ -118,7 +125,7 @@ function Navbar() {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-lg border-t border-base-300/30">
+        <div className="md:hidden bg-base-100/95 backdrop-blur-lg border-t border-base-300/30">
           <div className="px-6 py-4 space-y-4">
             <Link 
               to="/" 
@@ -134,13 +141,15 @@ function Navbar() {
             >
               About
             </Link>
-            <Link 
-              to="/docs" 
-              className="block py-2 text-base-content hover:text-primary transition-colors"
-              onClick={() => setIsMenuOpen(false)}
+            <button 
+              onClick={() => {
+                toggleDocs();
+                setIsMenuOpen(false);
+              }}
+              className="block py-2 text-base-content hover:text-primary transition-colors w-full text-left"
             >
               Docs
-            </Link>
+            </button>
             <Link 
               to="/pricing" 
               className="block py-2 text-base-content hover:text-primary transition-colors"
@@ -148,13 +157,20 @@ function Navbar() {
             >
               Pricing
             </Link>
-            <Link 
-              to="/login" 
-              className="btn btn-primary btn-sm rounded-full px-6 mt-4"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Login
-            </Link>
+            <SignedOut>
+              <Link 
+                to="/login" 
+                className="btn btn-primary btn-sm rounded-full px-6 mt-4"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Login
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <div className="pt-2">
+                <UserMenu />
+              </div>
+            </SignedIn>
           </div>
         </div>
       )}
