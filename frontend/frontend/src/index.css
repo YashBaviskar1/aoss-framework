@@ -1,9 +1,74 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* index.css */
+
+/* Tailwind Preflight (reset) */
+@import "tailwindcss/preflight";
+
+/* Tailwind Utilities */
+@import "tailwindcss/utilities";
 
 /* Optional global styles */
 body {
   font-family: sans-serif;
-  background-color: #f9fafb;
+  background-color: white;
+  color: black;
+}
+
+/* Custom Theme Variables */
+:root {
+  --radius: 0.625rem;
+
+  --color-primary: #1f2937;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #f3f4f6;
+  --color-secondary-foreground: #1f2937;
+
+  --color-accent: #10b981;
+  --color-accent-foreground: #ffffff;
+
+  --color-destructive: #ef4444;
+
+  --color-border: #d1d5db;
+  --color-input: #f9fafb;
+  --color-ring: #4f46e5;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #1f2937;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: #1f2937;
+}
+
+/* Dark Mode */
+.dark {
+  --color-primary: #d1d5db;
+  --color-primary-foreground: #1f2937;
+
+  --color-secondary: #1f2937;
+  --color-secondary-foreground: #f9fafb;
+
+  --color-accent: #10b981;
+  --color-accent-foreground: #ffffff;
+
+  --color-destructive: #f87171;
+
+  --color-border: #4b5563;
+  --color-input: #374151;
+  --color-ring: #818cf8;
+
+  --color-card: #1f2937;
+  --color-card-foreground: #f9fafb;
+
+  --color-popover: #1f2937;
+  --color-popover-foreground: #f9fafb;
+
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+/* Optional global component styles */
+button {
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  outline-color: var(--color-ring);
 }

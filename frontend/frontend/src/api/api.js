@@ -1,101 +1,96 @@
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "http://localhost:8000";
 
-export async function uploadDocuments(files) {
-  const formData = new FormData();
-  for (let file of files) {
-    formData.append("files", file); // matches backend List[UploadFile]
+async function handleJSONResponse(response) {
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    throw new Error("Invalid server response: " + text);
   }
-
-  const res = await fetch(`${BASE_URL}/upload`, { method: "POST", body: formData });
-  if (!res.ok) throw new Error("Upload failed");
-  return res.json();
 }
 
-export async function checkStatus(uploadId) {
-  const res = await fetch(`${BASE_URL}/status/${uploadId}`);
-  if (!res.ok) throw new Error("Status check failed");
-  return res.json();
+// ---------------------------
+// Document Upload / List / Delete
+// ---------------------------
+export async function uploadDocument(file) {
+  const fm = new FormData();
+  fm.append("file", file);
+  const res = await fetch(`${BASE_URL}/upload`, { method: "POST", body: fm });
+  return handleJSONResponse(res);
 }
 
 export async function listDocuments() {
   const res = await fetch(`${BASE_URL}/documents`);
-  if (!res.ok) throw new Error("Fetching documents failed");
-  const data = await res.json();
-  return data.documents || data || [];
+  return handleJSONResponse(res);
 }
 
-export async function deleteDocument(docId) {
-  const res = await fetch(`${BASE_URL}/documents/${docId}`, { method: "DELETE" });
-  if (!res.ok) throw new Error("Delete failed");
-  return res.json();
-}
-
-export async function testRag(query) {
-  const res = await fetch(`${BASE_URL}/test-rag`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query })
-  });
-  if (!res.ok) throw new Error("Test RAG failed");
-  return res.json();
-}
-
-export async function rag(query) {
-  const res = await fetch(`${BASE_URL}/rag`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query })
-  });
-  if (!res.ok) throw new Error("RAG failed");
-  return res.json();
-}
-
-export async function extractRules(docId) {
-  const res = await fetch(`${BASE_URL}/rules/${docId}`);
-  if (!res.ok) throw new Error("Rules extraction failed");
-  return res.json();
-}
-
-export async function resetIndex() {
-  const res = await fetch(`${BASE_URL}/reset_index`, { method: "POST" });
-  if (!res.ok) throw new Error("Reset index failed");
-  return res.json();
-}
-
-
-
-
-// --- Policy APIs ---
-export async function getPolicies(agent) {
-  const res = await fetch(`${BASE_URL}/policies/${agent}`);
-  if (!res.ok) throw new Error("Fetching policies failed");
-  return res.json();
-}
-
-export async function addPolicy(agent, policy) {
-  const res = await fetch(`${BASE_URL}/policies/${agent}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(policy),
-  });
-  if (!res.ok) throw new Error("Adding policy failed");
-  return res.json();
-}
-
-export async function updatePolicy(agent, policyId, policy) {
-  const res = await fetch(`${BASE_URL}/policies/${agent}/${policyId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(policy),
-  });
-  if (!res.ok) throw new Error("Updating policy failed");
-  return res.json();
-}
-
-export async function deletePolicy(agent, policyId) {
-  const res = await fetch(`${BASE_URL}/policies/${agent}/${policyId}`, {
+export async function deleteDocument(filename) {
+  const res = await fetch(`${BASE_URL}/documents/${encodeURIComponent(filename)}`, {
     method: "DELETE",
   });
-  if (!res.ok) throw new Error("Deleting policy failed");
-  return res.json();
+  return handleJSONResponse(res);
+}
+
+// ---------------------------
+// Rules
+// ---------------------------
+export async function fetchRules(filename) {
+  const res = await fetch(`${BASE_URL}/fetch_rules/${encodeURIComponent(filename)}`, {
+    method: "POST",
+  });
+  return handleJSONResponse(res);
+}
+
+export async function getRules(filename) {
+  const url = filename
+    ? `${BASE_URL}/rules?filename=${encodeURIComponent(filename)}`
+    : `${BASE_URL}/rules`;
+  const res = await fetch(url);
+  return handleJSONResponse(res);
+}
+
+export async function addRule(filename, ruleType, ruleValue) {
+  const params = new URLSearchParams({
+    filename,
+    rule_type: ruleType,
+    rule_value: ruleValue,
+  });
+  const res = await fetch(`${BASE_URL}/rules?${params.toString()}`, {
+    method: "POST",
+  });
+  return handleJSONResponse(res);
+}
+
+export async function deleteRule(filename, ruleType, ruleValue) {
+  const params = new URLSearchParams({
+    filename,
+    rule_type: ruleType,
+    rule_value: ruleValue,
+  });
+  const res = await fetch(`${BASE_URL}/rules?${params.toString()}`, {
+    method: "DELETE",
+  });
+  return handleJSONResponse(res);
+}
+
+// ---------------------------
+// Index Document
+// ---------------------------
+export async function indexDocument(filename) {
+  const res = await fetch(`${BASE_URL}/index/${encodeURIComponent(filename)}`, {
+    method: "POST",
+  });
+  return handleJSONResponse(res);
+}
+
+// ---------------------------
+// RAG Query
+// ---------------------------
+export async function testRag(query, filename) {
+  const res = await fetch(`${BASE_URL}/rag/${encodeURIComponent(filename)}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
+  });
+  return handleJSONResponse(res);
 }

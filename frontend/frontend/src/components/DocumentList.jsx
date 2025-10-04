@@ -1,75 +1,31 @@
-import { useEffect, useState } from "react";
-import { listDocuments, deleteDocument } from "../api/api";
-
-export default function DocumentList() {
-  const [docs, setDocs] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const fetchDocs = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await listDocuments();
-      // Handle both API formats: array or {documents: []}
-      const documents = Array.isArray(data)
-        ? data
-        : data?.documents && Array.isArray(data.documents)
-        ? data.documents
-        : [];
-      setDocs(documents);
-    } catch (err) {
-      console.error("Error fetching documents:", err);
-      setError("Failed to load documents.");
-      setDocs([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (docId) => {
-    try {
-      await deleteDocument(docId);
-      fetchDocs();
-    } catch (err) {
-      console.error("Error deleting document:", err);
-      setError("Failed to delete document.");
-    }
-  };
-
-  useEffect(() => {
-    fetchDocs();
-  }, []);
-
+// DocumentList.jsx
+export default function DocumentList({ docs = [], onSelect, selectedDoc }) {
   return (
-    <div className="p-4 border rounded-lg mt-4">
-      <h2 className="font-bold text-lg mb-2">Uploaded Documents</h2>
-
-      {loading && <p className="text-gray-500">Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
-      {!loading && !error && docs.length === 0 && (
-        <p className="text-gray-500">No documents uploaded yet.</p>
-      )}
-
-      {!loading && docs.length > 0 && (
-        <ul>
-          {docs.map((doc) => (
-            <li
-              key={doc.id}
-              className="flex justify-between items-center border-b py-2"
-            >
-              <span>{doc.filename}</span>
+    <div style={{ marginTop: 20 }}>
+      <h3>Uploaded Documents</h3>
+      <ul>
+        {docs.length > 0 ? (
+          docs.map((doc) => (
+            <li key={doc} style={{ marginBottom: 8 }}>
               <button
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                onClick={() => handleDelete(doc.id)}
+                onClick={() => onSelect(doc)}
+                style={{
+                  padding: "6px 12px",
+                  backgroundColor: selectedDoc === doc ? "#4caf50" : "#eee",
+                  color: selectedDoc === doc ? "#fff" : "#000",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor: "pointer",
+                }}
               >
-                Delete
+                {doc} {selectedDoc === doc ? "(Selected)" : ""}
               </button>
             </li>
-          ))}
-        </ul>
-      )}
+          ))
+        ) : (
+          <li>No documents uploaded</li>
+        )}
+      </ul>
     </div>
   );
 }
