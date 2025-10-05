@@ -7,6 +7,8 @@ import LandingPage from "./components/LandingPage";
 import Chat from "./components/Chat";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
+import Compliance from "./components/Compliance";
+
 function App() {
   return (
     <Router>
@@ -22,6 +24,8 @@ function App() {
           <Route path = "/chat" element = {<Chat/>}/>
           <Route path = "/login" element = {<Login/>}/>
           <Route path = "/dashboard" element = {<Dashboard/>} />
+          <Route path="/compliance" element={<Compliance />} />
+
         </Routes>
       </div>
     </Router>
