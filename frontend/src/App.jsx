@@ -5,7 +5,8 @@ import About from "./components/About";
 import Docs from "./components/Docs";
 import LandingPage from "./components/LandingPage";
 import Chat from "./components/Chat";
-
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
 function App() {
   return (
     <Router>
@@ -19,6 +20,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/docs" element={<Docs />} />
           <Route path = "/chat" element = {<Chat/>}/>
+          <Route path = "/login" element = {<Login/>}/>
+          <Route path = "/dashboard" element = {<Dashboard/>} />
         </Routes>
       </div>
     </Router>

@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from fastapi.middleware.cors import CORSMiddleware
-# Load API key
+
 load_dotenv()
 origins = [
     "http://localhost:3000",   # CRA default
@@ -28,7 +28,7 @@ llm = ChatGroq(
     api_key=os.getenv("API_KEY")
 )
 
-# Prompt template
+
 template = """
 You are an execuation agent of a Multi Agent System which handles the terminal of a server and has access to it's terminal, 
 you will respond in JSON format only.
@@ -64,7 +64,7 @@ class Query(BaseModel):
     execute: bool = False  # whether to actually run in WSL
 
 
-# Run commands inside WSL
+
 import subprocess
 
 def run_commands(commands):
@@ -80,7 +80,7 @@ def run_commands(commands):
             errors="replace"
         )
         
-        # Mirror output live to your console
+
         if result.stdout:
             print(result.stdout.strip())
         if result.stderr:
@@ -139,11 +139,9 @@ def agent(query: Query):
 
 @app.post("/get_commands")
 def get_commands(query: Query):
-    # Ask LLM to convert query -> commands
     response = llm.invoke(prompt.format(question=query.question))
 
     try:
-        # Parse JSON from LLM response
         commands = eval(response.content)["Commands"]
         print(commands)
         return {
