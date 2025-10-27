@@ -1,0 +1,56 @@
+
+
+## **1. Docker**
+
+| Error Pattern                              | Cause                               | Fix Command                                           | Preventive Measure                                      |
+| ------------------------------------------ | ----------------------------------- | ----------------------------------------------------- | ------------------------------------------------------- |
+| `port is already allocated`                | Host port already in use            | `docker ps` → identify container → `docker stop <id>` | Use dynamic port mapping or check free ports before run |
+| `Cannot connect to the Docker daemon`      | Docker daemon not running           | `sudo systemctl start docker`                         | Enable auto-start: `sudo systemctl enable docker`       |
+| `image not found`                          | Typo in image name or missing image | `docker pull <image>`                                 | Verify image exists on Docker Hub or private registry   |
+| `permission denied while accessing socket` | Non-root user trying Docker         | `sudo usermod -aG docker $USER`                       | Add user to docker group and log out/in                 |
+
+---
+
+## **2. PM2**
+
+| Error Pattern            | Cause                      | Fix Command                                         | Preventive Measure                                         |
+| ------------------------ | -------------------------- | --------------------------------------------------- | ---------------------------------------------------------- |
+| `EADDRINUSE`             | Port already in use        | `pm2 stop <app>` or `lsof -i :<port> && kill <pid>` | Use different ports for apps; check free ports             |
+| `PM2 daemon not running` | PM2 crashed or not started | `pm2 resurrect` or `pm2 kill && pm2 start <app>`    | Ensure `pm2 save` is used after setup; monitor `pm2 monit` |
+| `App crashed`            | Runtime error in app       | Check logs: `pm2 logs <app>`                        | Proper error handling; write robust startup scripts        |
+| `Memory limit exceeded`  | App uses too much RAM      | `pm2 restart <app> --max-memory-restart 200M`       | Monitor memory; set limits in ecosystem.config.js          |
+
+---
+
+## **3. Nginx**
+
+| Error Pattern                  | Cause                                         | Fix Command                                   | Preventive Measure                                     |
+| ------------------------------ | --------------------------------------------- | --------------------------------------------- | ------------------------------------------------------ |
+| `502 Bad Gateway`              | Backend server down or wrong port             | Restart backend; check Nginx config           | Verify backend URL/port; monitor service health        |
+| `nginx: [emerg] bind() failed` | Port (usually 80/443) in use                  | `sudo lsof -i :80` → kill conflicting process | Check ports before start; use `systemctl status nginx` |
+| `404 Not Found`                | Wrong root path or missing file               | Update Nginx `root` directive                 | Keep paths consistent with build output                |
+| `Too many open files`          | High concurrency / file descriptors exhausted | `ulimit -n 65535`                             | Configure `worker_rlimit_nofile` in nginx.conf         |
+
+---
+
+## **4. Gunicorn**
+
+| Error Pattern                             | Cause                           | Fix Command                       | Preventive Measure                            |
+| ----------------------------------------- | ------------------------------- | --------------------------------- | --------------------------------------------- |
+| `Address already in use`                  | Port in use                     | `kill <pid>`                      | Use different port or check running processes |
+| `ModuleNotFoundError`                     | Missing dependency              | `pip install -r requirements.txt` | Ensure virtualenv activated; pin dependencies |
+| `Worker timed out`                        | Long requests / blocked process | `gunicorn --timeout 120 <app>`    | Optimize code; increase worker timeout        |
+| `OSError: [Errno 24] Too many open files` | High concurrency                | `ulimit -n 65535`                 | Configure Gunicorn workers and `ulimit`       |
+
+---
+
+## **5. React Builds**
+
+| Error Pattern                        | Cause                          | Fix Command                   | Preventive Measure                                 |
+| ------------------------------------ | ------------------------------ | ----------------------------- | -------------------------------------------------- |
+| `Module not found`                   | Missing import / dependency    | `npm install` or fix import   | Use consistent paths; lint imports                 |
+| `EADDRINUSE`                         | Dev server port already in use | `lsof -i :3000 && kill <pid>` | Use `PORT` env variable; check running dev servers |
+| `Minified React error #...`          | Production build mismatch      | `npm run build` again         | Match React version; test builds before deploy     |
+| `Cannot find module 'react-scripts'` | Missing dev dependency         | `npm install react-scripts`   | Always run `npm install` after clone               |
+
+---

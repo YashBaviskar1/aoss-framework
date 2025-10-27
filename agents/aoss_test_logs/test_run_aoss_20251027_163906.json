@@ -1,0 +1,448 @@
+[
+  {
+    "test_id": "FT-001",
+    "mode": "aoss",
+    "query": "install htop",
+    "status": "PASSED",
+    "plan": {
+      "env": {
+        "SERVER_OS": "Ubuntu"
+      },
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt install -y curl"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y git"
+        },
+        {
+          "step": 3,
+          "command": "sudo apt install -y build-essential"
+        },
+        {
+          "step": 4,
+          "command": "sudo apt install -y libncurses5-dev"
+        },
+        {
+          "step": 5,
+          "command": "sudo apt install -y libncursesw5-dev"
+        },
+        {
+          "step": 6,
+          "command": "sudo apt install -y libtinfo-dev"
+        },
+        {
+          "step": 7,
+          "command": "sudo apt install -y libncurses-dev"
+        },
+        {
+          "step": 8,
+          "command": "sudo apt install -y htop"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt install -y curl",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\ncurl is already the newest version (8.5.0-2ubuntu10.6).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install -y git",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\ngit is already the newest version (1:2.43.0-1ubuntu7.3).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "sudo apt install -y build-essential",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nbuild-essential is already the newest version (12.10ubuntu1).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 4,
+        "command": "sudo apt install -y libncurses5-dev",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nNote, selecting 'libncurses-dev' instead of 'libncurses5-dev'\nlibncurses-dev is already the newest version (6.4+20240113-1ubuntu2).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 5,
+        "command": "sudo apt install -y libncursesw5-dev",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nNote, selecting 'libncurses-dev' instead of 'libncursesw5-dev'\nlibncurses-dev is already the newest version (6.4+20240113-1ubuntu2).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 6,
+        "command": "sudo apt install -y libtinfo-dev",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nNote, selecting 'libncurses-dev' instead of 'libtinfo-dev'\nlibncurses-dev is already the newest version (6.4+20240113-1ubuntu2).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 7,
+        "command": "sudo apt install -y libncurses-dev",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nlibncurses-dev is already the newest version (6.4+20240113-1ubuntu2).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 8,
+        "command": "sudo apt install -y htop",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nThe following package was automatically installed and is no longer required:\n  libllvm19\nUse 'sudo apt autoremove' to remove it.\nSuggested packages:\n  lm-sensors strace\nThe following NEW packages will be installed:\n  htop\n0 upgraded, 1 newly installed, 0 to remove and 14 not upgraded.\nNeed to get 171 kB of archives.\nAfter this operation, 434 kB of additional disk space will be used.\n0% [Working]0% [Waiting for headers]                        Get:1 http://archive.ubuntu.com/ubuntu noble/main amd64 htop amd64 3.3.0-4build1 [171 kB]\n4% [1 htop 8348 B/171 kB 5%]26% [1 htop 54.4 kB/171 kB 32%]                               100% [Working]              Fetched 171 kB in 2s (113 kB/s)\n\n\u001b7\u001b8Selecting previously unselected package htop.\n(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 57872 files and directories currently installed.)\nPreparing to unpack .../htop_3.3.0-4build1_amd64.deb ...\n\u001b7Progress: [  0%] [..........................................................] \u001b8\u001b7Progress: [ 20%] [###########...............................................] \u001b8Unpacking htop (3.3.0-4build1) ...\n\u001b7Progress: [ 40%] [#######################...................................] \u001b8Setting up htop (3.3.0-4build1) ...\n\u001b7Progress: [ 60%] [##################################........................] \u001b8\u001b7Progress: [ 80%] [##############################################............] \u001b8Processing triggers for hicolor-icon-theme (0.17-2) ...\nProcessing triggers for man-db (2.12.0-4build2) ...\n\n\u001b7\u001b8",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-003",
+    "mode": "aoss",
+    "query": "I need nginx.",
+    "status": "PASSED",
+    "plan": {
+      "env": {
+        "SERVER_OS": "Ubuntu"
+      },
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt install -y nginx"
+        },
+        {
+          "step": 2,
+          "command": "sudo systemctl start nginx"
+        },
+        {
+          "step": 3,
+          "command": "sudo systemctl enable nginx"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt install -y nginx",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nnginx is already the newest version (1.24.0-2ubuntu7.5).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo systemctl start nginx",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "sudo systemctl enable nginx",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nSynchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.\nExecuting: /usr/lib/systemd/systemd-sysv-install enable nginx",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-004",
+    "mode": "aoss",
+    "query": "check the disk space.",
+    "status": "FAILED (Execution)",
+    "plan": {
+      "env": {
+        "SERVER_OS": "Ubuntu"
+      },
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt install -y df"
+        },
+        {
+          "step": 2,
+          "command": "df -h"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt install -y df",
+        "status": "FAILED",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nE: Unable to locate package df",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-006",
+    "mode": "aoss",
+    "query": "create a file at /tmp/aoss-test.txt with the content 'hello world'",
+    "status": "PASSED",
+    "plan": {
+      "env": {
+        "SERVER_OS": "Ubuntu"
+      },
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt install -y nano"
+        },
+        {
+          "step": 2,
+          "command": "echo 'hello world' > /tmp/aoss-test.txt"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt install -y nano",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nnano is already the newest version (7.2-2ubuntu0.1).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200 nginx-common\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "echo 'hello world' > /tmp/aoss-test.txt",
+        "status": "SUCCESS",
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-010",
+    "mode": "aoss",
+    "query": "run 'foobar123'",
+    "status": "PASSED (Expected Fail)",
+    "plan": {
+      "env": {
+        "SERVER_OS": "Ubuntu",
+        "COMMAND": "foobar123"
+      },
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt install -y nodejs"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y npm"
+        },
+        {
+          "step": 3,
+          "command": "sudo apt install -y pm2"
+        },
+        {
+          "step": 4,
+          "command": "npm install pm2"
+        },
+        {
+          "step": 5,
+          "command": "pm2 start {COMMAND}"
+        },
+        {
+          "step": 6,
+          "command": "pm2 startup"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt install -y nodejs",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nnodejs is already the newest version (22.21.0-1nodesource1).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200 nginx-common\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install -y npm",
+        "status": "FAILED",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nSome packages could not be installed. This may mean that you have\nrequested an impossible situation or if you are using the unstable\ndistribution that some required packages have not yet been created\nor been moved out of Incoming.\nThe following information may help to resolve the situation:\n\nThe following packages have unmet dependencies:\n npm : Depends: node-agent-base but it is not going to be installed\n       Depends: node-archy but it is not going to be installed\n       Depends: node-cacache (>= 17) but it is not going to be installed\n       Depends: node-chalk (>= 5.1.2-2~) but it is not going to be installed\n       Depends: node-cli-table3\n       Depends: node-columnify but it is not going to be installed\n       Depends: node-cssesc\n       Depends: node-debug but it is not going to be installed\n       Depends: node-emoji-regex\n       Depends: node-gyp but it is not going to be installed\n       Depends: node-http-proxy-agent but it is not going to be installed\n       Depends: node-https-proxy-agent but it is not going to be installed\n       Depends: node-mkdirp but it is not going to be installed\n       Depends: node-ms but it is not going to be installed\n       Depends: node-nopt but it is not going to be installed\n       Depends: node-normalize-package-data but it is not going to be installed\n       Depends: node-npm-bundled but it is not going to be installed\n       Depends: node-npm-normalize-package-bin\n       Depends: node-npm-package-arg (>= 10) but it is not going to be installed\n       Depends: node-npmlog but it is not going to be installed\n       Depends: node-postcss-selector-parser\n       Depends: node-read-package-json but it is not going to be installed\n       Depends: node-rimraf but it is not going to be installed\n       Depends: node-semver but it is not going to be installed\n       Depends: node-string-width but it is not going to be installed\n       Depends: node-strip-ansi but it is not going to be installed\n       Depends: node-tar but it is not going to be installed\n       Depends: node-validate-npm-package-name but it is not going to be installed\n       Depends: node-which but it is not going to be installed\n       Depends: nodejs:any\n       Recommends: node-tap but it is not going to be installed\nE: Unable to correct problems, you have held broken packages.",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-013",
+    "mode": "aoss",
+    "query": "deploy my streamlit app from `https://github.com/streamlit/streamlit-example.git`",
+    "status": "FAILED (Execution)",
+    "plan": {
+      "env": {
+        "GIT_REPO_URL": "https://github.com/streamlit/streamlit-example.git",
+        "PROJECT_DIR": "streamlit-example",
+        "PORT": "5000"
+      },
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt install -y git"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y python3-venv"
+        },
+        {
+          "step": 3,
+          "command": "git clone {GIT_REPO_URL} {PROJECT_DIR}"
+        },
+        {
+          "step": 4,
+          "command": "cd {PROJECT_DIR}"
+        },
+        {
+          "step": 5,
+          "command": "python3 -m venv env"
+        },
+        {
+          "step": 6,
+          "command": "source env/bin/activate"
+        },
+        {
+          "step": 7,
+          "command": "pip install -r requirements.txt"
+        },
+        {
+          "step": 8,
+          "command": "env/bin/streamlit run app.py --server.port {PORT} --server.address 0.0.0.0"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt install -y git",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\ngit is already the newest version (1:2.43.0-1ubuntu7.3).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200 nginx-common\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install -y python3-venv",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\npython3-venv is already the newest version (3.12.3-0ubuntu2).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200 nginx-common\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "git clone {GIT_REPO_URL} {PROJECT_DIR}",
+        "status": "SUCCESS",
+        "stdout": "Cloning into 'streamlit-example'...\nremote: Enumerating objects: 25, done.\nremote: Total 25 (delta 0), reused 0 (delta 0), pack-reused 25 (from 1)\nReceiving objects:   4% (1/25)Receiving objects:   8% (2/25)Receiving objects:  12% (3/25)Receiving objects:  16% (4/25)Receiving objects:  20% (5/25)Receiving objects:  24% (6/25)Receiving objects:  28% (7/25)Receiving objects:  32% (8/25)Receiving objects:  36% (9/25)Receiving objects:  40% (10/25)Receiving objects:  44% (11/25)Receiving objects:  48% (12/25)Receiving objects:  52% (13/25)Receiving objects:  56% (14/25)Receiving objects:  60% (15/25)Receiving objects:  64% (16/25)Receiving objects:  68% (17/25)Receiving objects:  72% (18/25)Receiving objects:  76% (19/25)Receiving objects:  80% (20/25)Receiving objects:  84% (21/25)Receiving objects:  88% (22/25)Receiving objects:  92% (23/25)Receiving objects:  96% (24/25)Receiving objects: 100% (25/25)Receiving objects: 100% (25/25), 6.36 KiB | 6.36 MiB/s, done.\nResolving deltas:   0% (0/5)Resolving deltas:  20% (1/5)Resolving deltas:  40% (2/5)Resolving deltas:  60% (3/5)Resolving deltas:  80% (4/5)Resolving deltas: 100% (5/5)Resolving deltas: 100% (5/5), done.",
+        "stderr": ""
+      },
+      {
+        "step": 4,
+        "command": "cd {PROJECT_DIR}",
+        "status": "SUCCESS",
+        "stdout": "Changed directory to: /home/ygb/streamlit-example",
+        "stderr": ""
+      },
+      {
+        "step": 5,
+        "command": "python3 -m venv env",
+        "status": "SUCCESS",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "step": 6,
+        "command": "source env/bin/activate",
+        "status": "SUCCESS",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "step": 7,
+        "command": "pip install -r requirements.txt",
+        "status": "FAILED",
+        "stdout": "error: externally-managed-environment\n\n× This environment is externally managed\n╰─> To install Python packages system-wide, try apt install\n    python3-xyz, where xyz is the package you are trying to\n    install.\n    \n    If you wish to install a non-Debian-packaged Python package,\n    create a virtual environment using python3 -m venv path/to/venv.\n    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make\n    sure you have python3-full installed.\n    \n    If you wish to install a non-Debian packaged Python application,\n    it may be easiest to use pipx install xyz, which will manage a\n    virtual environment for you. Make sure you have pipx installed.\n    \n    See /usr/share/doc/python3.12/README.venv for more information.\n\nnote: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.\nhint: See PEP 668 for the detailed specification.",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-014",
+    "mode": "aoss",
+    "query": "First, run a simple python web server on port 8000 in the background. Second, configure nginx as a reverse proxy to it.",
+    "status": "FAILED (Execution)",
+    "plan": {
+      "env": {
+        "SERVER_OS": "Ubuntu",
+        "PORT": "8000"
+      },
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt install -y python3"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y nginx"
+        },
+        {
+          "step": 3,
+          "command": "sudo apt install -y python3-pip"
+        },
+        {
+          "step": 4,
+          "command": "pip3 install http.server"
+        },
+        {
+          "step": 5,
+          "command": "python3 -m http.server {PORT} &"
+        },
+        {
+          "step": 6,
+          "command": "sudo service nginx start"
+        },
+        {
+          "step": 7,
+          "command": "sudo sed -i 's/80/{PORT}/' /etc/nginx/sites-available/default"
+        },
+        {
+          "step": 8,
+          "command": "sudo service nginx restart"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt install -y python3",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\npython3 is already the newest version (3.12.3-0ubuntu2).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200 nginx-common\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install -y nginx",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\nThe following NEW packages will be installed:\n  nginx\n0 upgraded, 1 newly installed, 0 to remove and 14 not upgraded.\nNeed to get 520 kB of archives.\nAfter this operation, 1352 kB of additional disk space will be used.\n0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx amd64 1.24.0-2ubuntu7.5 [520 kB]\n1% [1 nginx 6908 B/520 kB 1%]11% [1 nginx 70.3 kB/520 kB 14%]                                78% [1 nginx 508 kB/520 kB 98%]                               100% [Working]              Fetched 520 kB in 1s (375 kB/s)\n\n\u001b7\u001b8Selecting previously unselected package nginx.\n(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 57867 files and directories currently installed.)\nPreparing to unpack .../nginx_1.24.0-2ubuntu7.5_amd64.deb ...\n\u001b7Progress: [  0%] [..........................................................] \u001b8\u001b7Progress: [ 20%] [###########...............................................] \u001b8Unpacking nginx (1.24.0-2ubuntu7.5) ...\n\u001b7Progress: [ 40%] [#######################...................................] \u001b8Setting up nginx (1.24.0-2ubuntu7.5) ...\n\u001b7Progress: [ 60%] [##################################........................] \u001b8\u001b7Progress: [ 80%] [##############################################............] \u001b8Processing triggers for man-db (2.12.0-4build2) ...\n\n\u001b7\u001b8",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "sudo apt install -y python3-pip",
+        "status": "SUCCESS",
+        "stdout": "1yash2raj\n1yash2raj\nReading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\npython3-pip is already the newest version (24.0+dfsg-1ubuntu1.3).\nThe following packages were automatically installed and are no longer required:\n  libllvm19 libnl-3-200 libnl-genl-3-200\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.",
+        "stderr": ""
+      },
+      {
+        "step": 4,
+        "command": "pip3 install http.server",
+        "status": "FAILED",
+        "stdout": "error: externally-managed-environment\n\n× This environment is externally managed\n╰─> To install Python packages system-wide, try apt install\n    python3-xyz, where xyz is the package you are trying to\n    install.\n    \n    If you wish to install a non-Debian-packaged Python package,\n    create a virtual environment using python3 -m venv path/to/venv.\n    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make\n    sure you have python3-full installed.\n    \n    If you wish to install a non-Debian packaged Python application,\n    it may be easiest to use pipx install xyz, which will manage a\n    virtual environment for you. Make sure you have pipx installed.\n    \n    See /usr/share/doc/python3.12/README.venv for more information.\n\nnote: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.\nhint: See PEP 668 for the detailed specification.",
+        "stderr": ""
+      }
+    ]
+  }
+]

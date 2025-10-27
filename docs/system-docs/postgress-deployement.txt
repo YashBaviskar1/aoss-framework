@@ -1,0 +1,72 @@
+
+---
+
+### 1. **Pull the PostgreSQL image**
+
+```bash
+docker pull postgres:15
+```
+
+*(You can replace `15` with any version you want, e.g., `postgres:14` or just `postgres` for latest.)*
+
+---
+
+### 2. **Run PostgreSQL container**
+
+```bash
+docker run -d \
+  --name my_postgres \
+  -e POSTGRES_USER=admin \
+  -e POSTGRES_PASSWORD=admin123 \
+  -e POSTGRES_DB=mydb \
+  -p 5432:5432 \
+  postgres:15
+```
+
+**Explanation:**
+
+* `-d` → Run in detached mode (background).
+* `--name my_postgres` → Container name.
+* `-e POSTGRES_USER=admin` → Creates a user `admin`.
+* `-e POSTGRES_PASSWORD=admin123` → Sets the password.
+* `-e POSTGRES_DB=mydb` → Creates a default database named `mydb`.
+* `-p 5432:5432` → Maps container’s port **5432** to host’s **5432**.
+* `postgres:15` → Image to use.
+
+---
+
+### 3. **Check if it’s running**
+
+```bash
+docker ps
+```
+
+---
+
+### 4. **Connect to PostgreSQL inside the container**
+
+```bash
+docker exec -it my_postgres psql -U admin -d mydb
+```
+
+---
+
+### 5. **Optional: Persist data (recommended)**
+
+If you want the data to persist even after removing the container:
+
+```bash
+docker run -d \
+  --name my_postgres \
+  -e POSTGRES_USER=admin \
+  -e POSTGRES_PASSWORD=admin123 \
+  -e POSTGRES_DB=mydb \
+  -p 5432:5432 \
+  -v pgdata:/var/lib/postgresql/data \
+  postgres:15
+```
+
+This will create a **Docker volume `pgdata`** to store your database files.
+
+---
+
