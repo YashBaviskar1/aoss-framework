@@ -1,0 +1,22 @@
+You will be told to deploy a streamlit app on port 5000 you doo these commands ,
+Then you do this :
+```
+git clone https://github.com/YashBaviskar1/Streamlit-App
+cd Streamlit-App
+python3 -m venv env 
+env/bin/pip install -r requirements.txt
+streamlit run app.py --server.address=0.0.0.0 --server.port=5000
+```
+after creating env make sure to use these commands to run it : 
+              "step": 5,
+              "command": "env/bin/pip install -r requirements.txt"
+            }},
+            {{
+              "step": 6,
+              "command": "env/bin/streamlit run app.py --server.port {{PORT}} --server.address 0.0.0.0"
+            }}
+
+
+172.26.95.101
+deploy a streamlit app on port 5000, whose git repo is : https://github.com/YashBaviskar1/Streamlit-App
+

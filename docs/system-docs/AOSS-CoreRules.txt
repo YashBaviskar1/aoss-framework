@@ -1,0 +1,69 @@
+---
+# AOSS Agent: Core Principles and Guardrails
+# Purpose: To guide the planning agent towards the simplest, safest, and most direct solution.
+---
+
+### CRITICAL RULE: DO NOT INSTALL CORE UTILITIES
+
+You MUST NOT attempt to install basic, built-in Linux commands. These tools are assumed to exist on *any* system.
+
+**FORBIDDEN INSTALLS (DO NOT use `apt install` or `dnf install` for these):**
+* `df`
+* `du`
+* `ls`, `cd`, `mkdir`, `cp`, `mv`, `rm`, `touch`, `pwd`
+* `echo`, `cat`
+* `grep`, `sed`, `awk`, `head`, `tail`, `sort`
+* `find`
+* [cite_start]`top` (Use `top -b -n 1` for non-interactive output [cite: 52])
+* `systemctl`, `service`
+* `nano`, `vim`, `vi`
+
+**CORRECT ACTIONS for related failed tasks:**
+* [cite_start]**To check disk space:** The *only* command for this is `df -h`[cite: 54, 57].
+* [cite_start]**To create a file with content:** Use `echo "file content" > /path/to/file.txt`[cite: 52]. Do NOT install `nano`.
+* [cite_start]**To find what's using space:** Use `du -xh --max-depth=1 / | sort -hr | head -n 10`[cite: 57, 63, 64]. [cite_start]Do NOT use `du -sh /`[cite: 58, 59].
+
+---
+
+### SOP: Planning Heuristics (Simplification First)
+
+Your goal is the *simplest* path. Do not overthink.
+
+1.  **Priority 1: Use Package Manager.** Always prefer installing a tool from the official package manager (e.g., `sudo apt install -y htop`).
+2.  **Priority 2: Use Built-in Tools.** If a core utility can do the job (like `echo` for file creation), use it.
+3.  **Priority 3: Compiling from Source.** This is a LAST RESORT. Do NOT compile from source (e.g., installing `build-essential`, `libncurses-dev`, etc.) unless the user *explicitly* asks to "compile" or requests a specific version unavailable in `apt`/`dnf`.
+
+---
+
+### SOP: Python App Deployment
+
+This procedure is mandatory for all Python applications, including Streamlit.
+
+1.  **ALWAYS Create a Virtual Environment:** Start by running `python3 -m venv env`.
+2.  **CRITICAL: DO NOT use `source`:** The command `source env/bin/activate` does NOT work in non-interactive shells or scripts. NEVER include it in a plan.
+3.  **ALWAYS Use Direct Paths:** To run commands from the virtual environment, you MUST call the binaries directly.
+    * [cite_start]**Correct:** `env/bin/pip install -r requirements.txt` [cite: 71]
+    * [cite_start]**Correct:** `env/bin/streamlit run app.py --server.port 5000` [cite: 71]
+    * **Correct:** `env/bin/python app.py`
+    * **Incorrect:** `pip install ...` (this pollutes the global system and will fail)
+    * **Incorrect:** `source env/bin/activate` (this will fail)
+
+---
+
+### SOP: Handling Ambiguous "run" or "start"
+
+If a user query is simple, the plan must also be simple.
+
+* **Query:** "run 'foobar123'"
+* **Analysis:** The user is asking to execute a command. They are NOT asking to deploy a service.
+* **Correct Plan:** `{"plan": [{"step": 1, "command": "foobar123"}]}`
+* [cite_start]**Incorrect Plan:** Do NOT install `nodejs`, `npm`, or `pm2` [cite: 92-104]. This is a massive over-complication. Only plan a service deployment if the query *explicitly* mentions a Git repository, `pm2`, Docker, or "deploying a service".
+
+---
+
+### SOP: Handling `http.server`
+
+* `http.server` is a built-in Python module, NOT a package to be installed.
+* **DO NOT:** `pip install http.server` (This will fail).
+* **DO:** `python3 -m http.server 8000 &`
+* **Note:** Use the `&` at the end to run the server in the background, allowing the plan to proceed to the next step (e.g., configuring Nginx).

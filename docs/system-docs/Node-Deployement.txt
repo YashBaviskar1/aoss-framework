@@ -1,0 +1,218 @@
+
+---
+
+# **Simple Deployment Guide — React + Node App**
+
+**Overview:**
+
+* Frontend: React app at root, build output in `dist/`.
+* Backend: Node.js app inside `backend/`, entry point `index.js`.
+* Goal: Serve frontend with Nginx, backend with PM2, and configure reverse proxy for `/api`.
+
+---
+
+## **1. Install server dependencies**
+
+Run as root or with `sudo`:
+
+```bash
+# Update packages
+sudo apt update && sudo apt upgrade -y
+
+# Install Node.js (v20 recommended)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs build-essential
+
+# Check versions
+node -v
+npm -v
+
+# Install PM2 globally
+sudo npm install -g pm2
+
+# Install Nginx
+sudo apt install -y nginx
+
+# Optional: curl for testing
+sudo apt install -y curl
+```
+
+---
+
+## **2. Deploy the frontend**
+
+1. **Go to the app root:**
+
+```bash
+cd /home/pro_fixionoff
+```
+
+2. **Install dependencies & build React app:**
+
+```bash
+npm install
+npm run build
+```
+
+> This will produce the `dist/` folder. **Remember this path:**
+> `/home/pro_fixionoff/dist` (or `/home/pro_fixionoff/frontend/dist` if using `frontend/` folder).
+
+3. **Confirm build folder exists:**
+
+```bash
+ls -l /home/pro_fixionoff/dist
+```
+
+---
+
+## **3. Deploy the backend**
+
+1. **Navigate to backend folder:**
+
+```bash
+cd /home/pro_fixionoff/backend
+```
+
+2. **Install backend dependencies:**
+
+```bash
+npm install
+```
+
+3. **Start backend using PM2:**
+
+```bash
+pm2 start index.js --name pro_backend
+```
+
+4. **Check PM2 status:**
+
+```bash
+pm2 list
+pm2 logs pro_backend
+```
+
+> **Tip for agents:** Use `pm2 show pro_backend` to see:
+>
+> * Entry file (`index.js`)
+> * Running environment
+> * PID and CPU/memory usage
+> * Port number (usually configured in code or `.env`)
+
+---
+
+## **4. Configure Nginx**
+
+1. **Open Nginx default site config:**
+
+```bash
+sudo nano /etc/nginx/sites-available/default
+```
+
+2. **Replace content with:**
+
+```nginx
+server {
+    listen 80;
+    server_name 34.14.205.106;
+
+    root /home/pro_fixionoff/dist;  # path to React build
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    location /api/ {
+        proxy_pass http://localhost:3001;  # Your Node backend
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+> **Notes for agents:**
+>
+> * Make sure `root` points to your React build folder.
+> * `/api/` path points to backend port (Node default is `3001` or as set in `index.js`).
+
+3. **Test Nginx configuration:**
+
+```bash
+sudo nginx -t
+```
+
+4. **Restart Nginx to apply changes:**
+
+```bash
+sudo systemctl restart nginx
+sudo systemctl status nginx
+```
+
+---
+
+## **5. Verify deployment**
+
+1. Open browser: `http://34.14.205.106` → should see React frontend.
+2. Test backend: `http://34.14.205.106/api/health` (or any endpoint) → should respond.
+3. Check logs:
+
+```bash
+# Frontend errors via Nginx
+sudo tail -f /var/log/nginx/error.log
+
+# Backend logs via PM2
+pm2 logs pro_backend
+```
+
+---
+
+## **6. Maintenance & self-healing tips**
+
+* **Restart backend if crashed:**
+
+```bash
+pm2 restart pro_backend
+```
+
+* **Set backend to auto-start on server reboot:**
+
+```bash
+pm2 startup systemd
+pm2 save
+```
+
+* **Check running processes:**
+
+```bash
+pm2 list
+sudo systemctl status nginx
+```
+
+* **Update frontend / backend:**
+
+  * Pull latest code via `git pull`
+  * Rebuild frontend: `npm run build`
+  * Restart backend via PM2
+
+---
+
+## **7. Optional: Notes for agents**
+
+* Always note the paths:
+
+  * Frontend build: `/home/pro_fixionoff/dist`
+  * Backend entry: `/home/pro_fixionoff/backend/index.js`
+* Backend port may vary; check `index.js` or `.env`. Update Nginx proxy if changed.
+* For debugging:
+
+  * PM2 logs: `pm2 logs pro_backend`
+  * Nginx logs: `/var/log/nginx/error.log` and `/var/log/nginx/access.log`
+
+---
+
+
+

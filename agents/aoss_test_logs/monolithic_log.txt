@@ -1,0 +1,252 @@
+(env) Y:\Projects\aoss-framework\agents>python test_cases_with_logs.py --mode monolithic
+--- Initializing Monolithic Component (llama-3.3-70b-versatile) ---
+Monolithic Component initialized successfully.
+
+--- Initializing Remote Server Connection ---
+Connecting to ygb@172.26.95.101...
+[SUCCESS] Remote connection verified.
+
+
+================================================================================
+RUNNING TEST: [FT-001] - MODE: MONOLITHIC - "install htop"
+================================================================================
+--- 1. Generating Plan (Monolithic) ---
+{
+  "env": {},
+  "plan": [
+    {
+      "step": 1,
+      "command": "sudo apt update"
+    },
+    {
+      "step": 2,
+      "command": "sudo apt install htop -y"
+    }
+  ]
+}
+--- 2. Executing Plan (Monolithic) ---
+[Remote PWD initialized to] /home/ygb
+======================================================================
+STEP: 1 | COMMAND: `sudo apt update` | STATUS: SUCCESS
+
+--- STDOUT ---
+1yash2raj
+1yash2raj
+0% [Working]            Hit:1 https://deb.nodesource.com/node_22.x nodistro InRelease
+0% [Connecting to archive.ubuntu.com] [Connecting to security.ubuntu.com (91.18                                                                               0% [Connecting to archive.ubuntu.com (185.125.190.83)] [Waiting for headers]                                                                            Hit:2 http://security.ubuntu.com/ubuntu noble-security InRelease
+                                                                            0% [Waiting for headers]                        Hit:3 http://archive.ubuntu.com/ubuntu noble InRelease
+                        0% [Working]0% [Waiting for headers]0% [Waiting for headers]                        Hit:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+                        0% [Working]0% [Waiting for headers]                        Hit:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+                        0% [Working]20% [Working]             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 39%Reading package lists... 39%Reading package lists... 51%Reading package lists... 54%Reading package lists... 54%Reading package lists... 55%Reading package lists... 55%Reading package lists... 55%Reading package lists... 55%Reading package lists... 55%Reading package lists... 55%Reading package lists... 56%Reading package lists... 56%Reading package lists... 60%Reading package lists... 60%Reading package lists... 63%Reading package lists... 63%Reading package lists... 67%Reading package lists... 67%Reading package lists... 68%Reading package lists... 68%Reading package lists... 75%Reading package lists... 75%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 80%Reading package lists... 80%Reading package lists... 83%Reading package lists... 83%Reading package lists... 85%Reading package lists... 85%Reading package lists... 88%Reading package lists... 88%Reading package lists... 89%Reading package lists... 89%Reading package lists... 95%Reading package lists... 95%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+14 packages can be upgraded. Run 'apt list --upgradable' to see them.
+======================================================================
+
+======================================================================
+STEP: 2 | COMMAND: `sudo apt install htop -y` | STATUS: SUCCESS
+
+--- STDOUT ---
+1yash2raj
+1yash2raj
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  libllvm19 nginx-common
+Use 'sudo apt autoremove' to remove them.
+Suggested packages:
+  lm-sensors strace
+The following NEW packages will be installed:
+  htop
+0 upgraded, 1 newly installed, 0 to remove and 14 not upgraded.
+Need to get 171 kB of archives.
+After this operation, 434 kB of additional disk space will be used.
+0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble/main amd64 htop amd64 3.3.0-4build1 [171 kB]
+7% [1 htop 14.1 kB/171 kB 8%]19% [1 htop 41.5 kB/171 kB 24%]                               100% [Working]              Fetched 171 kB in 1s (154 kB/s)
+
+Selecting previously unselected package htop.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 57867 files and directories currently installed.)
+Preparing to unpack .../htop_3.3.0-4build1_amd64.deb ...
+Unpacking htop (3.3.0-4build1) .............................................]
+Setting up htop (3.3.0-4build1) ...######...................................]
+Processing triggers for hicolor-icon-theme (0.17-2) ...#########............]
+Processing triggers for man-db (2.12.0-4build2) ...
+
+
+======================================================================
+
+--- 3. Verifying Outcome ---
+
+[PASS] Test FT-001 successful.
+--- 4. Running Cleanup ---
+Running cleanup: `sudo apt-get remove -y htop`
+
+================================================================================
+RUNNING TEST: [FT-003] - MODE: MONOLITHIC - "I need nginx."
+================================================================================
+--- 1. Generating Plan (Monolithic) ---
+{
+  "env": {},
+  "plan": [
+    {
+      "step": 1,
+      "command": "sudo apt update"
+    },
+    {
+      "step": 2,
+      "command": "sudo apt install -y nginx"
+    },
+    {
+      "step": 3,
+      "command": "sudo systemctl enable nginx"
+    },
+    {
+      "step": 4,
+      "command": "sudo systemctl start nginx"
+    },
+    {
+      "step": 5,
+      "command": "sudo ufw allow 'Nginx HTTP'"
+    }
+  ]
+}
+--- 2. Executing Plan (Monolithic) ---
+[Remote PWD initialized to] /home/ygb
+======================================================================
+STEP: 1 | COMMAND: `sudo apt update` | STATUS: SUCCESS
+
+--- STDOUT ---
+1yash2raj
+1yash2raj
+0% [Working]            Hit:1 https://deb.nodesource.com/node_22.x nodistro InRelease
+0% [Connecting to archive.ubuntu.com (185.125.190.82)] [Connecting to security.0% [Connecting to archive.ubuntu.com (185.125.190.82)] [Connecting to security.                                                                               Hit:2 http://archive.ubuntu.com/ubuntu noble InRelease
+                                                                               0% [Waiting for headers]                        Hit:3 http://security.ubuntu.com/ubuntu noble-security InRelease
+0% [Waiting for headers]0% [Waiting for headers]0% [Waiting for headers]                        Hit:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+                        0% [Working]0% [Waiting for headers]                        Hit:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+                        0% [Working]20% [Working]             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 39%Reading package lists... 39%Reading package lists... 54%Reading package lists... 54%Reading package lists... 55%Reading package lists... 55%Reading package lists... 55%Reading package lists... 55%Reading package lists... 55%Reading package lists... 55%Reading package lists... 56%Reading package lists... 56%Reading package lists... 60%Reading package lists... 60%Reading package lists... 63%Reading package lists... 63%Reading package lists... 66%Reading package lists... 67%Reading package lists... 67%Reading package lists... 68%Reading package lists... 68%Reading package lists... 75%Reading package lists... 75%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 79%Reading package lists... 80%Reading package lists... 80%Reading package lists... 83%Reading package lists... 83%Reading package lists... 85%Reading package lists... 85%Reading package lists... 88%Reading package lists... 88%Reading package lists... 89%Reading package lists... 89%Reading package lists... 95%Reading package lists... 95%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+14 packages can be upgraded. Run 'apt list --upgradable' to see them.
+======================================================================
+
+======================================================================
+STEP: 2 | COMMAND: `sudo apt install -y nginx` | STATUS: SUCCESS
+
+--- STDOUT ---
+1yash2raj
+1yash2raj
+Reading package lists... 0%Reading package lists... 100%Reading package lists... Done
+Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done
+Reading state information... 0% Reading state information... 0%Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  libllvm19 libnl-3-200 libnl-genl-3-200
+Use 'sudo apt autoremove' to remove them.
+The following NEW packages will be installed:
+  nginx
+0 upgraded, 1 newly installed, 0 to remove and 14 not upgraded.
+Need to get 520 kB of archives.
+After this operation, 1352 kB of additional disk space will be used.
+0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 nginx amd64 1.24.0-2ubuntu7.5 [520 kB]
+1% [1 nginx 6908 B/520 kB 1%]5% [1 nginx 35.7 kB/520 kB 7%]30% [1 nginx 196 kB/520 kB 38%]                               100% [Working]              Fetched 520 kB in 2s (304 kB/s)
+
+Selecting previously unselected package nginx.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 57867 files and directories currently installed.)
+Preparing to unpack .../nginx_1.24.0-2ubuntu7.5_amd64.deb ...
+Unpacking nginx (1.24.0-2ubuntu7.5) ........................................]
+Setting up nginx (1.24.0-2ubuntu7.5) ...#...................................]
+Processing triggers for man-db (2.12.0-4build2) ...#############............]
+
+
+======================================================================
+
+======================================================================
+STEP: 3 | COMMAND: `sudo systemctl enable nginx` | STATUS: SUCCESS
+
+--- STDOUT ---
+1yash2raj
+1yash2raj
+Synchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
+======================================================================
+
+======================================================================
+STEP: 4 | COMMAND: `sudo systemctl start nginx` | STATUS: SUCCESS
+
+--- STDOUT ---
+1yash2raj
+1yash2raj
+======================================================================
+
+======================================================================
+STEP: 5 | COMMAND: `sudo ufw allow 'Nginx HTTP'` | STATUS: SUCCESS
+
+--- STDOUT ---
+1yash2raj
+1yash2raj
+Skipping adding existing rule
+Skipping adding existing rule (v6)
+======================================================================
+
+--- 3. Verifying Outcome ---
+
+[PASS] Test FT-003 successful.
+--- 4. Running Cleanup ---
+Running cleanup: `sudo systemctl stop nginx`
+Running cleanup: `sudo apt-get remove -y nginx`
+
+================================================================================
+RUNNING TEST: [FT-004] - MODE: MONOLITHIC - "check the disk space."
+================================================================================
+--- 1. Generating Plan (Monolithic) ---
+{
+  "env": {},
+  "plan": [
+    {
+      "step": 1,
+      "command": "df -h"
+    },
+    {
+      "step": 2,
+      "command": "du -sh /"
+    },
+    {
+      "step": 3,
+      "command": "lsblk -d -o NAME,FSTYPE,SIZE,MOUNTPOINT,LABEL"
+    },
+    {
+      "step": 4,
+      "command": "sudo fdisk -l"
+    },
+    {
+      "step": 5,
+      "command": "ncdu /"
+    }
+  ]
+}
+--- 2. Executing Plan (Monolithic) ---
+[Remote PWD initialized to] /home/ygb
+======================================================================
+STEP: 1 | COMMAND: `df -h` | STATUS: SUCCESS
+
+--- STDOUT ---
+Filesystem      Size  Used Avail Use% Mounted on
+none            3.9G     0  3.9G   0% /usr/lib/modules/6.6.87.2-microsoft-standard-WSL2
+none            3.9G  4.0K  3.9G   1% /mnt/wsl
+drivers         239G  234G  5.8G  98% /usr/lib/wsl/drivers
+/dev/sdd       1007G   23G  934G   3% /
+none            3.9G  124K  3.9G   1% /mnt/wslg
+none            3.9G     0  3.9G   0% /usr/lib/wsl/lib
+rootfs          3.9G  2.7M  3.9G   1% /init
+none            3.9G  504K  3.9G   1% /run
+none            3.9G     0  3.9G   0% /run/lock
+none            3.9G  1.1M  3.9G   1% /run/shm
+none            3.9G   76K  3.9G   1% /mnt/wslg/versions.txt
+none            3.9G   76K  3.9G   1% /mnt/wslg/doc
+C:\             239G  234G  5.8G  98% /mnt/c
+Y:\             237G   26G  212G  11% /mnt/y
+tmpfs           3.9G   16K  3.9G   1% /run/user/1000
+======================================================================
+
+
+(got stuck over here for infinitum)

@@ -1,0 +1,331 @@
+ equivalent documents tailored for a **Fedora Server** environment. The core logic remains the same, but package management and firewall commands have been updated.
+FOR FEDORA : 
+-----
+
+### **File 1: Node-Deployment-Fedora.txt**
+
+# **Simple Deployment Guide — React + Node App (Fedora)**
+
+**Overview:**
+
+  * Frontend: React app at root, build output in `dist/`.
+  * Backend: Node.js app inside `backend/`, entry point `index.js`.
+  * Goal: Serve frontend with Nginx, backend with PM2, and configure reverse proxy for `/api`.
+
+-----
+
+## **1. Install server dependencies**
+
+Run as root or with `sudo`:
+
+```bash
+# Update packages
+sudo dnf update -y
+
+# Install Node.js (v20 recommended)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo dnf install -y nodejs gcc-c++ make
+
+# Check versions
+node -v
+npm -v
+
+# Install PM2 globally
+sudo npm install -g pm2
+
+# Install Nginx
+sudo dnf install -y nginx
+
+# Optional: curl for testing
+sudo dnf install -y curl
+```
+
+-----
+
+## **2. Configure Firewall**
+
+Fedora uses `firewalld` by default. You need to allow HTTP traffic.
+
+```bash
+# Allow HTTP traffic permanently
+sudo firewall-cmd --add-service=http --permanent
+
+# Reload the firewall to apply changes
+sudo firewall-cmd --reload
+```
+
+-----
+
+## **3. Deploy the frontend**
+
+1.  **Go to the app root:**
+    ```bash
+    cd /home/pro_fixionoff
+    ```
+2.  **Install dependencies & build React app:**
+    ```bash
+    npm install
+    npm run build
+    ```
+    > This will produce the `dist/` folder.
+    > **Remember this path:** `/home/pro_fixionoff/dist`.
+3.  **Confirm build folder exists:**
+    ```bash
+    ls -l /home/pro_fixionoff/dist
+    ```
+
+-----
+
+## **4. Deploy the backend**
+
+1.  **Navigate to backend folder:**
+    ```bash
+    cd /home/pro_fixionoff/backend
+    ```
+2.  **Install backend dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Start backend using PM2:**
+    ```bash
+    pm2 start index.js --name pro_backend
+    ```
+4.  **Check PM2 status:**
+    ```bash
+    pm2 list
+    pm2 logs pro_backend
+    ```
+
+-----
+
+## **5. Configure Nginx**
+
+On Fedora, it's best to create a new config file in `/etc/nginx/conf.d/`.
+
+1.  **Create a new Nginx config file:**
+
+    ```bash
+    sudo nano /etc/nginx/conf.d/pro_fixionoff.conf
+    ```
+
+2.  **Add the following content:**
+
+    ```nginx
+    server {
+        listen 80;
+        server_name 34.14.205.106;
+        root /home/pro_fixionoff/dist;  # path to React build
+        index index.html;
+
+        location / {
+            try_files $uri /index.html;
+        }
+
+        location /api/ {
+            proxy_pass http://localhost:3001; # Your Node backend
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+        }
+    }
+    ```
+
+3.  **Test Nginx configuration:**
+
+    ```bash
+    sudo nginx -t
+    ```
+
+4.  **Restart & Enable Nginx to apply changes:**
+
+    ```bash
+    sudo systemctl restart nginx
+    sudo systemctl enable nginx # Enable on server reboot
+    sudo systemctl status nginx
+    ```
+
+-----
+
+## **6. Maintenance & self-healing tips**
+
+  * **Restart backend if crashed:**
+    ```bash
+    pm2 restart pro_backend
+    ```
+  * **Set backend to auto-start on server reboot:**
+    ```bash
+    pm2 startup systemd
+    pm2 save
+    ```
+  * **Check running processes:**
+    ```bash
+    pm2 list
+    sudo systemctl status nginx
+    ```
+
+-----
+
+### **File 2: DevOps-Doc-Fedora.txt**
+
+# **Deployment & Maintenance Guide — React + Node + Python (Fedora)**
+
+Compact, practical, and ready-to-use. Assumes a **Fedora server** with Docker & Docker Compose installed, `git`, and a domain pointed via DNS.
+
+-----
+
+## **1. Install Docker & Docker Compose on Fedora**
+
+```bash
+# Add Docker repository
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+
+# Install Docker Engine and Compose
+sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Add your user to the docker group (optional, to run docker without sudo)
+sudo usermod -aG docker $USER
+newgrp docker # Apply group changes immediately
+```
+
+-----
+
+## **2. Basic setup steps**
+
+1.  **Prepare code**: `npm run build` for React, ensure Node listens on `process.env.PORT`.
+2.  **Containerize**: Create Docker images for each service.
+3.  **Compose or Orchestrate**: Use `docker-compose` for small deployments.
+4.  **Reverse proxy & TLS**: Nginx + Certbot to route traffic.
+5.  **Monitoring & Logs**: `docker logs`, Prometheus + Grafana.
+6.  **Backups & Secrets**: Use `.env` files, HashiCorp Vault, or AWS Secrets Manager.
+7.  **Healthchecks**: Implement `/health` endpoints.
+8.  **CI/CD**: Set up a pipeline using GitHub Actions or GitLab CI.
+
+*(The rest of this document regarding Dockerfiles, docker-compose examples, Nginx configuration, troubleshooting, and self-healing tips remains identical as it is platform-agnostic once Docker is installed.)*
+
+-----
+
+## **3. Self-healing & restart tips**
+
+  * **Docker restart policies**:
+    ```yaml
+    restart: unless-stopped   # or always, on-failure:5
+    ```
+  * **Healthchecks**: Use `HEALTHCHECK` in Dockerfile or compose healthcheck. If unhealthy, the orchestrator can restart the container.
+    ```dockerfile
+    HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+      CMD curl -f http://localhost:3000/health || exit 1
+    ```
+  * **Process manager**: Use `pm2-runtime` inside the Node container for graceful restarts.
+  * **Graceful shutdown**: Handle `SIGTERM` in your applications to close database connections before exiting.
+
+-----
+
+### **File 3: troubleshoot-Fedora.txt**
+
+*(This document is largely OS-agnostic, as the tools behave similarly across Linux distributions. The commands for Docker, PM2, Gunicorn, and React builds are universal. Nginx troubleshooting is also conceptually the same.)*
+
+## **1. Docker**
+
+| Error Pattern | Cause | Fix Command | Preventive Measure |
+| :--- | :--- | :--- | :--- |
+| `port is already allocated` | Host port already in use | `docker ps` → `docker stop <id>` | Use dynamic port mapping |
+| `Cannot connect to the Docker daemon` | Docker daemon not running | `sudo systemctl start docker` | `sudo systemctl enable docker` |
+| `image not found` | Typo or missing image | `docker pull <image>` | Verify image name |
+| `permission denied while accessing socket` | Non-root user permissions | `sudo usermod -aG docker $USER` | Add user to `docker` group |
+
+-----
+
+## **2. PM2**
+
+| Error Pattern | Cause | Fix Command | Preventive Measure |
+| :--- | :--- | :--- | :--- |
+| `EADDRINUSE` | Port already in use | `pm2 stop <app>` or `lsof -i :<port>` | Use different ports for apps |
+| `PM2 daemon not running` | PM2 crashed | `pm2 resurrect` or `pm2 kill && pm2 start <app>` | Use `pm2 save` after setup |
+| `App crashed` | Runtime error in app | `pm2 logs <app>` | Implement robust error handling |
+
+-----
+
+## **3. Nginx**
+
+| Error Pattern | Cause | Fix Command | Preventive Measure |
+| :--- | :--- | :--- | :--- |
+| `502 Bad Gateway` | Backend server down | Restart backend; check Nginx config | Monitor service health |
+| `nginx: [emerg] bind() failed` | Port (80/443) in use | `sudo lsof -i :80` → kill process | Check ports before starting |
+| `404 Not Found` | Wrong `root` path | Update Nginx `root` directive | Keep paths consistent |
+
+-----
+
+### **File 4: pm2-deployment-Fedora.txt**
+
+*(This guide is identical, as PM2 is a Node.js tool and its functionality is independent of the underlying Linux distribution. The `pm2 startup` command correctly detects and uses `systemd` on Fedora.)*
+
+## **1. Install PM2**
+
+```bash
+npm install -g pm2
+```
+
+-----
+
+## **2. Start / Stop / Restart Apps**
+
+### Start
+
+```bash
+pm2 start app.js --name my-app   # Start with a custom name
+pm2 start app.js --watch         # Auto-restart on file changes
+```
+
+### Stop
+
+```bash
+pm2 stop my-app
+pm2 stop all                     # Stop all PM2 processes
+```
+
+### Restart
+
+```bash
+pm2 restart my-app
+```
+
+-----
+
+## **3. Log Viewing**
+
+```bash
+pm2 logs my-app       # View logs of a single app
+pm2 logs              # View all logs
+pm2 flush             # Clear all logs
+pm2 monit             # Live process monitoring
+```
+
+-----
+
+## **4. Generating Startup Scripts**
+
+Enable PM2 to restart on server reboot.
+
+```bash
+# This command detects systemd on Fedora and generates the correct script
+pm2 startup
+
+# Save the current process list to be respawned on reboot
+pm2 save
+```
+
+-----
+
+## **5. Common Errors & Recovery**
+
+  * **App not starting:** Check logs via `pm2 logs my-app`.
+  * **Port already in use:** Change the port or kill the conflicting process using `lsof -i :PORT`.
+  * **PM2 daemon not running:** Restart it with `pm2 kill && pm2 resurrect`.
+  * **High memory usage:** Monitor with `pm2 monit` and consider setting a memory limit: `pm2 restart app --max-memory-restart 250M`.

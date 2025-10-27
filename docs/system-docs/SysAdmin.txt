@@ -1,0 +1,118 @@
+
+### `SysAdmin.txt`
+
+````text
+---
+# Topic: System Administration Best Practices
+# Audience: AI Agent
+# Purpose: Guide for creating safe and effective command-line plans.
+---
+CRITICAL RULE: DO NOT INSTALL CORE UTILITIES
+#################################################################
+# CRITICAL RULE: NON-INTERACTIVE COMMANDS ONLY
+#################################################################
+
+All commands in a plan MUST be non-interactive. They must not require user input, open a Text User Interface (TUI), or wait for user interaction.
+
+**FORBIDDEN INTERACTIVE COMMANDS:**
+* `ncdu` (Use `du` with flags instead)
+* `htop` (Use `ps aux` or `top -b -n 1` instead)
+* `top` (Unless in batch mode: `top -b -n 1`)
+* `vim`, `nano`, `pico` (Use `echo "..." > file` or `sed` instead)
+* `less`, `more` (Commands should output to stdout directly)
+* `dialog`, `whiptail`
+
+Failure to follow this rule will cause the agent to hang indefinitely.
+
+---
+
+#################################################################
+# STANDARD OPERATING PROCEDURE (SOP): Checking Disk Space
+#################################################################
+
+**Query Intent:** "check the disk space", "how full is my disk?", "what is using space?"
+
+**Procedure:**
+1.  **Overview (Fast):** ALWAYS start with `df -h`. This command is fast and shows the usage, capacity, and available space for all *mounted filesystems*. This answers "How full are my disks?"
+2.  **Analysis:** Check the `Use%` column from the `df -h` output.
+3.  **Triage (Slow):** ONLY if a specific filesystem (e.g., mounted on `/` or `/var`) is reported as full (e.g., > 90%), proceed to find the largest directories *on that specific filesystem*.
+
+**SOP-COMPLIANT PLAN for "check disk space":**
+```json
+{
+  "plan": [
+    { "step": 1, "command": "df -h" }
+  ]
+}
+````
+
+**SOP-COMPLIANT PLAN for "find what is using space on the root disk":**
+
+```json
+{
+  "plan": [
+    { "step": 1, "command": "df -h" },
+    { "step": 2, "command": "du -xh --max-depth=1 / | sort -hr | head -n 10" }
+  ]
+}
+```
+
+-----
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+# DANGER: `du` (Disk Usage) Command
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+The `du` command scans files and directories, which can be EXTREMELY slow.
+
+**BAD COMMAND: `du -sh /`**
+
+  * **Reason:** This command recursively scans *every file and directory* starting from the root (`/`).
+  * **High Risk:** It will cross filesystem boundaries. If a slow network drive (NFS) or a cross-OS mount (like `/mnt/c` or `/mnt/y` in WSL) is present, the command will appear to hang for minutes or hours.
+  * **Conclusion:** AVOID this command.
+
+**GOOD `du` Commands (Safe Alternatives):**
+
+1.  **To find the largest top-level directories:**
+
+      * `du -h --max-depth=1 /`
+      * **Explanation:** This scans only the *top-level* directories (`/var`, `/home`, `/etc`, etc.) instead of every subdirectory, making it much faster.
+
+2.  **To find the largest directories on the *main* disk ONLY:**
+
+      * `du -xh /`
+      * **Explanation:** The `-x` (or `--one-file-system`) flag is CRITICAL. It tells `du` *not* to cross filesystem boundaries. It will scan only the files on the same filesystem as `/` and will properly *skip* `/mnt/c`, `/mnt/y`, `/proc`, and `/dev`.
+
+3.  **BEST COMMAND (Combined):**
+
+      * `du -xh --max-depth=1 / | sort -hr`
+      * **Explanation:** This safely scans only the top-level directories on the root filesystem, sorts them by human-readable size (largest first), and is the most effective way to find what's using space.
+
+-----
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+# COMMAND SEMANTICS: `df` vs. `du`
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+  * **`df` (Disk Free):**
+
+      * **Use:** To see the total size, used space, and available space *per filesystem* (per disk/partition).
+      * **Analogy:** Checking the total capacity and fuel level of each *gas tank* in a car.
+      * **Speed:** Very fast.
+      * **Example:** `df -h`
+
+  * **`du` (Disk Usage):**
+
+      * **Use:** To see the space consumed by a *specific directory* and its contents.
+      * **Analogy:** Weighing the *luggage* inside one specific suitcase.
+      * **Speed:** Slow (proportional to the number of files).
+      * **Example:** `du -sh /var/log`
+
+<!-- end list -->
+
+```
+```
