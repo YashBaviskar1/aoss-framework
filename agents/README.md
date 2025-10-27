@@ -19,14 +19,14 @@ Here is a detailed breakdown of the test outcomes:
 
 | Test ID | Category | Test Case (User Query) | Pass/Fail |
 | :--- | :--- | :--- | :--- |
-| **FT-001** | Basic Install | "install htop" | \<span style="color:green; font-weight:bold;"\>PASS\</span\> |
-| **FT-003** | Service Mgmt | "I need nginx." | \<span style="color:green; font-weight:bold;"\>PASS\</span\> |
-| **FT-004** | SysAdmin | "check the disk space." | \<span style="color:red; font-weight:bold;"\>FAIL\</span\> |
-| **FT-005** | SysAdmin | "set up a new user 'testuser'" | \<span style="color:red; font-weight:bold;"\>FAIL\</span\> |
-| **FT-006** | SysAdmin | "create a file at /tmp/aoss-test.txt..." | \<span style="color:green; font-weight:bold;"\>PASS\</span\> |
-| **FT-010** | Error (User) | "run 'foobar123'" | \<span style="color:green; font-weight:bold;"\>PASS\</span\> |
-| **FT-013** | Deployment | "deploy my streamlit app..." | \<span style="color:red; font-weight:bold;"\>FAIL\</span\> |
-| **FT-014** | Deployment | "configure nginx as a reverse proxy..." | \<span style="color:red; font-weight:bold;"\>FAIL\</span\> |
+| **FT-001** | Basic Install | "install htop" | **PASS** |
+| **FT-003** | Service Mgmt | "I need nginx." | **PASS**  |
+| **FT-004** | SysAdmin | "check the disk space." | **FAIL** |
+| **FT-005** | SysAdmin | "set up a new user 'testuser'" | FAIL |
+| **FT-006** | SysAdmin | "create a file at /tmp/aoss-test.txt..." | **PASS** |
+| **FT-010** | Error (User) | "run 'foobar123'" | **PASS** |
+| **FT-013** | Deployment | "deploy my streamlit app..." | **FAIL** |
+| **FT-014** | Deployment | "configure nginx as a reverse proxy..." | \<span style="color:red; **FAIL** |
 
 -----
 
