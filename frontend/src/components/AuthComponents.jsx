@@ -54,8 +54,8 @@ export const Login = () => {
                 dividerText: "text-base-content/70 bg-base-100"
               }
             }}
-            afterSignInUrl="/"
-            afterSignUpUrl="/"
+            afterSignInUrl="/profile-setup"
+            afterSignUpUrl="/profile-setup"
           />
         </div>
       </div>
@@ -101,8 +101,8 @@ export const Register = () => {
                 dividerText: "text-base-content/70 bg-base-100"
               }
             }}
-            afterSignInUrl="/"
-            afterSignUpUrl="/"
+            afterSignInUrl="/profile-setup"
+            afterSignUpUrl="/profile-setup"
           />
         </div>
       </div>
