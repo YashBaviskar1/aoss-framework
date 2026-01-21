@@ -1,21 +1,6 @@
 import { SignIn, SignUp, useAuth } from "@clerk/clerk-react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
-// Redirect component after successful authentication
-const RedirectAfterAuth = () => {
-  const { isSignedIn } = useAuth();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isSignedIn) {
-      // Redirect to homepage after successful login
-      navigate("/");
-    }
-  }, [isSignedIn, navigate]);
-
-  return
-};
 
 export const Login = () => {
   return (
@@ -30,39 +15,26 @@ export const Login = () => {
             />
           </div>
           <h2 className="text-3xl font-bold text-base-content">Welcome back</h2>
-          <p className="mt-2 text-base-content/70">Sign in to your AOSS account</p>
+          <p className="mt-2 text-base-content/70">
+            Sign in to your AOSS account
+          </p>
         </div>
+
         <div className="bg-base-100 rounded-2xl shadow-lg border border-base-300 p-6">
-          <SignIn 
+          <SignIn
             routing="path"
             path="/login"
-            appearance={{
-              elements: {
-                rootBox: "w-full",
-                card: "shadow-none bg-transparent w-full",
-                headerTitle: "text-xl font-bold text-base-content",
-                headerSubtitle: "text-base-content/70",
-                socialButtonsBlockButton: "border-base-300 hover:bg-base-200",
-                socialButtonsBlockButtonText: "text-base-content",
-                formButtonPrimary: "bg-primary hover:bg-primary/90",
-                footerActionText: "text-base-content/70",
-                footerActionLink: "text-primary hover:text-primary/80",
-                formFieldInput: "border-base-300 focus:border-primary focus:ring-primary",
-                identityPreviewText: "text-base-content",
-                formFieldLabel: "text-base-content",
-                dividerLine: "bg-base-300",
-                dividerText: "text-base-content/70 bg-base-100"
-              }
-            }}
-            afterSignInUrl="/profile-setup"
-            afterSignUpUrl="/profile-setup"
+            forceRedirectUrl="/profile-setup"
+            fallbackRedirectUrl="/profile-setup"
+            appearance={{ /* keep your appearance config */ }}
           />
         </div>
       </div>
-      <RedirectAfterAuth />
     </div>
   );
 };
+
+
 
 export const Register = () => {
   return (
@@ -76,37 +48,25 @@ export const Register = () => {
               className="w-12 h-12"
             />
           </div>
-          <h2 className="text-3xl font-bold text-base-content">Create account</h2>
-          <p className="mt-2 text-base-content/70">Get started with AOSS</p>
+          <h2 className="text-3xl font-bold text-base-content">
+            Create account
+          </h2>
+          <p className="mt-2 text-base-content/70">
+            Get started with AOSS
+          </p>
         </div>
+
         <div className="bg-base-100 rounded-2xl shadow-lg border border-base-300 p-6">
-          <SignUp 
+          <SignUp
             routing="path"
             path="/register"
-            appearance={{
-              elements: {
-                rootBox: "w-full",
-                card: "shadow-none bg-transparent w-full",
-                headerTitle: "text-xl font-bold text-base-content",
-                headerSubtitle: "text-base-content/70",
-                socialButtonsBlockButton: "border-base-300 hover:bg-base-200",
-                socialButtonsBlockButtonText: "text-base-content",
-                formButtonPrimary: "bg-primary hover:bg-primary/90",
-                footerActionText: "text-base-content/70",
-                footerActionLink: "text-primary hover:text-primary/80",
-                formFieldInput: "border-base-300 focus:border-primary focus:ring-primary",
-                identityPreviewText: "text-base-content",
-                formFieldLabel: "text-base-content",
-                dividerLine: "bg-base-300",
-                dividerText: "text-base-content/70 bg-base-100"
-              }
-            }}
-            afterSignInUrl="/profile-setup"
-            afterSignUpUrl="/profile-setup"
+            forceRedirectUrl="/profile-setup"
+            fallbackRedirectUrl="/profile-setup"
+            appearance={{ /* keep your appearance config */ }}
           />
         </div>
       </div>
-      <RedirectAfterAuth />
     </div>
   );
 };
+
