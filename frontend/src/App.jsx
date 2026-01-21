@@ -14,13 +14,13 @@ import DocsSidebar from "./components/DocsSidebar";
 import { Login, Register } from "./components/AuthComponents";
 import ProfileSetup from "./components/ProfileSetup";
 import Dashboard from "./components/Dashboard";
-import Compliance from "../frontend/src/components/Compliance";
+import Compliance from "./components/Compliance";
 
 /* NEW imports */
-import GdprConfigure from "../frontend/src/components/GdprConfigure";
+import GdprConfigure from "./components/GdprConfigure";
 import ComplianceCustomize from "./components/ComplianceCustomize";
-import OrgPolicy from "../frontend/src/components/OrgPolicy";
-import SreSafety from "../frontend/src/components/SreSafety";
+import OrgPolicy from "./components/OrgPolicy";
+import SreSafety from "./components/SreSafety";
 
 export default function App() {
   const [isDocsOpen, setIsDocsOpen] = useState(false);
