@@ -4,10 +4,12 @@ from sqlalchemy.orm import Session
 from typing import List
 import models
 import models
+import models
 import schemas
 from database import engine, get_db
 from agents.planner import PlannerAgent
 from agents.executor import RemoteExecutor
+import monitoring # Import the new module
 
 # Create tables (if not handled by migration tool, though init.sql usually handles it)
 models.Base.metadata.create_all(bind=engine)
@@ -16,6 +18,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
+
+# Include Routers
+app.include_router(monitoring.router)
 
 # CORS for frontend
 app.add_middleware(

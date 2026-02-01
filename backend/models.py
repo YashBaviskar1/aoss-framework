@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, JSON
+from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, JSON, Integer
 from sqlalchemy.dialects.postgresql import UUID, INET
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -58,3 +58,21 @@ class ExecutionLog(Base):
 
     server = relationship("Server", back_populates="logs")
 
+
+class MonitoringConfig(Base):
+    __tablename__ = "monitoring_configs"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+
+    server_id = Column(UUID(as_uuid=True), ForeignKey("servers.id"), nullable=False)
+    monitor_path = Column(Text, nullable=True)
+    interval_seconds = Column(Integer, default=60) # Need to import Integer
+
+    cpu_enabled = Column(Boolean, default=True)
+    memory_enabled = Column(Boolean, default=True)
+    disk_enabled = Column(Boolean, default=True)
+    network_enabled = Column(Boolean, default=False)
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # server = relationship("Server", back_populates="monitoring_config") # Add back_populates to Server if needed

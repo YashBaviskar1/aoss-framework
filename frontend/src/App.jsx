@@ -23,6 +23,8 @@ import ComplianceCustomize from "./components/ComplianceCustomize";
 import OrgPolicy from "./components/OrgPolicy";
 import SreSafety from "./components/SreSafety";
 import ChatOrchestrator from "./components/ChatOrchestrator";
+import MonitoringSetup from "./components/MonitoringSetup";
+import MonitoringDashboard from "./components/MonitoringDashboard";
 
 // Separate component for Auth Logic to use hooks inside Routes
 const AuthRouteHandler = ({ component: Component }) => {
@@ -265,6 +267,36 @@ export default function App() {
               <>
                 <SignedIn>
                   <ChatOrchestrator />
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
+
+          {/* Monitoring Dashboard */}
+          <Route
+            path="/monitoring"
+            element={
+              <>
+                <SignedIn>
+                  <MonitoringDashboard />
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
+
+          {/* Monitoring Setup Form */}
+          <Route
+            path="/monitoring/enable"
+            element={
+              <>
+                <SignedIn>
+                  <MonitoringSetup />
                 </SignedIn>
                 <SignedOut>
                   <RedirectToSignIn />

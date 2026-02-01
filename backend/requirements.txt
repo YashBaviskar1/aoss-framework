@@ -3,7 +3,8 @@ uvicorn
 sqlalchemy
 psycopg2-binary
 pydantic
-paramiko
+python-dotenv
 langchain
 langchain-groq
-python-dotenv
+paramiko
+boto3n-dotenv

@@ -79,3 +79,9 @@ class ExecutionLogResponse(BaseModel):
 
 class ExecutionHistory(BaseModel):
     logs: List[ExecutionLogResponse]
+
+class MonitoringRequest(BaseModel):
+    aws_access_key: str
+    aws_secret_key: str
+    aws_region: str
+    instance_id: str
