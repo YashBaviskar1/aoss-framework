@@ -33,6 +33,7 @@ class Server(Base):
     
     # Dynamic fields
     additional_components = Column(JSON, nullable=True)
+    server_metadata = Column(JSON, default={}) # Shared agent knowledge base (paths, repos, etc.)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

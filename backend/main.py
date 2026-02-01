@@ -10,6 +10,8 @@ from database import engine, get_db
 from agents.planner import PlannerAgent
 from agents.executor import RemoteExecutor
 import monitoring 
+from fastapi.responses import StreamingResponse
+import json
 from compliance.router import router as compliance_router
 
 # Create tables (if not handled by migration tool, though init.sql usually handles it)
@@ -212,15 +214,21 @@ def test_connection(server_id: str, db: Session = Depends(get_db)):
 # --- Orchestration Endpoints ---
 
 @app.post("/api/chat/plan", response_model=schemas.PlanResponse)
-def generate_plan(request: schemas.PlanRequest):
+def generate_plan(request: schemas.PlanRequest, db: Session = Depends(get_db)):
     print(f"Request: {request}") # Debug log
-    # Initialize planner (could be global/singleton if stateless)
+    
+    # Fetch Server Context
+    server = db.query(models.Server).filter(models.Server.id == request.serverId).first()
+    server_context = server.server_metadata if server else {}
+
+    # Initialize planner
     planner = PlannerAgent()
-    # Pass model and agent_type from request
+    # Pass model, agent_type, AND context
     plan_json = planner.generate_plan(
         query=request.query, 
         model=request.model, 
-        agent_type=request.agent_type
+        agent_type=request.agent_type,
+        server_context=server_context
     )
     
     if "error" in plan_json:
@@ -229,152 +237,196 @@ def generate_plan(request: schemas.PlanRequest):
     return {"plan": plan_json.get("plan", [])}
 
 
-@app.post("/api/chat/execute", response_model=schemas.ExecutionLogResponse)
-def execute_plan(request: schemas.ExecuteRequest, db: Session = Depends(get_db)):
+@app.post("/api/chat/execute")
+def execute_plan_stream(request: schemas.ExecuteRequest, db: Session = Depends(get_db)):
     # 1. Fetch Server
     server = db.query(models.Server).filter(models.Server.id == request.serverId).first()
     if not server:
         raise HTTPException(status_code=404, detail="Server not found")
 
-    # 2. Initialize Executor
-    executor = RemoteExecutor(
-        host=str(server.ip_address),
-        user=server.ssh_username,
-        key_path=server.ssh_key_path,
-        password=server.ssh_password_encrypted
-    )
-    
-    # 3. Execution State
-    execution_queue = request.plan.copy() # Our dynamic queue
-    results = []
-    final_status = "Success"
-    
-    # Initialize Planner for healing
-    planner = PlannerAgent()
-    max_retries = 3 # Prevent infinite loops
-    current_retries = 0
-
-    try:
-        executor.connect()
+    def execution_generator():
+        # 2. Initialize Executor inside generator to keep scope
+        executor = RemoteExecutor(
+            host=str(server.ip_address),
+            user=server.ssh_username,
+            key_path=server.ssh_key_path,
+            password=server.ssh_password_encrypted
+        )
         
-        # --- THE SMART LOOP ---
-        while execution_queue:
-            # Pop the first step
-            current_step = execution_queue.pop(0) 
-            
-            # Execute
-            step_result = executor.execute_step(current_step.command)
-            step_result["step"] = current_step.step # Keep original step ID (or special 999 for fixes)
-            # If it was a recovery step, maybe we want to mark it or keep description?
-            # For now, let's just append result.
+        execution_queue = request.plan.copy()
+        results = []
+        final_status = "Success"
+        
+        planner = PlannerAgent()
+        max_retries = 3
+        current_retries = 0
 
-            if step_result["exit_code"] == 0:
-                # Success: Log and continue
-                results.append(step_result)
-            else:
-                # FAILURE DETECTED
-                results.append(step_result) # Log the failure
-                
-                if current_retries < max_retries:
-                    print(f"⚠️ Step failed: {current_step.command}. Attempting Self-Heal...")
-                    
-                    # Log the "Brain Activity" start
-                    results.append({
-                        "type": "healing_start",
-                        "step": current_step.step,
-                        "command": "Analyzing Failure...",
-                        "status": "Thinking",
-                        "stdout": "",
-                        "stderr": f"Command '{current_step.command}' failed. Consulting Planner..."
-                    })
-                    
-                    # 1. Ask Agent for a Fix
-                    # ... [Using existing logic] ...
-                    fix_data = planner.generate_fix(
-                        original_query=request.query,
-                        failed_command=current_step.command,
-                        error_output=step_result["stderr"],
-                        model="llama-3.3-70b-versatile" 
-                    )
-                    
-                    new_steps_data = fix_data.get("plan", [])
-                    
-                    if new_steps_data:
-                        # Log the "Brain Activity" Result
-                        results.append({
-                            "type": "healing_plan",
-                            "step": 999,
-                            "command": "Generated Fix Plan",
-                            "status": "Healed",
-                            "stdout": json.dumps(new_steps_data, indent=2),
-                            "stderr": "Injecting recovery steps into queue..."
-                        })
-                        
-                        # 2. Convert to Pydantic models
-                        recovery_steps = [
-                            schemas.PlanStep(
-                                step=999, 
-                                command=s["command"],
-                                description=f"Recovery: {s.get('description', 'Fixing error')}"
-                            ) for s in new_steps_data
-                        ]
-                        
-                        # 3. INJECT into start of queue
-                        execution_queue = recovery_steps + execution_queue
-                        
-                        current_retries += 1
-                        continue
-                
-                # If we run out of retries or no fix found:
-                final_status = "Failed"
-                break 
-
-    except Exception as e:
-        final_status = "Failed"
-        import traceback
-        traceback.print_exc() # Print stack trace to backend logs
-        results.append({
-            "command": "System Execution Error",
-            "exit_code": 999,
-            "stdout": "",
-            "stderr": f"An error occurred during execution logic: {str(e)}",
-            "status": "Failed"
-        })
-    finally:
-        if 'executor' in locals():
-            executor.close()
-
-    # 4. Generate Summary (Post-Execution)
-    agent_summary = None
-    if results:
-        # We can run this async or sync. Sync for now.
         try:
-           agent_summary = planner.summarize_execution(
-               query=request.query,
-               results=results,
-               model="llama-3.3-70b-versatile"
-           )
+            executor.connect()
+            
+            # --- THE SMART LOOP ---
+            while execution_queue:
+                current_step = execution_queue.pop(0) 
+                
+                # Notify: Step Started
+                yield json.dumps({
+                    "type": "step_start",
+                    "step": current_step.step,
+                    "command": current_step.command
+                }) + "\n"
+
+                # Execute
+                step_result = executor.execute_step(current_step.command)
+                step_result["step"] = current_step.step 
+                
+                if step_result["exit_code"] == 0:
+                    results.append(step_result)
+                    # Notify: Step Success
+                    yield json.dumps({
+                        "type": "step_result",
+                        "status": "success",
+                        "result": step_result
+                    }) + "\n"
+                else:
+                    results.append(step_result)
+                    
+                    # Notify: Step Failed
+                    yield json.dumps({
+                        "type": "step_result",
+                        "status": "failure",
+                        "result": step_result
+                    }) + "\n"
+
+                    if current_retries < max_retries:
+                        print(f"⚠️ Step failed: {current_step.command}. Attempting Self-Heal...")
+                        
+                        # Notify: Healing Start
+                        yield json.dumps({
+                            "type": "healing_start",
+                            "stderr": f"Command '{current_step.command}' failed. Consulting Planner..."
+                        }) + "\n"
+                        
+                        fix_data = planner.generate_fix(
+                            original_query=request.query,
+                            failed_command=current_step.command,
+                            error_output=step_result["stderr"],
+                            model="llama-3.3-70b-versatile" 
+                        )
+                        
+                        new_steps_data = fix_data.get("plan", [])
+                        
+                        if new_steps_data:
+                            # Notify: Healing Plan Generated
+                            yield json.dumps({
+                                "type": "healing_plan",
+                                "stdout": json.dumps(new_steps_data, indent=2)
+                            }) + "\n"
+                            
+                            recovery_steps = [
+                                schemas.PlanStep(
+                                    step=999, 
+                                    command=s["command"],
+                                    description=f"Recovery: {s.get('description', 'Fixing error')}"
+                                ) for s in new_steps_data
+                            ]
+                            
+                            execution_queue = recovery_steps + execution_queue
+                            current_retries += 1
+                            continue
+                    
+                    final_status = "Failed"
+                    break 
+
         except Exception as e:
-            print(f"Summary failed: {e}")
+            final_status = "Failed"
+            import traceback
+            traceback.print_exc()
+            err_res = {
+                "command": "System Execution Error",
+                "exit_code": 999,
+                "stdout": "",
+                "stderr": f"An error occurred: {str(e)}",
+                "status": "Failed"
+            }
+            results.append(err_res)
+            yield json.dumps({
+                "type": "error",
+                "result": err_res
+            }) + "\n"
+            
+        finally:
+            if 'executor' in locals():
+                executor.close()
 
-    # 5. Save Logs
-    # Note: request.plan is the *original* plan. The executed steps (including recovery) are in `results`.
-    # We might want to store the *actual* executed sequence, but preserving original plan is good for comparison.
-    # The `execution_results` JSON will contain the full trace of what happened.
-    new_log = models.ExecutionLog(
-        user_id=server.user_id,
-        server_id=server.id,
-        query=request.query,
-        plan=[step.model_dump() for step in request.plan],
-        execution_results=results,
-        agent_summary=agent_summary,
-        status=final_status
-    )
-    db.add(new_log)
-    db.commit()
-    db.refresh(new_log)
+        # 4. Generate Summary & UPDATE KNOWLEDGE BASE
+        agent_summary = None
+        if results:
+            try:
+                # Notify: Summarizing
+                yield json.dumps({"type": "summarizing"}) + "\n"
+                
+                # A. Summary
+                agent_summary = planner.summarize_execution(
+                    query=request.query,
+                    results=results,
+                    model="llama-3.3-70b-versatile"
+                )
+                
+                # B. Update Knowledge Base (The Memory)
+                current_metadata = server.server_metadata or {}
+                new_metadata = planner.update_knowledge_base(
+                    current_context=current_metadata,
+                    execution_logs=results,
+                    model="llama-3.3-70b-versatile"
+                )
+                
+                # We need a new session context to update DB safely inside generator? 
+                # Actually, the 'server' object is attached to 'db' session passed in Depends(get_db).
+                # But 'yield' suspends execution. AnyIO/FastAPI threading might be tricky with db session lifespan.
+                # However, usually the request session is open until response closes.
+                # We should use a fresh session or careful handling. 
+                # For simplicity here, we assume the session is valid or re-query if needed.
+                # Re-querying is safer to avoid detached instance issues.
+                
+                # Use a separate temporary DB session for the update to avoid conflicts with streaming response transaction
+                # (FastAPI Depends(get_db) usually closes after yield... wait, StreamingResponse works differently)
+                # We will try using the existing 'db' session. If it fails, we handle it.
+                
+                server.server_metadata = new_metadata
+                db.add(server)
+                db.commit() # Commit the new state
 
-    return new_log
+                # Notify: Summary Ready
+                yield json.dumps({
+                    "type": "agent_summary",
+                    "content": agent_summary
+                }) + "\n"
+
+            except Exception as e:
+                print(f"Post-execution processing failed: {e}")
+
+        # 5. Save Logs
+        new_log = models.ExecutionLog(
+            user_id=server.user_id,
+            server_id=server.id,
+            query=request.query,
+            plan=[step.model_dump() for step in request.plan],
+            execution_results=results,
+            agent_summary=agent_summary,
+            status=final_status
+        )
+        db.add(new_log)
+        db.commit()
+        db.refresh(new_log)
+
+        # Final Event
+        yield json.dumps({
+            "type": "complete",
+            "log_id": str(new_log.id),
+            "final_status": final_status
+        }) + "\n"
+
+    return StreamingResponse(execution_generator(), media_type="application/x-ndjson")
 
 @app.get("/api/chat/history/{server_id}", response_model=schemas.ExecutionHistory)
 def get_execution_history(server_id: str, db: Session = Depends(get_db)):

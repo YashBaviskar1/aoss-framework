@@ -97,6 +97,18 @@ export default function ChatOrchestrator() {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [chatHistory, planning, executing]);
 
+    // Auto-open Brain Panel when healing starts
+    useEffect(() => {
+        if (!chatHistory.length) return;
+        const lastMsg = chatHistory[chatHistory.length - 1];
+        if (lastMsg.type === 'result' && lastMsg.result.execution_results) {
+            const lastEvent = lastMsg.result.execution_results[lastMsg.result.execution_results.length - 1];
+            if (lastEvent && lastEvent.type === 'healing_start') {
+                setShowBrainPanel(true);
+            }
+        }
+    }, [chatHistory]);
+
     const handleSendMessage = async (e) => {
         e.preventDefault();
         if (!query.trim() || !selectedServerId) return;
@@ -147,8 +159,18 @@ export default function ChatOrchestrator() {
 
     const handleExecutePlan = async (originalQuery, plan) => {
         setExecuting(true);
-        // Remove the "Execute" button from the specific plan message or just append status
-        // For simplicity, we just append a new "Executing" block
+
+        // 1. Create a placeholder result message immediately
+        const placeholderId = Date.now();
+        setChatHistory(prev => [...prev, {
+            type: 'result',
+            id: placeholderId,
+            result: {
+                status: 'Running',
+                execution_results: [],
+                agent_summary: null
+            }
+        }]);
 
         try {
             const res = await fetch('http://localhost:8000/api/chat/execute', {
@@ -156,12 +178,77 @@ export default function ChatOrchestrator() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ serverId: selectedServerId, query: originalQuery, plan: plan })
             });
-            const data = await res.json();
 
-            setChatHistory(prev => [...prev, {
-                type: 'result',
-                result: data
-            }]);
+            if (!res.body) throw new Error("No response body");
+
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+                // Split by newline to get JSON objects
+                const lines = buffer.split('\n');
+                // Keep the last partial line in buffer
+                buffer = lines.pop() || '';
+
+                for (const line of lines) {
+                    if (!line.trim()) continue;
+                    try {
+                        const event = JSON.parse(line);
+
+                        // UPDATE UI STATE BASED ON EVENT
+                        setChatHistory(prev => prev.map(msg => {
+                            if (msg.id !== placeholderId) return msg;
+
+                            // Mutate copy of result for this message
+                            const newResult = { ...msg.result };
+
+                            switch (event.type) {
+                                case 'step_start':
+                                    // Optionally show "running" state for a step, 
+                                    // but we usually just append when result comes. 
+                                    // Could add a "current_step" indicator if we wanted.
+                                    break;
+
+                                case 'step_result':
+                                case 'error':
+                                    newResult.execution_results = [...(newResult.execution_results || []), event.result];
+                                    break;
+
+                                case 'healing_start':
+                                    newResult.execution_results = [...(newResult.execution_results || []), {
+                                        type: 'healing_start',
+                                        stderr: event.stderr
+                                    }];
+                                    break;
+
+                                case 'healing_plan':
+                                    newResult.execution_results = [...(newResult.execution_results || []), {
+                                        type: 'healing_plan',
+                                        stdout: event.stdout
+                                    }];
+                                    break;
+
+                                case 'agent_summary':
+                                    newResult.agent_summary = event.content;
+                                    break;
+
+                                case 'complete':
+                                    newResult.status = event.final_status;
+                                    break;
+                            }
+                            return { ...msg, result: newResult };
+                        }));
+
+                    } catch (e) {
+                        console.error("Error parsing stream line:", line, e);
+                    }
+                }
+            }
 
         } catch (err) {
             setChatHistory(prev => [...prev, { type: 'error', content: "Execution failed: " + err.message }]);
@@ -175,6 +262,20 @@ export default function ChatOrchestrator() {
         const activity = [];
         chatHistory.forEach(msg => {
             if (msg.type === 'result' && msg.result.execution_results) {
+                // Determine if this execution is currently active (running)
+                // We don't have a direct "active" flag on the msg, but we can verify status
+                const isRunning = msg.result.status === "Running";
+
+                // Add execution steps as "activity" too if we want, or just healing?
+                // The user wants to see "execution output of each step"
+                // Let's also add normal steps to the "Brain" panel ONLY IF RUNNING, to show progress?
+                // Or keep Brain panel for "Brain" things (healing/summary) and let the main chat show output.
+                // Re-reading user request: "see execution output of each sep... like which step is it at"
+
+                // The main chat ALREADY shows execution output in the `msg.type === 'result'` block.
+                // By updating `execution_results` live, the Main Chat view will auto-update!
+                // So "Brain Panel" can stay focused on "Thoughts", while main view shows "Console".
+
                 msg.result.execution_results.forEach(res => {
                     if (res.type === 'healing_start' || res.type === 'healing_plan') {
                         activity.push(res);
@@ -391,8 +492,13 @@ export default function ChatOrchestrator() {
                                             {/* Execution Log Block */}
                                             <div className="bg-base-100 border border-base-300 rounded-xl rounded-tl-none p-0 shadow-md">
                                                 <div className="bg-success/10 text-success-content px-6 py-3 rounded-t-xl border-b border-success/20 flex justify-between items-center">
-                                                    <span className="font-semibold flex items-center gap-2"><TerminalSquare className="w-4 h-4" /> Execution Complete</span>
-                                                    <span className={`badge ${msg.result.status === 'Success' ? 'badge-success' : 'badge-error'}`}>{msg.result.status}</span>
+                                                    <span className="font-semibold flex items-center gap-2">
+                                                        {msg.result.status === 'Running' ? <Loader2 className="w-4 h-4 animate-spin" /> : <TerminalSquare className="w-4 h-4" />}
+                                                        {msg.result.status === 'Running' ? 'Executing...' : 'Execution Complete'}
+                                                    </span>
+                                                    <span className={`badge ${msg.result.status === 'Success' ? 'badge-success' :
+                                                        msg.result.status === 'Running' ? 'badge-warning' : 'badge-error'
+                                                        }`}>{msg.result.status}</span>
                                                 </div>
                                                 <div className="p-4 space-y-2 max-h-60 overflow-y-auto">
                                                     {msg.result.execution_results && msg.result.execution_results.map((res, i) => (
@@ -405,8 +511,27 @@ export default function ChatOrchestrator() {
                                                                     </span>
                                                                 </div>
                                                                 {res.error && <div className="text-error font-semibold px-2">System Error: {res.error}</div>}
-                                                                {res.stdout && <pre className="text-base-content/60 pl-2 border-l-2 border-base-300">{res.stdout}</pre>}
-                                                                {res.stderr && <pre className="text-error/80 pl-2 border-l-2 border-error/30">{res.stderr}</pre>}
+
+                                                                {(res.stdout || res.stderr) && (
+                                                                    <details className="group">
+                                                                        <summary className="cursor-pointer text-xs opacity-50 hover:opacity-100 select-none flex items-center gap-1">
+                                                                            <span>View Output</span>
+                                                                            <span className="group-open:rotate-90 transition-transform">▸</span>
+                                                                        </summary>
+                                                                        <div className="mt-2 pl-2 border-l-2 border-base-300">
+                                                                            {res.stdout && (
+                                                                                <pre className="text-base-content/60 overflow-x-auto whitespace-pre-wrap max-h-32 text-[10px] bg-base-200/50 p-1 rounded">
+                                                                                    {res.stdout.length > 1000 ? res.stdout.substring(0, 1000) + "... (truncated)" : res.stdout}
+                                                                                </pre>
+                                                                            )}
+                                                                            {res.stderr && (
+                                                                                <pre className="text-error/80 overflow-x-auto whitespace-pre-wrap max-h-32 text-[10px] bg-error/5 p-1 rounded mt-1">
+                                                                                    {res.stderr}
+                                                                                </pre>
+                                                                            )}
+                                                                        </div>
+                                                                    </details>
+                                                                )}
                                                             </div>
                                                         )
                                                     ))}
@@ -467,7 +592,7 @@ export default function ChatOrchestrator() {
                     </div>
 
                     {/* Right: Agent Brain Activity Panel */}
-                    <div className={`border-l border-base-300/50 flex flex-col transition-all duration-300 ease-in-out bg-base-50 overflow-hidden ${showBrainPanel ? 'w-80' : 'w-0 opacity-0'}`}>
+                    <div className={`border-l border-base-300/50 flex flex-col transition-all duration-300 ease-in-out bg-base-50 overflow-hidden ${showBrainPanel ? 'w-80 opacity-100' : 'w-0 opacity-0'}`} style={{ visibility: showBrainPanel ? 'visible' : 'hidden' }}>
                         <div className="px-4 py-3 border-b border-base-300/50 bg-base-100 flex items-center justify-between w-80">
                             <div className="flex items-center gap-2">
                                 <BrainCircuit className="w-4 h-4 text-purple-600" />
