@@ -1,6 +1,7 @@
 from pydantic import BaseModel, IPvAnyAddress
-from typing import List, Optional
+from typing import Optional, List, Any, Dict
 from uuid import UUID
+from datetime import datetime
 
 class ServerCreate(BaseModel):
     serverTag: str
@@ -38,3 +39,43 @@ class ServerResponse(BaseModel):
 class DashboardData(BaseModel):
     user_name: str
     servers: List[ServerResponse]
+
+# --- Orchestration Schemas ---
+
+class PlanStep(BaseModel):
+    step: int
+    command: str
+    description: Optional[str] = None
+    status: Optional[str] = None # For logs
+    stdout: Optional[str] = None
+    stderr: Optional[str] = None
+
+class PlanRequest(BaseModel):
+    serverId: str
+    query: str
+    # NEW FIELDS
+    model: str = "llama-3.3-70b-versatile" 
+    agent_type: str = "general"
+
+class PlanResponse(BaseModel):
+    plan: List[PlanStep]
+
+class ExecuteRequest(BaseModel):
+    serverId: str
+    plan: List[PlanStep]
+    query: str # Original query for logging
+
+class ExecutionLogResponse(BaseModel):
+    id: UUID
+    query: str
+    plan: List[PlanStep]
+    status: str
+    execution_results: Optional[List[Dict[str, Any]]] = None
+    agent_summary: Optional[str] = None # NEW FIELD
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+class ExecutionHistory(BaseModel):
+    logs: List[ExecutionLogResponse]

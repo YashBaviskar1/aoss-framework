@@ -22,6 +22,7 @@ import GdprConfigure from "./components/GdprConfigure";
 import ComplianceCustomize from "./components/ComplianceCustomize";
 import OrgPolicy from "./components/OrgPolicy";
 import SreSafety from "./components/SreSafety";
+import ChatOrchestrator from "./components/ChatOrchestrator";
 
 // Separate component for Auth Logic to use hooks inside Routes
 const AuthRouteHandler = ({ component: Component }) => {
@@ -256,8 +257,23 @@ export default function App() {
               </>
             }
           />
+
+          {/* Orchestrator Chat */}
+          <Route
+            path="/chat"
+            element={
+              <>
+                <SignedIn>
+                  <ChatOrchestrator />
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
         </Routes>
       </div>
-    </div>
+    </div >
   );
 }

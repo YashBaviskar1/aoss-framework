@@ -16,7 +16,6 @@ const ProfileSetup = () => {
       id: Date.now(),
       serverTag: '',
       ipAddress: '',
-      ipAddress: '',
       hostname: '',
       sshUsername: 'ubuntu',
       // Security
@@ -62,7 +61,6 @@ const ProfileSetup = () => {
     const newServer = {
       id: Date.now(),
       serverTag: '',
-      ipAddress: '',
       ipAddress: '',
       hostname: '',
       sshUsername: 'ubuntu',
