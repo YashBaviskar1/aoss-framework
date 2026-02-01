@@ -35,25 +35,62 @@ export default function OrgPolicy() {
       {/* Role Permissions */}
       <section className="card bg-base-100 border border-base-300">
         <div className="card-body">
-          <h2 className="font-semibold mb-2">Role Permissions</h2>
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="font-semibold">Role Permissions</h2>
+            <button
+              onClick={() => {
+                setRole("SRE_Junior");
+                setAction("DELETE_PROD_DB");
+                setRuleType("FORBID");
+              }}
+              className="btn btn-xs btn-outline"
+            >
+              Populate Example
+            </button>
+          </div>
+
           <input
             className="input input-bordered mb-2"
             placeholder="Role"
+            value={role}
             onChange={(e) => setRole(e.target.value)}
           />
           <input
             className="input input-bordered mb-2"
             placeholder="Action (e.g. DELETE_LOGS)"
+            value={action}
             onChange={(e) => setAction(e.target.value)}
           />
           <select
             className="select select-bordered mb-2"
+            value={ruleType}
             onChange={(e) => setRuleType(e.target.value)}
           >
             <option value="ALLOW">Allow</option>
             <option value="FORBID">Forbid</option>
           </select>
-          <button className="btn btn-primary">Apply Rule</button>
+          <button
+            className="btn btn-primary"
+            onClick={async () => {
+              try {
+                await fetch("http://localhost:8000/api/compliance/org-policy", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    role: role,
+                    action: action,
+                    resource: "ProductionDatabase", // mocking for now as input missing
+                    effect: ruleType
+                  })
+                });
+                alert("Policy Saved to Graph!");
+              } catch (e) {
+                alert("Error saving");
+              }
+            }}
+          >
+            Apply Rule
+          </button>
         </div>
       </section>
 

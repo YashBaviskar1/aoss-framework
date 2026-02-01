@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShieldCheck, UploadCloud, FileText, Zap } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Server, BarChart3, Bot, Cpu } from "lucide-react";
@@ -36,6 +36,36 @@ export default function Compliance() {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // ===== Fetch Rules on Mount =====
+  const fetchRules = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/api/compliance/rules");
+      if (!res.ok) throw new Error("Failed to fetch");
+      const data = await res.json();
+
+      // Group by type
+      const newRules = { allowed: [], forbidden: [], required: [] };
+      data.forEach(r => {
+        if (newRules[r.type]) {
+          newRules[r.type].push(r.name + ": " + r.description); // Simple formatting
+        }
+      });
+      setRules(newRules);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchRules();
+  }, []);
+
+  // ===== Seed Data =====
+  const handleSeed = async () => {
+    await fetch("http://localhost:8000/api/compliance/seed", { method: "POST" });
+    fetchRules();
+  };
+
   // ===== File Upload (local only) =====
   function handleUpload(file) {
     if (!file) return alert("Select a PDF first");
@@ -45,19 +75,35 @@ export default function Compliance() {
   }
 
   // ===== Add Rule =====
-  function handleAddRule() {
-    if (!selectedDoc || !newRule.trim()) return alert("Enter a rule");
-    const updated = { ...rules };
-    updated[newType] = [...updated[newType], newRule.trim()];
-    setRules(updated);
-    setNewRule("");
+  async function handleAddRule() {
+    if (!selectedDoc && !newRule.trim()) return alert("Enter a rule"); // Modified to allow manual entry without doc
+
+    // Optimistic UI update? Or just wait. Let's wait for simplicity.
+    try {
+      await fetch("http://localhost:8000/api/compliance/rules", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "MANUAL-" + Date.now().toString().slice(-4),
+          description: newRule,
+          rule_type: newType
+        })
+      });
+      setNewRule("");
+      fetchRules();
+    } catch (e) {
+      alert("Failed to add rule");
+    }
   }
 
   // ===== Delete Rule =====
   function handleDeleteRule(type, value) {
-    const updated = { ...rules };
-    updated[type] = updated[type].filter((r) => r !== value);
-    setRules(updated);
+    // For now, no delete API endpoint implemented in this snippet request, keeping local only visual
+    // But to prevent errors, we just don't do anything or console log.
+    console.log("Delete not yet implemented in backend API for specific ID.");
+    // const updated = { ...rules };
+    // updated[type] = updated[type].filter((r) => r !== value);
+    // setRules(updated);
   }
 
   // ===== Simulate Query Run =====
@@ -156,11 +202,10 @@ export default function Compliance() {
                       <li key={doc}>
                         <button
                           onClick={() => setSelectedDoc(doc)}
-                          className={`w-full text-left px-4 py-2 rounded-lg ${
-                            selectedDoc === doc
-                              ? "bg-blue-600 text-white"
-                              : "bg-base-200 hover:bg-base-300 text-base-content/70"
-                          }`}
+                          className={`w-full text-left px-4 py-2 rounded-lg ${selectedDoc === doc
+                            ? "bg-blue-600 text-white"
+                            : "bg-base-200 hover:bg-base-300 text-base-content/70"
+                            }`}
                         >
                           {doc}
                         </button>
@@ -231,10 +276,15 @@ export default function Compliance() {
                   </select>
                   <button
                     onClick={handleAddRule}
-                    disabled={!selectedDoc || !newRule.trim()}
+                    disabled={!newRule.trim()}
                     className="btn bg-blue-600 hover:bg-blue-700 border-none text-white"
                   >
                     Add
+                  </button>
+                </div>
+                <div className="mt-4 pt-4 border-t border-base-300">
+                  <button onClick={handleSeed} className="btn btn-sm btn-ghost text-primary text-xs">
+                    Seed Default Database (Debug)
                   </button>
                 </div>
               </div>

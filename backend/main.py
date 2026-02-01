@@ -9,7 +9,8 @@ import schemas
 from database import engine, get_db
 from agents.planner import PlannerAgent
 from agents.executor import RemoteExecutor
-import monitoring # Import the new module
+import monitoring 
+from compliance.router import router as compliance_router
 
 # Create tables (if not handled by migration tool, though init.sql usually handles it)
 models.Base.metadata.create_all(bind=engine)
@@ -21,6 +22,7 @@ app = FastAPI()
 
 # Include Routers
 app.include_router(monitoring.router)
+app.include_router(compliance_router)
 
 # CORS for frontend
 app.add_middleware(
