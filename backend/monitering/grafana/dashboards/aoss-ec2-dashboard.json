@@ -70,7 +70,7 @@
             "targets": [
                 {
                     "editorMode": "code",
-                    "expr": "up{job=\"node_exporter\"}",
+                    "expr": "up{job=\"node_exporter\", instance=\"$instance\"}",
                     "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
@@ -165,7 +165,7 @@
             "targets": [
                 {
                     "editorMode": "code",
-                    "expr": "rate(node_network_transmit_bytes_total{job=\"node_exporter\", device!=\"lo\"}[5m])",
+                    "expr": "rate(node_network_transmit_bytes_total{job=\"node_exporter\", instance=\"$instance\", device!=\"lo\"}[5m])",
                     "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
@@ -260,7 +260,7 @@
             "targets": [
                 {
                     "editorMode": "code",
-                    "expr": "rate(node_network_receive_bytes_total{job=\"node_exporter\", device!=\"lo\"}[5m])",
+                    "expr": "rate(node_network_receive_bytes_total{job=\"node_exporter\", instance=\"$instance\", device!=\"lo\"}[5m])",
                     "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
@@ -354,7 +354,7 @@
             "targets": [
                 {
                     "editorMode": "code",
-                    "expr": "(\r\n  1 - (\r\n    node_filesystem_avail_bytes{job=\"node_exporter\", mountpoint=\"/\"}\r\n    /\r\n    node_filesystem_size_bytes{job=\"node_exporter\", mountpoint=\"/\"}\r\n  )\r\n) * 100",
+                    "expr": "(\r\n  1 - (\r\n    node_filesystem_avail_bytes{job=\"node_exporter\", instance=\"$instance\", mountpoint=\"/\"}\r\n    /\r\n    node_filesystem_size_bytes{job=\"node_exporter\", instance=\"$instance\", mountpoint=\"/\"}\r\n  )\r\n) * 100",
                     "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
@@ -448,7 +448,7 @@
             "targets": [
                 {
                     "editorMode": "code",
-                    "expr": "(\r\n  1 - (\r\n    node_memory_MemAvailable_bytes{job=\"node_exporter\"}\r\n    /\r\n    node_memory_MemTotal_bytes{job=\"node_exporter\"}\r\n  )\r\n) * 100",
+                    "expr": "(\r\n  1 - (\r\n    node_memory_MemAvailable_bytes{job=\"node_exporter\", instance=\"$instance\"}\r\n    /\r\n    node_memory_MemTotal_bytes{job=\"node_exporter\", instance=\"$instance\"}\r\n  )\r\n) * 100",
                     "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
@@ -462,7 +462,35 @@
     "schemaVersion": 42,
     "tags": [],
     "templating": {
-        "list": []
+        "list": [
+            {
+                "current": {
+                    "selected": false,
+                    "text": "All",
+                    "value": "$__all"
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "bfaxeqv2yuo74c"
+                },
+                "definition": "label_values(node_exporter_build_info, instance)",
+                "hide": 2,
+                "includeAll": false,
+                "label": "Instance",
+                "multi": false,
+                "name": "instance",
+                "options": [],
+                "query": {
+                    "query": "label_values(node_exporter_build_info, instance)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            }
+        ]
     },
     "time": {
         "from": "now-6h",

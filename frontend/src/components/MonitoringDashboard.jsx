@@ -167,7 +167,7 @@ export default function MonitoringDashboard() {
                                     </a>
                                 </div>
                                 <iframe
-                                    src={GRAFANA_URL}
+                                    src={`${GRAFANA_URL}&var-instance=${selectedServer.ip_address}:9100`}
                                     className="w-full h-full border-0"
                                     title={`Monitoring Dashboard for ${selectedServer.server_tag}`}
                                 />
