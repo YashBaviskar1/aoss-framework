@@ -24,8 +24,8 @@ export const Login = () => {
           <SignIn
             routing="path"
             path="/login"
-            forceRedirectUrl="/profile-setup"
-            fallbackRedirectUrl="/profile-setup"
+            forceRedirectUrl="/auth-check"
+            fallbackRedirectUrl="/auth-check"
             appearance={{ /* keep your appearance config */ }}
           />
         </div>
@@ -60,8 +60,8 @@ export const Register = () => {
           <SignUp
             routing="path"
             path="/register"
-            forceRedirectUrl="/profile-setup"
-            fallbackRedirectUrl="/profile-setup"
+            forceRedirectUrl="/auth-check"
+            fallbackRedirectUrl="/auth-check"
             appearance={{ /* keep your appearance config */ }}
           />
         </div>

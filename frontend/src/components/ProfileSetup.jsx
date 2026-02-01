@@ -1,61 +1,148 @@
 import { useState } from 'react';
 import { User, Server, Globe, Key, Plus, Trash2, Save } from 'lucide-react';
 import { useUser } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileSetup = () => {
   const { user } = useUser();
-  const [formData, setFormData] = useState({
-    name: user?.fullName || '',
-    serverTag: '',
-    ipAddress: '',
-    hostname: '',
-    pemFile: null,
-    ppkFile: null,
-    serverPassword: '',
-  });
+  const navigate = useNavigate();
 
-  const [additionalComponents, setAdditionalComponents] = useState([]);
-  const [selectedFileType, setSelectedFileType] = useState('pem');
+  // Global User Info
+  const [userName, setUserName] = useState(user?.fullName || '');
 
-  const handleInputChange = (e) => {
+  // Server List State
+  const [servers, setServers] = useState([
+    {
+      id: Date.now(),
+      serverTag: '',
+      ipAddress: '',
+      ipAddress: '',
+      hostname: '',
+      sshUsername: 'ubuntu',
+      // Security
+      selectedFileType: 'pem', // 'pem' or 'ppk'
+      pemFile: null,
+      ppkFile: null,
+      serverPassword: '',
+    }
+  ]);
+
+  const handleUserChange = (e) => {
+    setUserName(e.target.value);
+  };
+
+  const handleServerChange = (id, e) => {
     const { name, value, files } = e.target;
-    if (files) {
-      setFormData(prev => ({ ...prev, [name]: files[0] }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+    setServers(prevServers => prevServers.map(server => {
+      if (server.id === id) {
+        if (files) {
+          return { ...server, [name]: files[0] };
+        }
+        return { ...server, [name]: value };
+      }
+      return server;
+    }));
+  };
+
+  const handleFileTypeChange = (id, type) => {
+    setServers(prevServers => prevServers.map(server => {
+      if (server.id === id) {
+        return {
+          ...server,
+          selectedFileType: type,
+          pemFile: null,
+          ppkFile: null
+        };
+      }
+      return server;
+    }));
+  };
+
+  const addServer = () => {
+    const newServer = {
+      id: Date.now(),
+      serverTag: '',
+      ipAddress: '',
+      ipAddress: '',
+      hostname: '',
+      sshUsername: 'ubuntu',
+      selectedFileType: 'pem',
+      pemFile: null,
+      ppkFile: null,
+      serverPassword: '',
+    };
+    setServers([...servers, newServer]);
+  };
+
+  const removeServer = (id) => {
+    if (servers.length > 1) {
+      setServers(servers.filter(server => server.id !== id));
     }
   };
 
-  const handleFileTypeChange = (type) => {
-    setSelectedFileType(type);
-    setFormData(prev => ({ ...prev, pemFile: null, ppkFile: null }));
-  };
-
-  const addComponent = () => {
-    const newComponent = {
-      id: Date.now(),
-      type: 'custom',
-      label: 'Custom Component',
-      value: '',
-    };
-    setAdditionalComponents([...additionalComponents, newComponent]);
-  };
-
-  const removeComponent = (id) => {
-    setAdditionalComponents(additionalComponents.filter(comp => comp.id !== id));
-  };
-
-  const updateComponent = (id, field, value) => {
-    setAdditionalComponents(additionalComponents.map(comp => 
-      comp.id === id ? { ...comp, [field]: value } : comp
-    ));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Profile Data:', { ...formData, additionalComponents });
-    // Here you would typically send data to your backend
-    alert('Profile setup completed!');
+
+    // Basic IP Validation
+    const ipRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+    for (const server of servers) {
+      if (!ipRegex.test(server.ipAddress)) {
+        alert(`Invalid IP Address for server: ${server.serverTag}`);
+        return;
+      }
+    }
+
+    // Process servers to read file content
+    const processingServers = servers.map(async (server) => {
+      let sshKeyContent = null;
+      const file = server.selectedFileType === 'pem' ? server.pemFile : server.ppkFile;
+
+      if (file) {
+        sshKeyContent = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (event) => resolve(event.target.result);
+          reader.onerror = (error) => reject(error);
+          reader.readAsText(file);
+        });
+      }
+
+      return {
+        ...server,
+        sshKeyContent
+      };
+    });
+
+    try {
+      const serversWithKeys = await Promise.all(processingServers);
+
+      const finalData = {
+        userId: user?.id,
+        email: user?.primaryEmailAddress?.emailAddress,
+        userName,
+        servers: serversWithKeys
+      };
+      console.log('Profile Data:', finalData);
+
+      const response = await fetch('http://localhost:8000/api/profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(finalData),
+      });
+
+      if (response.ok) {
+        navigate('/dashboard');
+      } else {
+        console.error('Failed to save profile');
+        alert('Failed to save profile. Please try again.');
+        const err = await response.json();
+        console.error(err);
+      }
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -70,214 +157,198 @@ const ProfileSetup = () => {
             Complete Your Profile Setup
           </h1>
           <p className="text-xl text-base-content/70 max-w-2xl mx-auto">
-            Configure your server details and add custom components for your orchestration setup
+            Configure your server details and add multiple servers for your orchestration setup
           </p>
         </div>
 
         {/* Main Form */}
         <div className="bg-base-100 rounded-2xl shadow-xl border border-base-300 p-8">
           <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Basic Information */}
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-base-content mb-6 flex items-center gap-2">
-                  <User className="w-6 h-6" />
-                  User Information
-                </h2>
-                
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text text-base-content font-medium">Full Name</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
 
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text text-base-content font-medium">Server Tag</span>
-                    <span className="label-text-alt text-base-content/60">Used for identification</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="serverTag"
-                    value={formData.serverTag}
-                    onChange={handleInputChange}
-                    className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
-                    placeholder="e.g., Production-Server-01"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Server Configuration */}
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-base-content mb-6 flex items-center gap-2">
-                  <Server className="w-6 h-6" />
-                  Server Configuration
-                </h2>
-
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text text-base-content font-medium">IP Address</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="ipAddress"
-                    value={formData.ipAddress}
-                    onChange={handleInputChange}
-                    className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
-                    placeholder="e.g., 192.168.1.100"
-                    required
-                  />
-                </div>
-
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text text-base-content font-medium">Hostname</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="hostname"
-                    value={formData.hostname}
-                    onChange={handleInputChange}
-                    className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
-                    placeholder="e.g., server01.example.com"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Security Configuration */}
-            <div className="mt-12 pt-8 border-t border-base-300">
+            {/* User Information (Global) */}
+            <div className="space-y-6 mb-12">
               <h2 className="text-2xl font-bold text-base-content mb-6 flex items-center gap-2">
-                <Key className="w-6 h-6" />
-                Security Configuration
+                <User className="w-6 h-6" />
+                User Information
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* File Upload Section */}
-                <div className="space-y-4">
-                  <div className="flex gap-4 mb-4">
-                    <button
-                      type="button"
-                      onClick={() => handleFileTypeChange('pem')}
-                      className={`btn ${selectedFileType === 'pem' ? 'btn-primary' : 'btn-outline'}`}
-                    >
-                      PEM File
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleFileTypeChange('ppk')}
-                      className={`btn ${selectedFileType === 'ppk' ? 'btn-primary' : 'btn-outline'}`}
-                    >
-                      PPK File
-                    </button>
-                  </div>
-
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text text-base-content font-medium">
-                        {selectedFileType === 'pem' ? 'PEM Key File' : 'PPK Key File'}
-                      </span>
-                    </label>
-                    <input
-                      type="file"
-                      name={selectedFileType === 'pem' ? 'pemFile' : 'ppkFile'}
-                      onChange={handleInputChange}
-                      className="file-input file-input-bordered w-full bg-base-200 border-base-300"
-                      accept={selectedFileType === 'pem' ? '.pem' : '.ppk'}
-                    />
-                    {formData[selectedFileType === 'pem' ? 'pemFile' : 'ppkFile'] && (
-                      <p className="mt-2 text-sm text-success">
-                        ✓ File selected: {formData[selectedFileType === 'pem' ? 'pemFile' : 'ppkFile'].name}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Password Section */}
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text text-base-content font-medium">Server Password</span>
-                    <span className="label-text-alt text-base-content/60">Optional if using key file</span>
-                  </label>
-                  <input
-                    type="password"
-                    name="serverPassword"
-                    value={formData.serverPassword}
-                    onChange={handleInputChange}
-                    className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
-                    placeholder="Enter server password"
-                  />
-                </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text text-base-content font-medium">Full Name</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={userName}
+                  onChange={handleUserChange}
+                  className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
+                  placeholder="Enter your full name"
+                  required
+                />
               </div>
             </div>
 
-            {/* Additional Components */}
-            <div className="mt-12 pt-8 border-t border-base-300">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-base-content flex items-center gap-2">
-                  <Globe className="w-6 h-6" />
-                  Additional Components
-                </h2>
-                <button
-                  type="button"
-                  onClick={addComponent}
-                  className="btn btn-primary gap-2"
-                >
-                  <Plus className="w-5 h-5" />
-                  Add Component
-                </button>
-              </div>
+            {/* Servers List */}
+            <div className="space-y-12">
+              {servers.map((server, index) => (
+                <div key={server.id} className="p-6 border border-base-300 rounded-xl bg-base-50/50 relative">
 
-              {additionalComponents.length === 0 ? (
-                <div className="text-center py-8 border-2 border-dashed border-base-300 rounded-lg">
-                  <Globe className="w-12 h-12 text-base-content/30 mx-auto mb-4" />
-                  <p className="text-base-content/60">No additional components added yet</p>
-                  <p className="text-sm text-base-content/40 mt-2">
-                    Click "Add Component" to add custom fields for your setup
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {additionalComponents.map((component) => (
-                    <div key={component.id} className="flex gap-4 items-center p-4 bg-base-200 rounded-lg">
-                      <div className="flex-1">
-                        <input
-                          type="text"
-                          value={component.label}
-                          onChange={(e) => updateComponent(component.id, 'label', e.target.value)}
-                          className="input input-bordered w-full bg-base-100 mb-2"
-                          placeholder="Component Label"
-                        />
-                        <input
-                          type="text"
-                          value={component.value}
-                          onChange={(e) => updateComponent(component.id, 'value', e.target.value)}
-                          className="input input-bordered w-full bg-base-100"
-                          placeholder="Component Value"
-                        />
-                      </div>
+                  <div className="flex justify-between items-start mb-6">
+                    <h2 className="text-2xl font-bold text-base-content flex items-center gap-2">
+                      <Server className="w-6 h-6" />
+                      Server #{index + 1} Configuration
+                    </h2>
+                    {servers.length > 1 && (
                       <button
                         type="button"
-                        onClick={() => removeComponent(component.id)}
-                        className="btn btn-error btn-square btn-sm"
+                        onClick={() => removeServer(server.id)}
+                        className="btn btn-error btn-sm gap-2"
                       >
                         <Trash2 className="w-4 h-4" />
+                        Remove
                       </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Server Details */}
+                    <div className="space-y-6">
+                      <div className="form-control">
+                        <label className="label">
+                          <span className="label-text text-base-content font-medium">Server Tag</span>
+                          <span className="label-text-alt text-base-content/60">Used for identification</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="serverTag"
+                          value={server.serverTag}
+                          onChange={(e) => handleServerChange(server.id, e)}
+                          className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
+                          placeholder="e.g., Production-Server-01"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-control">
+                        <label className="label">
+                          <span className="label-text text-base-content font-medium">IP Address</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="ipAddress"
+                          value={server.ipAddress}
+                          onChange={(e) => handleServerChange(server.id, e)}
+                          className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
+                          placeholder="e.g., 192.168.1.100"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-control">
+                        <label className="label">
+                          <span className="label-text text-base-content font-medium">Hostname</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="hostname"
+                          value={server.hostname}
+                          onChange={(e) => handleServerChange(server.id, e)}
+                          className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
+                          placeholder="e.g., server01.example.com"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-control">
+                        <label className="label">
+                          <span className="label-text text-base-content font-medium">SSH Username</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="sshUsername"
+                          value={server.sshUsername}
+                          onChange={(e) => handleServerChange(server.id, e)}
+                          className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
+                          placeholder="e.g., ubuntu, root, ec2-user"
+                          required
+                        />
+                      </div>
                     </div>
-                  ))}
+
+                    {/* Security Config (Per Server) */}
+                    <div className="space-y-6">
+                      <h3 className="text-xl font-semibold text-base-content mb-4 flex items-center gap-2">
+                        <Key className="w-5 h-5 text-base-content/70" />
+                        Security
+                      </h3>
+
+                      {/* Key File Type Selection */}
+                      <div className="flex gap-2 mb-2">
+                        <button
+                          type="button"
+                          onClick={() => handleFileTypeChange(server.id, 'pem')}
+                          className={`btn btn-sm ${server.selectedFileType === 'pem' ? 'btn-primary' : 'btn-ghost'}`}
+                        >
+                          PEM
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleFileTypeChange(server.id, 'ppk')}
+                          className={`btn btn-sm ${server.selectedFileType === 'ppk' ? 'btn-primary' : 'btn-ghost'}`}
+                        >
+                          PPK
+                        </button>
+                      </div>
+
+                      <div className="form-control">
+                        <label className="label">
+                          <span className="label-text text-base-content font-medium">
+                            {server.selectedFileType === 'pem' ? 'PEM Key File' : 'PPK Key File'}
+                          </span>
+                        </label>
+                        <input
+                          type="file"
+                          name={server.selectedFileType === 'pem' ? 'pemFile' : 'ppkFile'}
+                          onChange={(e) => handleServerChange(server.id, e)}
+                          className="file-input file-input-bordered w-full bg-base-200 border-base-300 file-input-sm"
+                          accept={server.selectedFileType === 'pem' ? '.pem' : '.ppk'}
+                        />
+                        {server[server.selectedFileType === 'pem' ? 'pemFile' : 'ppkFile'] && (
+                          <p className="mt-2 text-xs text-success">
+                            ✓ {server[server.selectedFileType === 'pem' ? 'pemFile' : 'ppkFile'].name}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="form-control">
+                        <label className="label">
+                          <span className="label-text text-base-content font-medium">Server Password</span>
+                        </label>
+                        <input
+                          type="password"
+                          name="serverPassword"
+                          value={server.serverPassword}
+                          onChange={(e) => handleServerChange(server.id, e)}
+                          className="input input-bordered w-full bg-base-200 border-base-300 focus:border-primary"
+                          placeholder="Optional if using key"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              )}
+              ))}
+            </div>
+
+            {/* Add Server Button */}
+            <div className="mt-8 flex justify-center">
+              <button
+                type="button"
+                onClick={addServer}
+                className="btn btn-outline btn-primary gap-2"
+              >
+                <Plus className="w-5 h-5" />
+                Add Another Server
+              </button>
             </div>
 
             {/* Submit Button */}
@@ -306,8 +377,8 @@ const ProfileSetup = () => {
             <div className="step">Dashboard</div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
