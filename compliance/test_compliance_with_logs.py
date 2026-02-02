@@ -648,6 +648,114 @@ def generate_summary_chart(aoss_results: Dict, baseline_results: Dict):
     plt.close()
 
 
+def generate_line_graph(aoss_results: Dict, baseline_results: Dict):
+    """Generate a line graph showing violation detection rate across test categories."""
+    
+    categories = list(aoss_results["by_category"].keys())
+    
+    # Calculate detection rates for each category
+    aoss_detection_rates = []
+    baseline_detection_rates = []
+    
+    for cat in categories:
+        aoss_cat = aoss_results["by_category"].get(cat, {})
+        baseline_cat = baseline_results["by_category"].get(cat, {})
+        
+        # Calculate detection rate: correct blocks / (correct blocks + missed violations)
+        aoss_blocks = aoss_cat.get("correct_blocks", 0)
+        aoss_missed = aoss_cat.get("missed_violations", 0)
+        aoss_total_violations = aoss_blocks + aoss_missed
+        aoss_rate = (aoss_blocks / aoss_total_violations * 100) if aoss_total_violations > 0 else 100
+        
+        baseline_blocks = baseline_cat.get("correct_blocks", 0)
+        baseline_missed = baseline_cat.get("missed_violations", 0)
+        baseline_total_violations = baseline_blocks + baseline_missed
+        baseline_rate = (baseline_blocks / baseline_total_violations * 100) if baseline_total_violations > 0 else 100
+        
+        aoss_detection_rates.append(aoss_rate)
+        baseline_detection_rates.append(baseline_rate)
+    
+    # Create figure with two subplots
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+    
+    # --- Subplot 1: Detection Rate by Category ---
+    x = np.arange(len(categories))
+    
+    ax1.plot(x, aoss_detection_rates, 'o-', linewidth=2.5, markersize=10, 
+             color='#2ecc71', label='AOSS (Policy-as-Engine)', markerfacecolor='white', markeredgewidth=2)
+    ax1.plot(x, baseline_detection_rates, 's--', linewidth=2.5, markersize=10, 
+             color='#e74c3c', label='Baseline (Prompt-based)', markerfacecolor='white', markeredgewidth=2)
+    
+    ax1.set_xlabel('Test Category', fontsize=12)
+    ax1.set_ylabel('Violation Detection Rate (%)', fontsize=12)
+    ax1.set_title('Violation Detection Rate by Category\n(CMDP Constraint-based vs Prompt-based Safety)', fontsize=13, fontweight='bold')
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(categories, rotation=15, ha='right')
+    ax1.set_ylim(-5, 110)
+    ax1.axhline(y=100, color='green', linestyle=':', alpha=0.5, label='Perfect Detection')
+    ax1.legend(loc='lower left')
+    ax1.grid(True, alpha=0.3)
+    
+    # Add value annotations
+    for i, (aoss_rate, base_rate) in enumerate(zip(aoss_detection_rates, baseline_detection_rates)):
+        ax1.annotate(f'{aoss_rate:.0f}%', (i, aoss_rate + 5), ha='center', fontsize=9, color='#2ecc71', fontweight='bold')
+        ax1.annotate(f'{base_rate:.0f}%', (i, base_rate - 8), ha='center', fontsize=9, color='#e74c3c', fontweight='bold')
+    
+    # --- Subplot 2: Cumulative Violation Detection ---
+    test_nums = list(range(1, len(COMPLIANCE_TEST_CASES) + 1))
+    
+    # Calculate cumulative detection for violation tests only
+    violation_tests = [t for t in COMPLIANCE_TEST_CASES if t["expected_violation"]]
+    
+    aoss_cumulative = []
+    baseline_cumulative = []
+    aoss_blocked_count = 0
+    baseline_blocked_count = 0
+    
+    for i, test in enumerate(violation_tests):
+        # Find results for this test
+        aoss_test = next((r for r in aoss_results["test_results"] if r["test_id"] == test["id"]), None)
+        baseline_test = next((r for r in baseline_results["test_results"] if r["test_id"] == test["id"]), None)
+        
+        if aoss_test and aoss_test["status"] == "CORRECT_BLOCK":
+            aoss_blocked_count += 1
+        if baseline_test and baseline_test["status"] == "CORRECT_BLOCK":
+            baseline_blocked_count += 1
+        
+        aoss_cumulative.append(aoss_blocked_count / (i + 1) * 100)
+        baseline_cumulative.append(baseline_blocked_count / (i + 1) * 100)
+    
+    x2 = list(range(1, len(violation_tests) + 1))
+    
+    ax2.fill_between(x2, aoss_cumulative, alpha=0.3, color='#2ecc71')
+    ax2.fill_between(x2, baseline_cumulative, alpha=0.3, color='#e74c3c')
+    ax2.plot(x2, aoss_cumulative, 'o-', linewidth=2.5, markersize=8, 
+             color='#2ecc71', label='AOSS (Policy-as-Engine)')
+    ax2.plot(x2, baseline_cumulative, 's--', linewidth=2.5, markersize=8, 
+             color='#e74c3c', label='Baseline (Prompt-based)')
+    
+    ax2.set_xlabel('Number of Violation Tests Processed', fontsize=12)
+    ax2.set_ylabel('Cumulative Detection Rate (%)', fontsize=12)
+    ax2.set_title('Cumulative Violation Detection Rate\n(10 Violation Tests)', fontsize=13, fontweight='bold')
+    ax2.set_ylim(-5, 110)
+    ax2.axhline(y=100, color='green', linestyle=':', alpha=0.5, label='Perfect Detection')
+    ax2.legend(loc='lower right')
+    ax2.grid(True, alpha=0.3)
+    
+    # Add final value annotations
+    ax2.annotate(f'{aoss_cumulative[-1]:.0f}%', (len(x2), aoss_cumulative[-1] + 3), 
+                 ha='center', fontsize=11, color='#2ecc71', fontweight='bold')
+    ax2.annotate(f'{baseline_cumulative[-1]:.0f}%', (len(x2), baseline_cumulative[-1] - 8), 
+                 ha='center', fontsize=11, color='#e74c3c', fontweight='bold')
+    
+    plt.tight_layout()
+    line_chart = "compliance_line_graph.png"
+    plt.savefig(line_chart, dpi=150, bbox_inches='tight')
+    print(f"[SUCCESS] Line graph saved to: {line_chart}")
+    plt.close()
+
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run AOSS Compliance Test Suite")
     parser.add_argument('--mode', choices=['aoss', 'baseline', 'both'], default='both',
@@ -672,6 +780,7 @@ def main():
         print("="*80)
         generate_comparison_chart(aoss_results, baseline_results)
         generate_summary_chart(aoss_results, baseline_results)
+        generate_line_graph(aoss_results, baseline_results)
         print("\n" + "="*80)
         print("TEST COMPLETE - Charts generated for research paper")
         print("="*80)
