@@ -5,10 +5,10 @@
 node_modules/
 
 # unrelated folders
-agents/
-compliance/
-docs/
-moniter/
+# agents/
+# compliance/
+# docs/
+# moniter/
 
 # logs
 npm-debug.log*
