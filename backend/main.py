@@ -13,6 +13,7 @@ import monitoring
 from fastapi.responses import StreamingResponse
 import json
 from compliance.router import router as compliance_router
+from reporting.router import router as reporting_router  # NEW: Governance Reporting
 
 # Create tables (if not handled by migration tool, though init.sql usually handles it)
 models.Base.metadata.create_all(bind=engine)
@@ -25,6 +26,7 @@ app = FastAPI()
 # Include Routers
 app.include_router(monitoring.router)
 app.include_router(compliance_router)
+app.include_router(reporting_router)  # NEW: Governance Reporting API
 
 # CORS for frontend
 app.add_middleware(
@@ -35,9 +37,34 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Start log shipper for Grafana Loki integration
+from log_shipper import start_log_shipper, stop_log_shipper
+
+# Prometheus metrics
+from metrics import get_metrics
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize log shipper on application startup."""
+    start_log_shipper()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Stop log shipper on application shutdown."""
+    stop_log_shipper()
+
 @app.get("/")
 def read_root():
     return {"message": "AOSS Framework Backend API"}
+
+@app.get("/metrics")
+def metrics_endpoint():
+    """
+    Prometheus metrics endpoint.
+    
+    Returns metrics in Prometheus text format for scraping.
+    """
+    return get_metrics()
 
 @app.get("/api/user/{user_id}/status", response_model=schemas.UserStatus)
 def check_user_status(user_id: str, db: Session = Depends(get_db)):
@@ -243,6 +270,24 @@ def execute_plan_stream(request: schemas.ExecuteRequest, db: Session = Depends(g
     server = db.query(models.Server).filter(models.Server.id == request.serverId).first()
     if not server:
         raise HTTPException(status_code=404, detail="Server not found")
+    
+    # Import metrics functions
+    from metrics import (
+        record_execution_start,
+        record_execution_complete,
+        record_execution_step,
+        record_execution_error,
+        record_self_healing
+    )
+    import time
+    
+    # Determine agent type and server tag for metrics
+    agent_type = getattr(request, 'agent_type', 'general')
+    server_tag = server.server_tag if server else "unknown"
+    
+    # Record execution start
+    start_time = time.time()
+    record_execution_start(agent_type=agent_type, server_tag=server_tag)
 
     def execution_generator():
         # 2. Initialize Executor inside generator to keep scope
@@ -281,6 +326,8 @@ def execute_plan_stream(request: schemas.ExecuteRequest, db: Session = Depends(g
                 
                 if step_result["exit_code"] == 0:
                     results.append(step_result)
+                    # Record successful step
+                    record_execution_step(agent_type=agent_type, status="Success")
                     # Notify: Step Success
                     yield json.dumps({
                         "type": "step_result",
@@ -289,6 +336,8 @@ def execute_plan_stream(request: schemas.ExecuteRequest, db: Session = Depends(g
                     }) + "\n"
                 else:
                     results.append(step_result)
+                    # Record failed step
+                    record_execution_step(agent_type=agent_type, status="Failed")
                     
                     # Notify: Step Failed
                     yield json.dumps({
@@ -316,6 +365,8 @@ def execute_plan_stream(request: schemas.ExecuteRequest, db: Session = Depends(g
                         new_steps_data = fix_data.get("plan", [])
                         
                         if new_steps_data:
+                            # Record self-healing attempt
+                            record_self_healing(agent_type=agent_type, success=True)
                             # Notify: Healing Plan Generated
                             yield json.dumps({
                                 "type": "healing_plan",
@@ -339,6 +390,8 @@ def execute_plan_stream(request: schemas.ExecuteRequest, db: Session = Depends(g
 
         except Exception as e:
             final_status = "Failed"
+            # Record error
+            record_execution_error(error_type="system_error", agent_type=agent_type)
             import traceback
             traceback.print_exc()
             err_res = {
@@ -357,6 +410,15 @@ def execute_plan_stream(request: schemas.ExecuteRequest, db: Session = Depends(g
         finally:
             if 'executor' in locals():
                 executor.close()
+            
+            # Record execution completion
+            duration = time.time() - start_time
+            record_execution_complete(
+                agent_type=agent_type,
+                server_tag=server_tag,
+                status=final_status,
+                duration_seconds=duration
+            )
 
         # 4. Generate Summary & UPDATE KNOWLEDGE BASE
         agent_summary = None
@@ -418,6 +480,17 @@ def execute_plan_stream(request: schemas.ExecuteRequest, db: Session = Depends(g
         db.add(new_log)
         db.commit()
         db.refresh(new_log)
+
+        # 6. Trigger Governance Report Generation (Event Hook)
+        try:
+            from reporting.event_hook import trigger_report_update
+            trigger_report_update(
+                execution_log_id=str(new_log.id),
+                user_id=server.user_id,
+                db=db
+            )
+        except Exception as e:
+            print(f"Failed to generate governance report: {e}")
 
         # Final Event
         yield json.dumps({

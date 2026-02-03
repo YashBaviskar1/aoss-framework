@@ -25,6 +25,8 @@ import SreSafety from "./components/SreSafety";
 import ChatOrchestrator from "./components/ChatOrchestrator";
 import MonitoringSetup from "./components/MonitoringSetup";
 import MonitoringDashboard from "./components/MonitoringDashboard";
+import GovernanceReports from "./components/GovernanceReports"; // NEW: Objective 1
+import ReportDetail from "./components/ReportDetail"; // NEW: Objective 1
 
 // Separate component for Auth Logic to use hooks inside Routes
 const AuthRouteHandler = ({ component: Component }) => {
@@ -304,7 +306,35 @@ export default function App() {
               </>
             }
           />
-        </Routes>
+          {/* NEW: Governance Reports (Objective 1) */}
+          <Route
+            path="/reports"
+            element={
+              <>
+                <SignedIn>
+                  <GovernanceReports />
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
+
+          {/* NEW: Report Detail View (Objective 1) */}
+          <Route
+            path="/reports/:reportId"
+            element={
+              <>
+                <SignedIn>
+                  <ReportDetail />
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />        </Routes>
       </div>
     </div >
   );

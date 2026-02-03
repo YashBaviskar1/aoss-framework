@@ -115,6 +115,7 @@ export default function Dashboard() {
             <NavLink to="/compliance" icon={ShieldCheck}>Compliance</NavLink>
             <NavLink to="/monitoring" icon={BarChart3}>Monitoring</NavLink>
             <NavLink to="/chat" icon={Bot}>Orchestrate</NavLink>
+            <NavLink to="/reports" icon={FileText}>Reports</NavLink>
           </ul>
         </nav>
 

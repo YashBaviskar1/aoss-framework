@@ -10,9 +10,11 @@ import {
     Activity,
     Plus,
     ExternalLink,
-    LineChart
+    LineChart,
+    AlertTriangle
 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import AlertsSidebar from './AlertsSidebar';
 
 // --- Reused Helper ---
 function NavLink({ to, icon: Icon, children }) {
@@ -29,7 +31,20 @@ function NavLink({ to, icon: Icon, children }) {
 }
 
 // Hardcoded for now based on user request/example
-const GRAFANA_URL = "http://localhost:3001/d/ad7kwf5/aoss-server-monitoring?orgId=1&refresh=5s&kiosk";
+const GRAFANA_DASHBOARDS = {
+    system: {
+        name: "System Metrics",
+        url: "http://localhost:3001/d/ad7kwf5/aoss-server-monitoring?orgId=1&refresh=5s&kiosk"
+    },
+    execution: {
+        name: "Execution Metrics",
+        url: "http://localhost:3001/d/adjwzc6/evaluation-metrics?orgId=1&from=now-30m&to=now&timezone=browser&editPanel=8&kiosk"
+    },
+    logs: {
+        name: "Logs & Failures",
+        url: "http://localhost:3001/d/advkscn/aoss-logs?orgId=1&from=now-24h&to=now&timezone=browser&kiosk"
+    }
+};
 
 export default function MonitoringDashboard() {
     const { user, isLoaded } = useUser();
@@ -38,6 +53,9 @@ export default function MonitoringDashboard() {
     const [loading, setLoading] = useState(true);
     const [viewMode, setViewMode] = useState('list'); // 'list' | 'dashboard'
     const [selectedServer, setSelectedServer] = useState(null);
+    const [selectedDashboard, setSelectedDashboard] = useState('system');
+    const [alertsSidebarOpen, setAlertsSidebarOpen] = useState(false);
+    const [alertCount, setAlertCount] = useState(0);
 
     useEffect(() => {
         if (isLoaded && user) {
@@ -51,6 +69,14 @@ export default function MonitoringDashboard() {
                     console.error("Failed to fetch status", err);
                     setLoading(false);
                 });
+            
+            // Fetch active alerts count
+            fetch(`http://localhost:8000/api/monitoring/alerts?status=firing`)
+                .then(res => res.json())
+                .then(data => {
+                    setAlertCount(data.length);
+                })
+                .catch(err => console.error("Failed to fetch alerts", err));
         }
     }, [isLoaded, user]);
 
@@ -84,6 +110,19 @@ export default function MonitoringDashboard() {
                         <NavLink to="/monitoring" icon={BarChart3}>Monitoring</NavLink>
                         <NavLink to="/chat" icon={Bot}>Orchestrate</NavLink>
                     </ul>
+                    
+                    <div className="mt-6 px-4">
+                        <button 
+                            className="btn btn-outline btn-block justify-start gap-2"
+                            onClick={() => setAlertsSidebarOpen(true)}
+                        >
+                            <AlertTriangle className="w-5 h-5" />
+                            <span>Alerts</span>
+                            {alertCount > 0 && (
+                                <span className="badge badge-error badge-sm ml-auto">{alertCount}</span>
+                            )}
+                        </button>
+                    </div>
                 </nav>
             </aside>
 
@@ -160,22 +199,50 @@ export default function MonitoringDashboard() {
                         )}
 
                         {viewMode === 'dashboard' && selectedServer && (
-                            <div className="flex-1 bg-base-100 rounded-2xl shadow-lg border border-base-300 overflow-hidden flex flex-col relative w-full h-full">
-                                <div className="absolute top-4 right-4 z-10 flex gap-2">
-                                    <a href={GRAFANA_URL} target="_blank" rel="noreferrer" className="btn btn-sm btn-circle btn-ghost bg-base-100/80 backdrop-blur" title="Open in Grafana">
+                            <div className="flex-1 flex flex-col overflow-hidden">
+                                {/* Dashboard Selector */}
+                                <div className="bg-base-100 p-4 border-b border-base-300 flex items-center justify-between">
+                                    <div className="flex gap-2">
+                                        {Object.entries(GRAFANA_DASHBOARDS).map(([key, dashboard]) => (
+                                            <button
+                                                key={key}
+                                                className={`btn btn-sm ${selectedDashboard === key ? 'btn-primary' : 'btn-ghost'}`}
+                                                onClick={() => setSelectedDashboard(key)}
+                                            >
+                                                {dashboard.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <a 
+                                        href={`${GRAFANA_DASHBOARDS[selectedDashboard].url}&var-instance=${selectedServer.ip_address}:9100`}
+                                        target="_blank" 
+                                        rel="noreferrer" 
+                                        className="btn btn-sm btn-circle btn-ghost"
+                                        title="Open in Grafana"
+                                    >
                                         <ExternalLink className="w-4 h-4" />
                                     </a>
                                 </div>
-                                <iframe
-                                    src={`${GRAFANA_URL}&var-instance=${selectedServer.ip_address}:9100`}
-                                    className="w-full h-full border-0"
-                                    title={`Monitoring Dashboard for ${selectedServer.server_tag}`}
-                                />
+                                
+                                {/* Dashboard iframe */}
+                                <div className="flex-1 bg-base-100 overflow-hidden">
+                                    <iframe
+                                        src={`${GRAFANA_DASHBOARDS[selectedDashboard].url}&var-instance=${selectedServer.ip_address}:9100`}
+                                        className="w-full h-full border-0"
+                                        title={`${GRAFANA_DASHBOARDS[selectedDashboard].name} for ${selectedServer.server_tag}`}
+                                    />
+                                </div>
                             </div>
                         )}
                     </>
                 )}
             </main>
+            
+            {/* Alerts Sidebar */}
+            <AlertsSidebar 
+                isOpen={alertsSidebarOpen}
+                onClose={() => setAlertsSidebarOpen(false)}
+            />
         </div>
     );
 }

@@ -11,3 +11,9 @@ scrape_configs:
     file_sd_configs:
       - files:
         - 'targets.json'
+
+  - job_name: 'aoss-backend'
+    static_configs:
+      - targets: ['host.docker.internal:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 5s

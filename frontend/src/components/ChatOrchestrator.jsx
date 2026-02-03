@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 import { useState, useEffect, useRef } from 'react';
@@ -19,7 +19,8 @@ import {
     BrainCircuit,
     Database,
     Globe,
-    Lock
+    Lock,
+    FileText
 } from 'lucide-react';
 
 // --- Helper component for Sidebar Links ---
@@ -48,6 +49,7 @@ function NavLink({ to, icon: Icon, children }) {
 
 export default function ChatOrchestrator() {
     const { user, isLoaded } = useUser();
+    const navigate = useNavigate();
     const [servers, setServers] = useState([]);
     const [selectedServerId, setSelectedServerId] = useState('');
     const [query, setQuery] = useState('');
@@ -81,16 +83,34 @@ export default function ChatOrchestrator() {
     useEffect(() => {
         if (isLoaded && user) {
             fetch(`http://localhost:8000/api/dashboard/${user.id}`)
-                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 404) {
+                        // User not found in database - redirect to profile setup
+                        navigate('/profile-setup');
+                        return null;
+                    }
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    return res.json();
+                })
                 .then(data => {
-                    setServers(data.servers);
-                    if (data.servers.length > 0) {
-                        setSelectedServerId(data.servers[0].id);
+                    if (data) {
+                        setServers(data.servers || []);
+                        if (data.servers && data.servers.length > 0) {
+                            setSelectedServerId(data.servers[0].id);
+                        } else {
+                            // User exists but has no servers - redirect to profile setup
+                            navigate('/profile-setup');
+                        }
                     }
                 })
-                .catch(err => console.error("Error fetching servers:", err));
+                .catch(err => {
+                    console.error("Error fetching servers:", err);
+                    setServers([]); // Set empty array on error
+                });
         }
-    }, [isLoaded, user]);
+    }, [isLoaded, user, navigate]);
 
     // Scroll to bottom
     useEffect(() => {
@@ -336,6 +356,7 @@ export default function ChatOrchestrator() {
                         <NavLink to="/compliance" icon={ShieldCheck}>Compliance</NavLink>
                         <NavLink to="/monitoring" icon={BarChart3}>Monitoring</NavLink>
                         <NavLink to="/chat" icon={Bot}>Orchestrate</NavLink>
+                        <NavLink to="/reports" icon={FileText}>Reports</NavLink>
                     </ul>
                 </nav>
                 <div className="px-6 py-4 border-t border-base-300/50">
@@ -407,7 +428,7 @@ export default function ChatOrchestrator() {
                             onChange={(e) => { setSelectedServerId(e.target.value); setChatHistory([]); }}
                         >
                             <option disabled value="">Target Server</option>
-                            {servers.map(s => (
+                            {servers && servers.map(s => (
                                 <option key={s.id} value={s.id}>{s.server_tag}</option>
                             ))}
                         </select>

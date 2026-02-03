@@ -4,14 +4,17 @@ from uuid import UUID
 from datetime import datetime
 
 class ServerCreate(BaseModel):
+    id: Optional[int] = None # Frontend React key, ignored by backend
     serverTag: str
-    ipAddress: IPvAnyAddress
     ipAddress: IPvAnyAddress
     hostname: Optional[str] = None
     sshUsername: str = "root" # Default to root if not provided, or make required
     # Security/Auth placeholders
     selectedFileType: Optional[str] = None # 'pem' or 'ppk'
     sshKeyContent: Optional[str] = None # content of the key file
+    pemFile: Optional[Any] = None # Ignored, handled via sshKeyContent
+    ppkFile: Optional[Any] = None # Ignored, handled via sshKeyContent
+    serverPassword: Optional[str] = None # For future password-based auth
     
     class Config:
         from_attributes = True

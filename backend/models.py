@@ -77,3 +77,58 @@ class MonitoringConfig(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # server = relationship("Server", back_populates="monitoring_config") # Add back_populates to Server if needed
+
+
+# NEW: Governance Report Model (Objective 1)
+class GovernanceReport(Base):
+    __tablename__ = "governance_reports"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(Text, ForeignKey("users.id"), nullable=False)
+    
+    # Report metadata
+    report_type = Column(Text, default="activity")  # activity, compliance, deployment
+    status = Column(Text, default="active")  # active, archived
+    
+    # Timestamps
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    last_updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    
+    # Report content (incremental, append-only)
+    executions = Column(JSON, default=[])  # Array of execution summaries
+    summary_stats = Column(JSON, default={})  # Aggregated statistics
+    
+    # Optional metadata
+    period_start = Column(DateTime(timezone=True), nullable=True)
+    period_end = Column(DateTime(timezone=True), nullable=True)
+    tags = Column(JSON, default=[])  # For categorization
+
+
+class GrafanaAlert(Base):
+    __tablename__ = "grafana_alerts"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    
+    # Grafana alert identifiers
+    alertname = Column(Text, nullable=False)
+    fingerprint = Column(Text, nullable=True)  # Unique alert identifier from Grafana
+    
+    # Alert metadata
+    instance = Column(Text, nullable=True)  # Server identifier (IP:port)
+    severity = Column(Text, nullable=True)  # critical, warning, info
+    status = Column(Text, nullable=False)  # firing, resolved
+    
+    # Alert content
+    summary = Column(Text, nullable=True)
+    description = Column(Text, nullable=True)
+    
+    # Timestamps
+    starts_at = Column(DateTime(timezone=True), nullable=True)
+    ends_at = Column(DateTime(timezone=True), nullable=True)
+    received_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    # Full payload for reference
+    raw_payload = Column(JSON, nullable=True)
+    
+    # Link to server if instance can be matched
+    server_id = Column(UUID(as_uuid=True), ForeignKey("servers.id", ondelete="SET NULL"), nullable=True)

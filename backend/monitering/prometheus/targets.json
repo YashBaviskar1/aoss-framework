@@ -16,5 +16,14 @@
       "job": "node_exporter",
       "env": "production"
     }
+  },
+  {
+    "targets": [
+      "43.205.128.5:9100"
+    ],
+    "labels": {
+      "job": "node_exporter",
+      "env": "production"
+    }
   }
 ]

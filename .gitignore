@@ -1,5 +1,6 @@
 # env
 .env
+.db
 
 # dependencies
 node_modules/

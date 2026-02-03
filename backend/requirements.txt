@@ -8,4 +8,7 @@ python-dotenv
 langchain
 langchain-groq
 paramiko
-boto3n-dotenv
+boto3
+python-dotenv
+requests
+prometheus-client

@@ -2,7 +2,8 @@ import boto3
 import json
 import os
 from typing import List
-from fastapi import APIRouter, HTTPException, Depends
+from datetime import datetime
+from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from database import get_db
 import models
@@ -228,3 +229,232 @@ def get_monitoring_status(db: Session = Depends(get_db)):
         })
         
     return result
+
+
+@router.post("/api/monitoring/alerts")
+async def receive_grafana_alert(request: Request, db: Session = Depends(get_db)):
+    """
+    Webhook endpoint to receive Grafana alerts.
+    Stores alert data without modification.
+    """
+    try:
+        payload = await request.json()
+        
+        # Extract alerts from Grafana webhook payload
+        alerts = payload.get("alerts", [])
+        
+        for alert in alerts:
+            # Parse labels and annotations
+            labels = alert.get("labels", {})
+            annotations = alert.get("annotations", {})
+            
+            # Extract instance (server identifier) and try to match with server
+            instance = labels.get("instance", "")
+            server_id = None
+            
+            if instance:
+                # Try to match instance IP with server IP
+                # Instance format is usually "IP:PORT"
+                instance_ip = instance.split(":")[0] if ":" in instance else instance
+                server = db.query(models.Server).filter(
+                    models.Server.ip_address == instance_ip
+                ).first()
+                if server:
+                    server_id = server.id
+            
+            # Parse timestamps
+            starts_at = None
+            ends_at = None
+            if alert.get("startsAt"):
+                try:
+                    starts_at = datetime.fromisoformat(alert["startsAt"].replace("Z", "+00:00"))
+                except:
+                    pass
+            if alert.get("endsAt"):
+                try:
+                    ends_at = datetime.fromisoformat(alert["endsAt"].replace("Z", "+00:00"))
+                except:
+                    pass
+            
+            # Create alert record
+            grafana_alert = models.GrafanaAlert(
+                alertname=labels.get("alertname", "Unknown"),
+                fingerprint=alert.get("fingerprint"),
+                instance=instance,
+                severity=labels.get("severity", "info"),
+                status=alert.get("status", "firing"),
+                summary=annotations.get("summary"),
+                description=annotations.get("description"),
+                starts_at=starts_at,
+                ends_at=ends_at,
+                raw_payload=alert,
+                server_id=server_id
+            )
+            
+            db.add(grafana_alert)
+        
+        db.commit()
+        
+        return {"status": "success", "message": f"Processed {len(alerts)} alert(s)"}
+    
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to process alert: {str(e)}")
+
+
+@router.get("/api/monitoring/alerts")
+def get_alerts(
+    status: str = None,
+    severity: str = None,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """
+    Returns list of Grafana alerts.
+    Filters: status (firing, resolved), severity (critical, warning, info)
+    """
+    query = db.query(models.GrafanaAlert).order_by(models.GrafanaAlert.received_at.desc())
+    
+    if status:
+        query = query.filter(models.GrafanaAlert.status == status)
+    if severity:
+        query = query.filter(models.GrafanaAlert.severity == severity)
+    
+    alerts = query.limit(limit).all()
+    
+    result = []
+    for alert in alerts:
+        # Get server info if linked
+        server_tag = None
+        server_ip = None
+        if alert.server_id:
+            server = db.query(models.Server).filter(models.Server.id == alert.server_id).first()
+            if server:
+                server_tag = server.server_tag
+                server_ip = str(server.ip_address)
+        
+        result.append({
+            "id": str(alert.id),
+            "alertname": alert.alertname,
+            "instance": alert.instance,
+            "severity": alert.severity,
+            "status": alert.status,
+            "summary": alert.summary,
+            "description": alert.description,
+            "starts_at": alert.starts_at.isoformat() if alert.starts_at else None,
+            "ends_at": alert.ends_at.isoformat() if alert.ends_at else None,
+            "received_at": alert.received_at.isoformat() if alert.received_at else None,
+            "server_tag": server_tag,
+            "server_ip": server_ip,
+            "server_id": str(alert.server_id) if alert.server_id else None
+        })
+    
+    return result
+
+
+@router.get("/api/monitoring/logs")
+def get_execution_logs(
+    limit: int = 100,
+    server_id: str = None,
+    status: str = None,
+    db: Session = Depends(get_db)
+):
+    """
+    READ-ONLY endpoint to expose execution logs in structured format.
+    
+    Extracts per-step execution events from execution_results JSON and
+    flattens them into log records suitable for observability tools.
+    
+    Query Parameters:
+    - limit: Maximum number of execution records to fetch (default: 100)
+    - server_id: Filter by specific server UUID
+    - status: Filter by execution status (Success, Failed, Planned)
+    
+    Returns:
+    - List of log entries with timestamp, agent_type, server_id, command, status, etc.
+    """
+    query = db.query(models.ExecutionLog).order_by(models.ExecutionLog.created_at.desc())
+    
+    # Apply filters
+    if server_id:
+        query = query.filter(models.ExecutionLog.server_id == server_id)
+    if status:
+        query = query.filter(models.ExecutionLog.status == status)
+    
+    execution_logs = query.limit(limit).all()
+    
+    log_entries = []
+    
+    for exec_log in execution_logs:
+        # Get server info
+        server = db.query(models.Server).filter(models.Server.id == exec_log.server_id).first()
+        server_tag = server.server_tag if server else "unknown"
+        server_ip = str(server.ip_address) if server else "unknown"
+        
+        # Extract agent type from query/plan (heuristic)
+        agent_type = "general"
+        if exec_log.plan and isinstance(exec_log.plan, list) and len(exec_log.plan) > 0:
+            # Agent type might be embedded in plan or we use query keywords
+            query_lower = exec_log.query.lower() if exec_log.query else ""
+            if any(kw in query_lower for kw in ["network", "firewall", "dns", "port"]):
+                agent_type = "network"
+            elif any(kw in query_lower for kw in ["database", "postgres", "mysql", "sql"]):
+                agent_type = "database"
+            elif any(kw in query_lower for kw in ["security", "audit", "permission", "user"]):
+                agent_type = "security"
+        
+        # Flatten execution_results into individual log entries
+        if exec_log.execution_results and isinstance(exec_log.execution_results, list):
+            for step_result in exec_log.execution_results:
+                # Truncate output for log readability
+                stdout = step_result.get("stdout", "")
+                stderr = step_result.get("stderr", "")
+                stdout_truncated = stdout[:500] + "..." if len(stdout) > 500 else stdout
+                stderr_truncated = stderr[:500] + "..." if len(stderr) > 500 else stderr
+                
+                log_entry = {
+                    "timestamp": exec_log.created_at.isoformat() if exec_log.created_at else None,
+                    "execution_id": str(exec_log.id),
+                    "user_id": exec_log.user_id,
+                    "server_id": str(exec_log.server_id),
+                    "server_tag": server_tag,
+                    "server_ip": server_ip,
+                    "agent_type": agent_type,
+                    "query": exec_log.query,
+                    "step": step_result.get("step", 0),
+                    "command": step_result.get("command", ""),
+                    "status": step_result.get("status", "Unknown"),
+                    "exit_code": step_result.get("exit_code"),
+                    "stdout": stdout_truncated,
+                    "stderr": stderr_truncated,
+                    "execution_status": exec_log.status,
+                    "agent_summary": exec_log.agent_summary
+                }
+                log_entries.append(log_entry)
+        else:
+            # No execution results yet (Planned state), create a single entry
+            log_entry = {
+                "timestamp": exec_log.created_at.isoformat() if exec_log.created_at else None,
+                "execution_id": str(exec_log.id),
+                "user_id": exec_log.user_id,
+                "server_id": str(exec_log.server_id),
+                "server_tag": server_tag,
+                "server_ip": server_ip,
+                "agent_type": agent_type,
+                "query": exec_log.query,
+                "step": 0,
+                "command": "",
+                "status": exec_log.status,
+                "exit_code": None,
+                "stdout": "",
+                "stderr": "",
+                "execution_status": exec_log.status,
+                "agent_summary": exec_log.agent_summary
+            }
+            log_entries.append(log_entry)
+    
+    return {
+        "total_executions": len(execution_logs),
+        "total_log_entries": len(log_entries),
+        "logs": log_entries
+    }
