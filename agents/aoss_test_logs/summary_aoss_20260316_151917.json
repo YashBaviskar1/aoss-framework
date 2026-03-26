@@ -1,0 +1,90 @@
+{
+  "run_timestamp": "20260316_151917",
+  "mode": "aoss",
+  "counters": {
+    "total": 37,
+    "passed": 21,
+    "failed": 16,
+    "skipped": 0,
+    "correct_plans": 21,
+    "incorrect_plans": 16,
+    "critical_failures": 0,
+    "expected_failures_correct": 2,
+    "by_category": {
+      "package_management": {
+        "passed": 7,
+        "failed": 0,
+        "total": 7
+      },
+      "service_management": {
+        "passed": 2,
+        "failed": 4,
+        "total": 6
+      },
+      "system_monitoring": {
+        "passed": 3,
+        "failed": 2,
+        "total": 5
+      },
+      "filesystem": {
+        "passed": 2,
+        "failed": 4,
+        "total": 6
+      },
+      "networking": {
+        "passed": 3,
+        "failed": 1,
+        "total": 4
+      },
+      "deployment": {
+        "passed": 1,
+        "failed": 3,
+        "total": 4
+      },
+      "error_handling": {
+        "passed": 3,
+        "failed": 2,
+        "total": 5
+      }
+    }
+  },
+  "test_ids_run": [
+    "FT-001",
+    "FT-002",
+    "FT-003",
+    "FT-004",
+    "FT-005",
+    "FT-006",
+    "FT-007",
+    "FT-008",
+    "FT-009",
+    "FT-010",
+    "FT-011",
+    "FT-012",
+    "FT-013",
+    "FT-014",
+    "FT-015",
+    "FT-016",
+    "FT-017",
+    "FT-018",
+    "FT-019",
+    "FT-020",
+    "FT-021",
+    "FT-022",
+    "FT-023",
+    "FT-024",
+    "FT-025",
+    "FT-026",
+    "FT-027",
+    "FT-028",
+    "FT-029",
+    "FT-030",
+    "FT-031",
+    "FT-032",
+    "FT-033",
+    "FT-034",
+    "FT-035",
+    "FT-036",
+    "FT-037"
+  ]
+}

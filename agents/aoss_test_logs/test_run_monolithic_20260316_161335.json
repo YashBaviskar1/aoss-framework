@@ -1,0 +1,1562 @@
+[
+  {
+    "test_id": "FT-001",
+    "category": "package_management",
+    "mode": "monolithic",
+    "query": "install htop",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 11.72,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install htop -y"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt update",
+        "status": "SUCCESS",
+        "stdout": "0% [Working]            Hit:1 https://aquasecurity.github.io/trivy-repo/deb noble InRelease\n0% [Waiting for headers] [Connecting to archive.ubuntu.com (185.125.190.83)] [C                                                                               Hit:2 https://download.docker.com/linux/ubuntu noble InRelease\n0% [Connecting to deb.nodesource.com] [Connecting to archive.ubuntu.com (185.121yash2raj\n                                                                               Hit:3 https://deb.nodesource.com/node_22.x nodistro InRelease\n                                                                               0% [Connecting to archive.ubuntu.com (185.125.190.83)] [Waiting for headers]                                                                            Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease\n                                                                            0% [Waiting for headers]                        Hit:5 http://archive.ubuntu.com/ubuntu noble InRelease\n                        0% [Working]0% [Waiting for headers]                        Hit:6 http://archive.ubuntu.com/ubuntu noble-updates InRelease\n                        0% [Working]0% [Waiting for headers]                        Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease\n                        0% [Working]0% [Working]0% [Working]0% [Working]0% [Working]20% [Working]             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 30%Reading package lists... 36%Reading package lists... 36%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 55%Reading package lists... 55%Reading package lists... 58%Reading package lists... 58%Reading package lists... 62%Reading package lists... 62%Reading package lists... 64%Reading package lists... 64%Reading package lists... 71%Reading package lists... 71%Reading package lists... 71%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 81%Reading package lists... 81%Reading package lists... 83%Reading package lists... 83%Reading package lists... 86%Reading package lists... 86%Reading package lists... 87%Reading package lists... 87%Reading package lists... 94%Reading package lists... 94%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\n124 packages can be upgraded. Run 'apt list --upgradable' to see them.\nW: https://aquasecurity.github.io/trivy-repo/deb/dists/noble/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install htop -y",
+        "status": "SUCCESS",
+        "stdout": "Reading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%1yash2raj\nBuilding dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nThe following packages were automatically installed and are no longer required:\n  gettext-base gfortran gfortran-13 gfortran-13-x86-64-linux-gnu\n  gfortran-x86-64-linux-gnu git-man libblas-dev libbz2-dev liberror-perl\n  libestr0 libfastjson4 libgfortran-13-dev libgfortran5 libjpeg-dev\n  libjpeg-turbo8-dev libjpeg8-dev libjq1 liblapack-dev liblapack3 libllvm19\n  liblzma-dev libonig5 libpng-dev libpng-tools libreadline-dev libtcl8.6\n  libtk8.6 libxss1 r-doc-html zip\nUse 'sudo apt autoremove' to remove them.\nSuggested packages:\n  lm-sensors strace\nThe following NEW packages will be installed:\n  htop\n0 upgraded, 1 newly installed, 0 to remove and 124 not upgraded.\nNeed to get 171 kB of archives.\nAfter this operation, 434 kB of additional disk space will be used.\n0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble/main amd64 htop amd64 3.3.0-4build1 [171 kB]\n6% [1 htop 13.4 kB/171 kB 8%]39% [1 htop 83.2 kB/171 kB 49%]                               100% [Working]              Fetched 171 kB in 1s (160 kB/s)\n\n\u001b7\u001b8Selecting previously unselected package htop.\n(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 62874 files and directories currently installed.)\nPreparing to unpack .../htop_3.3.0-4build1_amd64.deb ...\n\u001b7Progress: [  0%] [..........................................................] \u001b8\u001b7Progress: [ 20%] [###########...............................................] \u001b8Unpacking htop (3.3.0-4build1) ...\n\u001b7Progress: [ 40%] [#######################...................................] \u001b8Setting up htop (3.3.0-4build1) ...\n\u001b7Progress: [ 60%] [##################################........................] \u001b8\u001b7Progress: [ 80%] [##############################################............] \u001b8Processing triggers for hicolor-icon-theme (0.17-2) ...\nProcessing triggers for man-db (2.12.0-4build2) ...\n\n\u001b7\u001b8",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-002",
+    "category": "package_management",
+    "mode": "monolithic",
+    "query": "install the curl utility",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 5.37,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y curl"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt update",
+        "status": "SUCCESS",
+        "stdout": "0% [Working]            Hit:1 https://aquasecurity.github.io/trivy-repo/deb noble InRelease\n0% [Connected to download.docker.com (13.225.5.103)] [Connected to deb.nodesour                                                                               Hit:2 https://download.docker.com/linux/ubuntu noble InRelease\n0% [Connected to deb.nodesource.com (104.20.45.190)] [Connecting to archive.ubu                                                                               Hit:3 https://deb.nodesource.com/node_22.x nodistro InRelease\n0% [Connecting to archive.ubuntu.com (91.189.91.82)] [Connecting to security.ub1yash2raj\n                                                                               0% [Waiting for headers] [Waiting for headers]                                              Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease\n                                              0% [Waiting for headers]0% [Waiting for headers]0% [Waiting for headers]                        Hit:5 http://archive.ubuntu.com/ubuntu noble InRelease\n                        0% [Working]0% [Waiting for headers]0% [Waiting for headers]                        Hit:6 http://archive.ubuntu.com/ubuntu noble-updates InRelease\n                        0% [Working]0% [Waiting for headers]                        Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease\n                        0% [Working]20% [Working]             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 36%Reading package lists... 36%Reading package lists... 36%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 55%Reading package lists... 55%Reading package lists... 58%Reading package lists... 58%Reading package lists... 62%Reading package lists... 62%Reading package lists... 64%Reading package lists... 64%Reading package lists... 71%Reading package lists... 71%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 81%Reading package lists... 81%Reading package lists... 83%Reading package lists... 83%Reading package lists... 86%Reading package lists... 86%Reading package lists... 87%Reading package lists... 87%Reading package lists... 93%Reading package lists... 94%Reading package lists... 94%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\n124 packages can be upgraded. Run 'apt list --upgradable' to see them.\nW: https://aquasecurity.github.io/trivy-repo/deb/dists/noble/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install -y curl",
+        "status": "SUCCESS",
+        "stdout": "Reading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%1yash2raj\nBuilding dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\ncurl is already the newest version (8.5.0-2ubuntu10.8).\nThe following packages were automatically installed and are no longer required:\n  gettext-base gfortran gfortran-13 gfortran-13-x86-64-linux-gnu\n  gfortran-x86-64-linux-gnu git-man libblas-dev libbz2-dev liberror-perl\n  libestr0 libfastjson4 libgfortran-13-dev libgfortran5 libjpeg-dev\n  libjpeg-turbo8-dev libjpeg8-dev libjq1 liblapack-dev liblapack3 libllvm19\n  liblzma-dev libnl-genl-3-200 libonig5 libpng-dev libpng-tools\n  libreadline-dev libtcl8.6 libtk8.6 libxss1 r-doc-html zip\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 124 not upgraded.",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-003",
+    "category": "package_management",
+    "mode": "monolithic",
+    "query": "install git version control",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 8.79,
+    "commands_generated": 3,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install git -y"
+        },
+        {
+          "step": 3,
+          "command": "git --version"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt update",
+        "status": "SUCCESS",
+        "stdout": "0% [Working]            Hit:1 https://download.docker.com/linux/ubuntu noble InRelease\n0% [Waiting for headers] [Waiting for headers] [Connecting to archive.ubuntu.co                                                                               Hit:2 https://aquasecurity.github.io/trivy-repo/deb noble InRelease\n0% [Waiting for headers] [Connecting to archive.ubuntu.com (91.189.92.22)] [Con                                                                               Hit:3 https://deb.nodesource.com/node_22.x nodistro InRelease\n0% [Connecting to archive.ubuntu.com (91.189.92.22)] [Connecting to security.ub0% [Connecting to archive.ubuntu.com (91.189.92.22)] [Connecting to security.ub1yash2raj\n                                                                               Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease\n                                                                               0% [Waiting for headers]                        Hit:5 http://archive.ubuntu.com/ubuntu noble InRelease\n                        0% [Working]0% [Waiting for headers]                        Hit:6 http://archive.ubuntu.com/ubuntu noble-updates InRelease\n                        0% [Working]0% [Waiting for headers]0% [Waiting for headers]                        Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease\n                        0% [Working]0% [Working]0% [Working]20% [Working]             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 31%Reading package lists... 36%Reading package lists... 36%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 55%Reading package lists... 55%Reading package lists... 58%Reading package lists... 58%Reading package lists... 62%Reading package lists... 62%Reading package lists... 64%Reading package lists... 64%Reading package lists... 71%Reading package lists... 71%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 81%Reading package lists... 81%Reading package lists... 83%Reading package lists... 83%Reading package lists... 86%Reading package lists... 86%Reading package lists... 87%Reading package lists... 87%Reading package lists... 94%Reading package lists... 94%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\n124 packages can be upgraded. Run 'apt list --upgradable' to see them.\nW: https://aquasecurity.github.io/trivy-repo/deb/dists/noble/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install git -y",
+        "status": "SUCCESS",
+        "stdout": "Reading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%1yash2raj\nBuilding dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nThe following packages were automatically installed and are no longer required:\n  gfortran gfortran-13 gfortran-13-x86-64-linux-gnu gfortran-x86-64-linux-gnu\n  libblas-dev libbz2-dev libestr0 libfastjson4 libgfortran-13-dev libgfortran5\n  libjpeg-dev libjpeg-turbo8-dev libjpeg8-dev libjq1 liblapack-dev liblapack3\n  libllvm19 liblzma-dev libnl-genl-3-200 libonig5 libpng-dev libpng-tools\n  libreadline-dev libtcl8.6 libtk8.6 libxss1 r-doc-html zip\nUse 'sudo apt autoremove' to remove them.\nSuggested packages:\n  git-daemon-run | git-daemon-sysvinit git-doc git-email git-gui gitk gitweb\n  git-cvs git-mediawiki git-svn\nThe following NEW packages will be installed:\n  git\n0 upgraded, 1 newly installed, 0 to remove and 124 not upgraded.\nNeed to get 3680 kB of archives.\nAfter this operation, 22.2 MB of additional disk space will be used.\n0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 git amd64 1:2.43.0-1ubuntu7.3 [3680 kB]\n0% [1 git 1074 B/3680 kB 0%]2% [1 git 90.0 kB/3680 kB 2%]15% [1 git 681 kB/3680 kB 19%]                              100% [Working]              Fetched 3680 kB in 2s (2080 kB/s)\n\n\u001b7\u001b8Selecting previously unselected package git.\n(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 62874 files and directories currently installed.)\nPreparing to unpack .../git_1%3a2.43.0-1ubuntu7.3_amd64.deb ...\n\u001b7Progress: [  0%] [..........................................................] \u001b8\u001b7Progress: [ 20%] [###########...............................................] \u001b8Unpacking git (1:2.43.0-1ubuntu7.3) ...\n\u001b7Progress: [ 40%] [#######################...................................] \u001b8Setting up git (1:2.43.0-1ubuntu7.3) ...\n\u001b7Progress: [ 60%] [##################################........................] \u001b8\u001b7Progress: [ 80%] [##############################################............] \u001b8\n\u001b7\u001b8",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "git --version",
+        "status": "SUCCESS",
+        "stdout": "git version 2.43.0",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-004",
+    "category": "package_management",
+    "mode": "monolithic",
+    "query": "install the tree command",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 9.17,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install tree -y"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt update",
+        "status": "SUCCESS",
+        "stdout": "0% [Working]1yash2raj\n            Hit:1 https://aquasecurity.github.io/trivy-repo/deb noble InRelease\n0% [Waiting for headers] [Waiting for headers] [Connecting to archive.ubuntu.co                                                                               Hit:2 https://download.docker.com/linux/ubuntu noble InRelease\n0% [Waiting for headers] [Connecting to archive.ubuntu.com (185.125.190.82)] [C                                                                               Hit:3 https://deb.nodesource.com/node_22.x nodistro InRelease\n0% [Connecting to archive.ubuntu.com (185.125.190.82)] [Connecting to security.                                                                               Hit:4 http://archive.ubuntu.com/ubuntu noble InRelease\n                                                                               0% [Connecting to security.ubuntu.com (185.125.190.81)]                                                       Hit:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease\n                                                       0% [Waiting for headers]0% [Waiting for headers] [Waiting for headers]                                              Hit:6 http://security.ubuntu.com/ubuntu noble-security InRelease\n                                              0% [Waiting for headers]                        Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease\n                        0% [Working]0% [Working]0% [Working]0% [Working]0% [Working]0% [Working]20% [Working]             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 36%Reading package lists... 36%Reading package lists... 39%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 55%Reading package lists... 55%Reading package lists... 58%Reading package lists... 58%Reading package lists... 62%Reading package lists... 62%Reading package lists... 64%Reading package lists... 64%Reading package lists... 71%Reading package lists... 71%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 81%Reading package lists... 81%Reading package lists... 83%Reading package lists... 83%Reading package lists... 86%Reading package lists... 86%Reading package lists... 87%Reading package lists... 87%Reading package lists... 94%Reading package lists... 94%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\n124 packages can be upgraded. Run 'apt list --upgradable' to see them.\nW: https://aquasecurity.github.io/trivy-repo/deb/dists/noble/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install tree -y",
+        "status": "SUCCESS",
+        "stdout": "Reading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%1yash2raj\nBuilding dependency tree... 50%Building dependency tree... 50%Building dependency tree... 97%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nThe following packages were automatically installed and are no longer required:\n  gettext-base gfortran gfortran-13 gfortran-13-x86-64-linux-gnu\n  gfortran-x86-64-linux-gnu git-man libblas-dev libbz2-dev liberror-perl\n  libestr0 libfastjson4 libgfortran-13-dev libgfortran5 libjpeg-dev\n  libjpeg-turbo8-dev libjpeg8-dev libjq1 liblapack-dev liblapack3 libllvm19\n  liblzma-dev libnl-genl-3-200 libonig5 libpng-dev libpng-tools\n  libreadline-dev libtcl8.6 libtk8.6 libxss1 r-doc-html zip\nUse 'sudo apt autoremove' to remove them.\nThe following NEW packages will be installed:\n  tree\n0 upgraded, 1 newly installed, 0 to remove and 124 not upgraded.\nNeed to get 47.4 kB of archives.\nAfter this operation, 111 kB of additional disk space will be used.\n0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 tree amd64 2.1.1-2ubuntu3.24.04.2 [47.4 kB]\n9% [1 tree 5182 B/47.4 kB 11%]                              100% [Working]              Fetched 47.4 kB in 1s (64.6 kB/s)\n\n\u001b7\u001b8Selecting previously unselected package tree.\n(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 62874 files and directories currently installed.)\nPreparing to unpack .../tree_2.1.1-2ubuntu3.24.04.2_amd64.deb ...\n\u001b7Progress: [  0%] [..........................................................] \u001b8\u001b7Progress: [ 20%] [###########...............................................] \u001b8Unpacking tree (2.1.1-2ubuntu3.24.04.2) ...\n\u001b7Progress: [ 40%] [#######################...................................] \u001b8Setting up tree (2.1.1-2ubuntu3.24.04.2) ...\n\u001b7Progress: [ 60%] [##################################........................] \u001b8\u001b7Progress: [ 80%] [##############################################............] \u001b8Processing triggers for man-db (2.12.0-4build2) ...\n\n\u001b7\u001b8",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-005",
+    "category": "package_management",
+    "mode": "monolithic",
+    "query": "install unzip",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 8.33,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install unzip -y"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt update",
+        "status": "SUCCESS",
+        "stdout": "0% [Working]            Hit:1 https://download.docker.com/linux/ubuntu noble InRelease\n0% [Connected to deb.nodesource.com (104.20.45.190)] [Connected to aquasecurity                                                                               Hit:2 https://aquasecurity.github.io/trivy-repo/deb noble InRelease\n0% [Waiting for headers] [Connecting to archive.ubuntu.com (91.189.91.82)] [Con1yash2raj\n                                                                               Hit:3 https://deb.nodesource.com/node_22.x nodistro InRelease\n0% [Connecting to archive.ubuntu.com (91.189.91.82)] [Connecting to security.ub                                                                               0% [Connecting to archive.ubuntu.com (91.189.91.82)] [Waiting for headers]                                                                          Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease\n                                                                          0% [Waiting for headers]0% [Waiting for headers]                        Hit:5 http://archive.ubuntu.com/ubuntu noble InRelease\n                        0% [Working]0% [Waiting for headers]0% [Waiting for headers]                        Hit:6 http://archive.ubuntu.com/ubuntu noble-updates InRelease\n                        0% [Working]0% [Waiting for headers]0% [Waiting for headers]                        Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease\n                        0% [Working]20% [Working]             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 36%Reading package lists... 36%Reading package lists... 36%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 55%Reading package lists... 55%Reading package lists... 58%Reading package lists... 58%Reading package lists... 62%Reading package lists... 62%Reading package lists... 64%Reading package lists... 64%Reading package lists... 71%Reading package lists... 71%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 81%Reading package lists... 81%Reading package lists... 83%Reading package lists... 83%Reading package lists... 86%Reading package lists... 86%Reading package lists... 87%Reading package lists... 87%Reading package lists... 94%Reading package lists... 94%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\n124 packages can be upgraded. Run 'apt list --upgradable' to see them.\nW: https://aquasecurity.github.io/trivy-repo/deb/dists/noble/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install unzip -y",
+        "status": "SUCCESS",
+        "stdout": "Reading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%1yash2raj\nBuilding dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nThe following packages were automatically installed and are no longer required:\n  gettext-base gfortran gfortran-13 gfortran-13-x86-64-linux-gnu\n  gfortran-x86-64-linux-gnu git-man libblas-dev libbz2-dev liberror-perl\n  libestr0 libfastjson4 libgfortran-13-dev libgfortran5 libjpeg-dev\n  libjpeg-turbo8-dev libjpeg8-dev libjq1 liblapack-dev liblapack3 libllvm19\n  liblzma-dev libnl-genl-3-200 libonig5 libpng-dev libpng-tools\n  libreadline-dev libtcl8.6 libtk8.6 libxss1 r-doc-html\nUse 'sudo apt autoremove' to remove them.\nThe following NEW packages will be installed:\n  unzip\n0 upgraded, 1 newly installed, 0 to remove and 124 not upgraded.\nNeed to get 174 kB of archives.\nAfter this operation, 384 kB of additional disk space will be used.\n0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 unzip amd64 6.0-28ubuntu4.1 [174 kB]\n2% [1 unzip 3812 B/174 kB 2%]69% [1 unzip 152 kB/174 kB 87%]                               100% [Working]              Fetched 174 kB in 1s (207 kB/s)\n\n\u001b7\u001b8Selecting previously unselected package unzip.\n(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 62874 files and directories currently installed.)\nPreparing to unpack .../unzip_6.0-28ubuntu4.1_amd64.deb ...\n\u001b7Progress: [  0%] [..........................................................] \u001b8\u001b7Progress: [ 20%] [###########...............................................] \u001b8Unpacking unzip (6.0-28ubuntu4.1) ...\n\u001b7Progress: [ 40%] [#######################...................................] \u001b8Setting up unzip (6.0-28ubuntu4.1) ...\n\u001b7Progress: [ 60%] [##################################........................] \u001b8\u001b7Progress: [ 80%] [##############################################............] \u001b8Processing triggers for man-db (2.12.0-4build2) ...\n\n\u001b7\u001b8",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-006",
+    "category": "package_management",
+    "mode": "monolithic",
+    "query": "install net-tools so I can use ifconfig and netstat",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 5.93,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y net-tools"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt update",
+        "status": "SUCCESS",
+        "stdout": "0% [Working]            Hit:1 https://aquasecurity.github.io/trivy-repo/deb noble InRelease\n0% [Connected to download.docker.com (13.225.5.128)] [Waiting for headers] [Con                                                                               Hit:2 https://download.docker.com/linux/ubuntu noble InRelease\n0% [Waiting for headers] [Connecting to archive.ubuntu.com (185.125.190.83)] [C1yash2raj\n                                                                               Hit:3 https://deb.nodesource.com/node_22.x nodistro InRelease\n0% [Connecting to archive.ubuntu.com (185.125.190.83)] [Connecting to security.                                                                               Hit:4 http://archive.ubuntu.com/ubuntu noble InRelease\n                                                                               0% [Waiting for headers]0% [Waiting for headers] [Waiting for headers]                                              Hit:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease\n                                              0% [Waiting for headers]                        Hit:6 http://security.ubuntu.com/ubuntu noble-security InRelease\n0% [Waiting for headers]0% [Waiting for headers]                        Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease\n                        0% [Working]0% [Working]0% [Working]0% [Working]0% [Working]20% [Working]             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 36%Reading package lists... 36%Reading package lists... 46%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 55%Reading package lists... 55%Reading package lists... 58%Reading package lists... 58%Reading package lists... 62%Reading package lists... 62%Reading package lists... 64%Reading package lists... 64%Reading package lists... 67%Reading package lists... 71%Reading package lists... 71%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 81%Reading package lists... 81%Reading package lists... 83%Reading package lists... 83%Reading package lists... 86%Reading package lists... 86%Reading package lists... 87%Reading package lists... 87%Reading package lists... 94%Reading package lists... 94%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\n124 packages can be upgraded. Run 'apt list --upgradable' to see them.\nW: https://aquasecurity.github.io/trivy-repo/deb/dists/noble/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install -y net-tools",
+        "status": "SUCCESS",
+        "stdout": "Reading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%1yash2raj\nBuilding dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nnet-tools is already the newest version (2.10-0.1ubuntu4.4).\nThe following packages were automatically installed and are no longer required:\n  gettext-base gfortran gfortran-13 gfortran-13-x86-64-linux-gnu\n  gfortran-x86-64-linux-gnu git-man libblas-dev libbz2-dev liberror-perl\n  libestr0 libfastjson4 libgfortran-13-dev libgfortran5 libjpeg-dev\n  libjpeg-turbo8-dev libjpeg8-dev libjq1 liblapack-dev liblapack3 libllvm19\n  liblzma-dev libnl-genl-3-200 libonig5 libpng-dev libpng-tools\n  libreadline-dev libtcl8.6 libtk8.6 libxss1 r-doc-html zip\nUse 'sudo apt autoremove' to remove them.\n0 upgraded, 0 newly installed, 0 to remove and 124 not upgraded.",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-007",
+    "category": "package_management",
+    "mode": "monolithic",
+    "query": "install jq for JSON processing",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 7.8,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y jq"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt update",
+        "status": "SUCCESS",
+        "stdout": "0% [Working]            Hit:1 https://aquasecurity.github.io/trivy-repo/deb noble InRelease\n0% [Connecting to download.docker.com] [Connected to deb.nodesource.com (172.661yash2raj\n                                                                               Hit:2 https://deb.nodesource.com/node_22.x nodistro InRelease\n0% [Connected to download.docker.com (13.225.5.128)] [Connecting to archive.ubu                                                                               Hit:3 https://download.docker.com/linux/ubuntu noble InRelease\n0% [Connecting to archive.ubuntu.com (185.125.190.83)] [Connecting to security.                                                                               Hit:4 http://archive.ubuntu.com/ubuntu noble InRelease\n                                                                               0% [Waiting for headers]0% [Waiting for headers] [Waiting for headers]                                              Hit:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease\n                                              0% [Waiting for headers]                        Hit:6 http://security.ubuntu.com/ubuntu noble-security InRelease\n0% [Waiting for headers]0% [Waiting for headers]                        Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease\n                        0% [Working]0% [Working]0% [Working]0% [Working]0% [Working]20% [Working]             Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 36%Reading package lists... 36%Reading package lists... 36%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 55%Reading package lists... 55%Reading package lists... 58%Reading package lists... 58%Reading package lists... 62%Reading package lists... 62%Reading package lists... 64%Reading package lists... 64%Reading package lists... 71%Reading package lists... 71%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 81%Reading package lists... 81%Reading package lists... 83%Reading package lists... 83%Reading package lists... 86%Reading package lists... 86%Reading package lists... 87%Reading package lists... 87%Reading package lists... 94%Reading package lists... 94%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\n124 packages can be upgraded. Run 'apt list --upgradable' to see them.\nW: https://aquasecurity.github.io/trivy-repo/deb/dists/noble/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install -y jq",
+        "status": "SUCCESS",
+        "stdout": "Reading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%1yash2raj\nBuilding dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nThe following packages were automatically installed and are no longer required:\n  gettext-base gfortran gfortran-13 gfortran-13-x86-64-linux-gnu\n  gfortran-x86-64-linux-gnu git-man libblas-dev libbz2-dev liberror-perl\n  libestr0 libfastjson4 libgfortran-13-dev libgfortran5 libjpeg-dev\n  libjpeg-turbo8-dev libjpeg8-dev liblapack-dev liblapack3 libllvm19\n  liblzma-dev libnl-genl-3-200 libpng-dev libpng-tools libreadline-dev\n  libtcl8.6 libtk8.6 libxss1 r-doc-html zip\nUse 'sudo apt autoremove' to remove them.\nThe following NEW packages will be installed:\n  jq\n0 upgraded, 1 newly installed, 0 to remove and 124 not upgraded.\nNeed to get 65.7 kB of archives.\nAfter this operation, 115 kB of additional disk space will be used.\n0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 jq amd64 1.7.1-3ubuntu0.24.04.1 [65.7 kB]\n3% [1 jq 2445 B/65.7 kB 4%]                           100% [Working]              Fetched 65.7 kB in 1s (93.0 kB/s)\n\n\u001b7\u001b8Selecting previously unselected package jq.\n(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 62826 files and directories currently installed.)\nPreparing to unpack .../jq_1.7.1-3ubuntu0.24.04.1_amd64.deb ...\n\u001b7Progress: [  0%] [..........................................................] \u001b8\u001b7Progress: [ 20%] [###########...............................................] \u001b8Unpacking jq (1.7.1-3ubuntu0.24.04.1) ...\n\u001b7Progress: [ 40%] [#######################...................................] \u001b8Setting up jq (1.7.1-3ubuntu0.24.04.1) ...\n\u001b7Progress: [ 60%] [##################################........................] \u001b8\u001b7Progress: [ 80%] [##############################################............] \u001b8Processing triggers for man-db (2.12.0-4build2) ...\n\n\u001b7\u001b8",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-008",
+    "category": "service_management",
+    "mode": "monolithic",
+    "query": "Install nginx if not already installed, then make sure it is running",
+    "status": "FAILED (Crashed)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 6.21,
+    "commands_generated": 4,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y nginx"
+        },
+        {
+          "step": 3,
+          "command": "sudo systemctl start nginx"
+        },
+        {
+          "step": 4,
+          "command": "sudo systemctl enable nginx"
+        }
+      ]
+    },
+    "execution_history": []
+  },
+  {
+    "test_id": "FT-009",
+    "category": "service_management",
+    "mode": "monolithic",
+    "query": "check whether the nginx service is running",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 241.87,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo systemctl status nginx"
+        },
+        {
+          "step": 2,
+          "command": "sudo service nginx status"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo systemctl status nginx",
+        "status": "TIMEOUT",
+        "stdout": "",
+        "stderr": "TIMEOUT: Command timed out after 240s: sudo systemctl status nginx"
+      }
+    ]
+  },
+  {
+    "test_id": "FT-010",
+    "category": "service_management",
+    "mode": "monolithic",
+    "query": "restart the SSH service",
+    "status": "FAILED (Crashed)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 1.14,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo systemctl restart ssh"
+        },
+        {
+          "step": 2,
+          "command": "sudo service ssh restart"
+        }
+      ]
+    },
+    "execution_history": []
+  },
+  {
+    "test_id": "FT-011",
+    "category": "service_management",
+    "mode": "monolithic",
+    "query": "enable nginx to start on boot and then start it",
+    "status": "FAILED (Crashed)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 2.15,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo systemctl enable nginx"
+        },
+        {
+          "step": 2,
+          "command": "sudo systemctl start nginx"
+        }
+      ]
+    },
+    "execution_history": []
+  },
+  {
+    "test_id": "FT-012",
+    "category": "service_management",
+    "mode": "monolithic",
+    "query": "stop the nginx web server",
+    "status": "FAILED (Crashed)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 0.86,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo systemctl stop nginx"
+        },
+        {
+          "step": 2,
+          "command": "sudo service nginx stop"
+        }
+      ]
+    },
+    "execution_history": []
+  },
+  {
+    "test_id": "FT-013",
+    "category": "service_management",
+    "mode": "monolithic",
+    "query": "show me all currently running systemd services",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 241.51,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo systemctl list-units --state=running"
+        },
+        {
+          "step": 2,
+          "command": "sudo systemctl status"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo systemctl list-units --state=running",
+        "status": "TIMEOUT",
+        "stdout": "",
+        "stderr": "TIMEOUT: Command timed out after 240s: sudo systemctl list-units --state=running"
+      }
+    ]
+  },
+  {
+    "test_id": "FT-014",
+    "category": "system_monitoring",
+    "mode": "monolithic",
+    "query": "check the disk space.",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 240.96,
+    "commands_generated": 5,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "df -h"
+        },
+        {
+          "step": 2,
+          "command": "du -sh /"
+        },
+        {
+          "step": 3,
+          "command": "lsblk -d -o NAME,FSTYPE,SIZE,MOUNTPOINT,LABEL"
+        },
+        {
+          "step": 4,
+          "command": "sudo fdisk -l"
+        },
+        {
+          "step": 5,
+          "command": "sudo parted -l"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "df -h",
+        "status": "SUCCESS",
+        "stdout": "Filesystem      Size  Used Avail Use% Mounted on\nnone            5.9G     0  5.9G   0% /usr/lib/modules/6.6.87.2-microsoft-standard-WSL2\nnone            5.9G  4.0K  5.9G   1% /mnt/wsl\ndrivers         373G  346G   27G  93% /usr/lib/wsl/drivers\n/dev/sdd       1007G  168G  789G  18% /\nnone            5.9G   76K  5.9G   1% /mnt/wslg\nnone            5.9G     0  5.9G   0% /usr/lib/wsl/lib\nrootfs          5.9G  2.7M  5.9G   1% /init\nnone            5.9G  1.7M  5.9G   1% /run\nnone            5.9G     0  5.9G   0% /run/lock\nnone            5.9G  1.1M  5.9G   1% /run/shm\nnone            5.9G   76K  5.9G   1% /mnt/wslg/versions.txt\nnone            5.9G   76K  5.9G   1% /mnt/wslg/doc\nC:\\             373G  346G   27G  93% /mnt/c\nD:\\              37G   28G  9.7G  74% /mnt/d\ntmpfs           5.9G   16K  5.9G   1% /run/user/1000",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "du -sh /",
+        "status": "TIMEOUT",
+        "stdout": "",
+        "stderr": "TIMEOUT: Command timed out after 240s: du -sh /"
+      }
+    ]
+  },
+  {
+    "test_id": "FT-015",
+    "category": "system_monitoring",
+    "mode": "monolithic",
+    "query": "check available memory and RAM usage",
+    "status": "FAILED (Execution)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 1.32,
+    "commands_generated": 5,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "free -m"
+        },
+        {
+          "step": 2,
+          "command": "vmstat -s"
+        },
+        {
+          "step": 3,
+          "command": "cat /proc/meminfo"
+        },
+        {
+          "step": 4,
+          "command": "top -b -n 1 | grep Mem"
+        },
+        {
+          "step": 5,
+          "command": "htop"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "free -m",
+        "status": "SUCCESS",
+        "stdout": "total        used        free      shared  buff/cache   available\nMem:           11962        1606        8505          28        2090       10356\nSwap:           4096           0        4096",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "vmstat -s",
+        "status": "SUCCESS",
+        "stdout": "12249832 K total memory\n      1645140 K used memory\n       727196 K active memory\n      2325124 K inactive memory\n      8709596 K free memory\n       225348 K buffer memory\n      1915540 K swap cache\n      4194304 K total swap\n            0 K used swap\n      4194304 K free swap\n        20292 non-nice user cpu ticks\n            0 nice user cpu ticks\n        19435 system cpu ticks\n       468848 idle cpu ticks\n         1914 IO-wait cpu ticks\n            0 IRQ cpu ticks\n         4504 softirq cpu ticks\n            0 stolen cpu ticks\n            0 non-nice guest cpu ticks\n            0 nice guest cpu ticks\n      1696379 K paged in\n      1255248 K paged out\n            0 pages swapped in\n            0 pages swapped out\n      3271379 interrupts\n      6172023 CPU context switches\n   1773657767 boot time\n         7801 forks",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "cat /proc/meminfo",
+        "status": "SUCCESS",
+        "stdout": "MemTotal:       12249832 kB\nMemFree:         8709596 kB\nMemAvailable:   10604880 kB\nBuffers:          225348 kB\nCached:          1749600 kB\nSwapCached:            0 kB\nActive:           727372 kB\nInactive:        2325360 kB\nActive(anon):       6764 kB\nInactive(anon):  1100072 kB\nActive(file):     720608 kB\nInactive(file):  1225288 kB\nUnevictable:          36 kB\nMlocked:               0 kB\nSwapTotal:       4194304 kB\nSwapFree:        4194304 kB\nDirty:               460 kB\nWriteback:             0 kB\nAnonPages:       1077704 kB\nMapped:           809648 kB\nShmem:             29224 kB\nKReclaimable:     165956 kB\nSlab:             238508 kB\nSReclaimable:     165956 kB\nSUnreclaim:        72552 kB\nKernelStack:        8736 kB\nPageTables:        13180 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    10319220 kB\nCommitted_AS:    3793064 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:       34560 kB\nVmallocChunk:          0 kB\nPercpu:             4608 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:         0 kB\nFilePmdMapped:         0 kB\nUnaccepted:            0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:      103424 kB\nDirectMap2M:    10381312 kB\nDirectMap1G:    11534336 kB",
+        "stderr": ""
+      },
+      {
+        "step": 4,
+        "command": "top -b -n 1 | grep Mem",
+        "status": "SUCCESS",
+        "stdout": "MiB Mem :  11962.7 total,   8505.5 free,   1606.5 used,   2090.8 buff/cache     \nMiB Swap:   4096.0 total,   4096.0 free,      0.0 used.  10356.2 avail Mem",
+        "stderr": ""
+      },
+      {
+        "step": 5,
+        "command": "htop",
+        "status": "FAILED",
+        "stdout": "bash: line 1: htop: command not found",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-016",
+    "category": "system_monitoring",
+    "mode": "monolithic",
+    "query": "show current CPU load and top processes",
+    "status": "FAILED (Execution)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 1.41,
+    "commands_generated": 4,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "uptime"
+        },
+        {
+          "step": 2,
+          "command": "top -b -n 1"
+        },
+        {
+          "step": 3,
+          "command": "mpstat -P ALL"
+        },
+        {
+          "step": 4,
+          "command": "htop"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "uptime",
+        "status": "SUCCESS",
+        "stdout": "10:57:13 up 14 min,  7 users,  load average: 1.39, 0.90, 0.51",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "top -b -n 1",
+        "status": "SUCCESS",
+        "stdout": "top - 10:57:13 up 14 min,  7 users,  load average: 1.39, 0.90, 0.51\nTasks:  83 total,   1 running,  82 sleeping,   0 stopped,   0 zombie\n%Cpu(s):  2.7 us,  4.1 sy,  0.0 ni, 90.4 id,  0.0 wa,  0.0 hi,  2.7 si,  0.0 st \nMiB Mem :  11962.7 total,   8504.5 free,   1607.3 used,   2091.0 buff/cache     \nMiB Swap:   4096.0 total,   4096.0 free,      0.0 used.  10355.4 avail Mem \n\n    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND\n    181 root      20   0 1841340 616376 150528 S  16.7   5.0   2:55.61 k3s-ser+\n   7505 ygb       20   0   10720   5888   3840 R   8.3   0.0   0:00.05 top\n      1 root      20   0   22596  13236   9268 S   0.0   0.1   0:03.51 systemd\n      2 root      20   0    3060   1664   1664 S   0.0   0.0   0:00.02 init-sy+\n      7 root      20   0    3060   1792   1792 S   0.0   0.0   0:00.00 init\n     42 root      19  -1   66864  17116  16220 S   0.0   0.1   0:00.57 systemd+\n     92 root      20   0   25272   6272   4864 S   0.0   0.1   0:00.32 systemd+\n    151 systemd+  20   0   21588  12672  10496 S   0.0   0.1   0:00.18 systemd+\n    160 root      20   0    4236   2560   2304 S   0.0   0.0   0:00.01 cron\n    161 message+  20   0    9768   4864   4352 S   0.0   0.0   0:00.62 dbus-da+\n    168 root      20   0 1300764  49276  32024 S   0.0   0.4   0:01.46 syslog-+\n    169 root      20   0   18160   8320   7424 S   0.0   0.1   0:00.49 systemd+\n    178 root      20   0 2171612  53164  36352 S   0.0   0.4   0:01.90 contain+\n    188 root      20   0    3160   1920   1792 S   0.0   0.0   0:00.01 agetty\n    194 root      20   0    3116   1792   1664 S   0.0   0.0   0:00.01 agetty\n    224 postgres  20   0  220264  30336  28160 S   0.0   0.2   0:00.15 postgres\n    250 postgres  20   0  220396   8440   6016 S   0.0   0.1   0:00.00 postgres\n    251 postgres  20   0  220416   7288   4864 S   0.0   0.1   0:00.03 postgres\n    277 root      20   0 2796216  88052  59392 S   0.0   0.7   0:02.46 dockerd\n    309 postgres  20   0  220264  10104   7680 S   0.0   0.1   0:00.02 postgres\n    311 postgres  20   0  221860   8312   5632 S   0.0   0.1   0:00.00 postgres\n    315 postgres  20   0  221844   7928   5248 S   0.0   0.1   0:00.00 postgres\n    787 root      20   0 1233580  10224   7040 S   0.0   0.1   0:00.13 contain+\n    789 root      20   0 1233836  10496   6912 S   0.0   0.1   0:00.11 contain+\n    791 root      20   0 1233580  10480   7040 S   0.0   0.1   0:00.12 contain+\n    796 root      20   0 1233580  10752   7168 S   0.0   0.1   0:00.11 contain+\n    797 root      20   0 1233580  10708   7168 S   0.0   0.1   0:00.12 contain+\n    918 472       20   0 1795060 245884 167936 S   0.0   2.0   0:12.41 grafana\n    920 nobody    20   0 1242008  14592  12032 S   0.0   0.1   0:00.09 node_ex+\n    933 5050      20   0  124432 110456  18944 S   0.0   0.9   0:07.10 gunicorn\n    935 999       20   0  216052  26624  24832 S   0.0   0.2   0:00.19 postgres\n    941 nobody    20   0 1514108  88020  58496 S   0.0   0.7   0:02.53 prometh+\n   1030 root      20   0 1436744 154580 115840 S   0.0   1.3   0:13.57 contain+\n   1032 root      20   0 1672996   4608   3584 S   0.0   0.0   0:00.00 docker-+\n   1045 root      20   0 1820716   4352   3456 S   0.0   0.0   0:00.00 docker-+\n   1078 root      20   0 1746984   4480   3456 S   0.0   0.0   0:00.00 docker-+\n   1089 root      20   0 1746984   4480   3456 S   0.0   0.0   0:00.00 docker-+\n   1124 root      20   0 1820716   4480   3456 S   0.0   0.0   0:00.00 docker-+\n   1132 root      20   0 1673252   4480   3584 S   0.0   0.0   0:00.00 docker-+\n   1162 root      20   0 1599008   4480   3584 S   0.0   0.0   0:00.00 docker-+\n   1167 root      20   0 1746984   4480   3456 S   0.0   0.0   0:00.00 docker-+\n   1225 999       20   0  216172   8064   5888 S   0.0   0.1   0:00.00 postgres\n   1226 999       20   0  216188   6528   4480 S   0.0   0.1   0:00.03 postgres\n   1327 root      20   0    9156   1864   1664 S   0.0   0.0   0:00.02 master\n   1328 dhcpcd    20   0    9140   4224   3968 S   0.0   0.0   0:00.01 pickup\n   1329 dhcpcd    20   0    9188   4352   4096 S   0.0   0.0   0:00.01 qmgr\n   1362 999       20   0  216052   9728   7680 S   0.0   0.1   0:00.01 postgres\n   1363 999       20   0  217636   7936   5760 S   0.0   0.1   0:00.00 postgres\n   1364 999       20   0  217616   7424   5120 S   0.0   0.1   0:00.00 postgres\n   1413 root      20   0    3076    896    896 S   0.0   0.0   0:00.00 Session+\n   1414 root      20   0    3076   1024    896 S   0.0   0.0   0:00.00 Relay(1+\n   1419 ygb       20   0    5916   4480   3328 S   0.0   0.0   0:00.06 bash\n   1420 root      20   0    6684   3968   3456 S   0.0   0.0   0:00.01 login\n   1456 ygb       20   0   20408  11264   9088 S   0.0   0.1   0:00.30 systemd\n   1457 ygb       20   0   21152   3520   1792 S   0.0   0.0   0:00.00 (sd-pam)\n   1466 ygb       20   0    5860   4864   3456 S   0.0   0.0   0:00.02 bash\n   2186 root      20   0 1240104  15768  11648 S   0.0   0.1   0:00.91 contain+\n   2319 65535     20   0     972    384    384 S   0.0   0.0   0:00.12 pause\n   2334 root      20   0 1239848  15992  11776 S   0.0   0.1   0:00.91 contain+\n   2386 65535     20   0     972    384    384 S   0.0   0.0   0:00.09 pause\n   2394 root      20   0 1239592  15524  11776 S   0.0   0.1   0:00.85 contain+\n   2398 root      20   0 1239592  15964  11776 S   0.0   0.1   0:01.47 contain+\n   2464 65535     20   0     972    384    384 S   0.0   0.0   0:00.17 pause\n   2471 65535     20   0     972    384    384 S   0.0   0.0   0:00.17 pause\n   2503 ygb       20   0 1296520  66092  45568 S   0.0   0.5   0:11.46 metrics+\n   2546 root      20   0 1276928  39144  32128 S   0.0   0.3   0:00.43 local-p+\n   2592 root      20   0    1652   1024   1024 S   0.0   0.0   0:00.03 entry\n   2617 65532     20   0 1302912  60288  48128 S   0.0   0.5   0:04.79 coredns\n   2695 root      20   0    1652    896    896 S   0.0   0.0   0:00.02 entry\n   2843 5050      20   0  232196 198824  18304 S   0.0   1.6   0:10.55 gunicorn\n   2885 root      20   0   14964  10304   8704 S   0.0   0.1   0:00.22 sshd\n   2908 ygb       20   0   15124   6724   4864 S   0.0   0.1   0:00.08 sshd\n   6114 root      20   0   14960  10396   8704 S   0.0   0.1   0:00.07 sshd\n   6137 ygb       20   0   15120   6848   4992 S   0.0   0.1   0:00.02 sshd\n   6747 root      20   0   14960  10320   8704 S   0.0   0.1   0:00.24 sshd\n   6771 ygb       20   0   15120   6720   4864 S   0.0   0.1   0:00.00 sshd\n   6779 root      20   0   12020   7936   6912 S   0.0   0.1   0:00.03 sshd\n   6781 root      20   0   14960  10120   8576 S   0.0   0.1   0:00.11 sshd\n   6804 ygb       20   0   15120   6720   4864 S   0.0   0.1   0:00.01 sshd\n   7036 root      20   0   14960  10140   8576 S   0.0   0.1   0:00.12 sshd\n   7063 ygb       20   0   15120   6720   4864 S   0.0   0.1   0:00.00 sshd\n   7479 root      20   0   14956  10180   8576 S   0.0   0.1   0:00.23 sshd\n   7502 ygb       20   0   15116   6716   4864 S   0.0   0.1   0:00.01 sshd",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "mpstat -P ALL",
+        "status": "SUCCESS",
+        "stdout": "Linux 6.6.87.2-microsoft-standard-WSL2 (DESKTOP-74TFSO9) \t03/16/26 \t_x86_64_\t(6 CPU)\n\n10:57:13     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle\n10:57:13     all    3.94    0.00    3.78    0.37    0.00    0.88    0.00    0.00    0.00   91.03\n10:57:13       0    3.16    0.00    5.48    0.46    0.00    3.11    0.00    0.00    0.00   87.78\n10:57:13       1    3.49    0.00    3.14    0.52    0.00    1.11    0.00    0.00    0.00   91.73\n10:57:13       2    4.48    0.00    3.65    0.37    0.00    0.43    0.00    0.00    0.00   91.07\n10:57:13       3    4.69    0.00    3.50    0.34    0.00    0.24    0.00    0.00    0.00   91.23\n10:57:13       4    4.01    0.00    3.52    0.25    0.00    0.19    0.00    0.00    0.00   92.04\n10:57:13       5    3.83    0.00    3.36    0.28    0.00    0.12    0.00    0.00    0.00   92.40",
+        "stderr": ""
+      },
+      {
+        "step": 4,
+        "command": "htop",
+        "status": "FAILED",
+        "stdout": "bash: line 1: htop: command not found",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-017",
+    "category": "system_monitoring",
+    "mode": "monolithic",
+    "query": "display the system uptime and who is logged in",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 0.8,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "uptime"
+        },
+        {
+          "step": 2,
+          "command": "w"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "uptime",
+        "status": "SUCCESS",
+        "stdout": "10:57:14 up 14 min,  7 users,  load average: 1.36, 0.90, 0.52",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "w",
+        "status": "SUCCESS",
+        "stdout": "10:57:14 up 14 min,  7 users,  load average: 1.36, 0.90, 0.52\nUSER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU  WHAT\nygb               172.26.80.1      10:57   14:19   0.00s  0.07s sshd: ygb [priv\nygb               172.26.80.1      10:49   14:19   0.00s  0.12s sshd: ygb [priv\nygb               172.26.80.1      10:49   14:19   0.00s  0.11s sshd: ygb [priv\nygb               172.26.80.1      10:49   14:19   0.00s  0.24s sshd: ygb [priv\nygb               172.26.80.1      10:44   14:19   0.00s  0.07s sshd: ygb [priv\nygb               172.26.80.1      10:43   14:19   0.00s  0.22s sshd: ygb [priv\nygb      pts/1    -                10:43   14:10   0.03s  0.02s -bash",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-018",
+    "category": "system_monitoring",
+    "mode": "monolithic",
+    "query": "show the last 20 lines of the syslog",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 0.68,
+    "commands_generated": 1,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "tail -n 20 /var/log/syslog"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "tail -n 20 /var/log/syslog",
+        "status": "SUCCESS",
+        "stdout": "Mar 16 10:52:59 DESKTOP-74TFSO9 k3s[181]: time=\"2026-03-16T10:52:59Z\" level=info msg=\"COMPACT deleted 320 rows from 320 revisions in 37.677279ms - compacted to 1181595/1182595\"\nMar 16 10:52:59 DESKTOP-74TFSO9 k3s[181]: time=\"2026-03-16T10:52:59Z\" level=info msg=\"COMPACT compacted from 1181275 to 1181595 in 1 transactions over 39ms\"\nMar 16 10:53:01 DESKTOP-74TFSO9 k3s[181]: I0316 10:53:01.742161     181 cidrallocator.go:277] updated ClusterIP allocator for Service CIDR 10.43.0.0/16\nMar 16 10:53:10 DESKTOP-74TFSO9 systemd[1]: session-18.scope: Deactivated successfully.\nMar 16 10:53:10 DESKTOP-74TFSO9 systemd[1]: Started session-19.scope - Session 19 of User ygb.\nMar 16 10:53:25 DESKTOP-74TFSO9 k3s[181]: E0316 10:53:25.053923     181 projected.go:194] Error preparing data for projected volume kube-api-access-rjdqh for pod kube-system/traefik-865bd56545-v7gd8: failed to fetch token: serviceaccounts \"traefik\" not found\nMar 16 10:53:25 DESKTOP-74TFSO9 k3s[181]: E0316 10:53:25.054163     181 nestedpendingoperations.go:348] Operation for \"{volumeName:kubernetes.io/projected/ca5e98fd-e247-4135-8e5e-9556d8a2f4e4-kube-api-access-rjdqh podName:ca5e98fd-e247-4135-8e5e-9556d8a2f4e4 nodeName:}\" failed. No retries permitted until 2026-03-16 10:55:27.054121747 +0000 UTC m=+750.922437148 (durationBeforeRetry 2m2s). Error: MountVolume.SetUp failed for volume \"kube-api-access-rjdqh\" (UniqueName: \"kubernetes.io/projected/ca5e98fd-e247-4135-8e5e-9556d8a2f4e4-kube-api-access-rjdqh\") pod \"traefik-865bd56545-v7gd8\" (UID: \"ca5e98fd-e247-4135-8e5e-9556d8a2f4e4\") : failed to fetch token: serviceaccounts \"traefik\" not found\nMar 16 10:54:18 DESKTOP-74TFSO9 k3s[181]: E0316 10:54:18.937180     181 pod_workers.go:1301] \"Error syncing pod, skipping\" err=\"unmounted volumes=[kube-api-access-rjdqh], unattached volumes=[], failed to process volumes=[]: context deadline exceeded\" pod=\"kube-system/traefik-865bd56545-v7gd8\" podUID=\"ca5e98fd-e247-4135-8e5e-9556d8a2f4e4\"\nMar 16 10:55:01 DESKTOP-74TFSO9 CRON[7358]: (root) CMD (command -v debian-sa1 > /dev/null && debian-sa1 1 1)\nMar 16 10:55:27 DESKTOP-74TFSO9 k3s[181]: E0316 10:55:27.087776     181 projected.go:194] Error preparing data for projected volume kube-api-access-rjdqh for pod kube-system/traefik-865bd56545-v7gd8: failed to fetch token: serviceaccounts \"traefik\" not found\nMar 16 10:55:27 DESKTOP-74TFSO9 k3s[181]: E0316 10:55:27.087914     181 nestedpendingoperations.go:348] Operation for \"{volumeName:kubernetes.io/projected/ca5e98fd-e247-4135-8e5e-9556d8a2f4e4-kube-api-access-rjdqh podName:ca5e98fd-e247-4135-8e5e-9556d8a2f4e4 nodeName:}\" failed. No retries permitted until 2026-03-16 10:57:29.08789482 +0000 UTC m=+872.956210121 (durationBeforeRetry 2m2s). Error: MountVolume.SetUp failed for volume \"kube-api-access-rjdqh\" (UniqueName: \"kubernetes.io/projected/ca5e98fd-e247-4135-8e5e-9556d8a2f4e4-kube-api-access-rjdqh\") pod \"traefik-865bd56545-v7gd8\" (UID: \"ca5e98fd-e247-4135-8e5e-9556d8a2f4e4\") : failed to fetch token: serviceaccounts \"traefik\" not found\nMar 16 10:56:33 DESKTOP-74TFSO9 k3s[181]: E0316 10:56:33.936197     181 pod_workers.go:1301] \"Error syncing pod, skipping\" err=\"unmounted volumes=[kube-api-access-rjdqh], unattached volumes=[], failed to process volumes=[]: context deadline exceeded\" pod=\"kube-system/traefik-865bd56545-v7gd8\" podUID=\"ca5e98fd-e247-4135-8e5e-9556d8a2f4e4\"\nMar 16 10:57:11 DESKTOP-74TFSO9 systemd[1]: session-19.scope: Deactivated successfully.\nMar 16 10:57:11 DESKTOP-74TFSO9 systemd[1]: session-19.scope: Consumed 18.065s CPU time.\nMar 16 10:57:11 DESKTOP-74TFSO9 systemd[1]: Started session-21.scope - Session 21 of User ygb.\nMar 16 10:57:12 DESKTOP-74TFSO9 systemd[1]: session-21.scope: Deactivated successfully.\nMar 16 10:57:13 DESKTOP-74TFSO9 systemd[1]: Started session-22.scope - Session 22 of User ygb.\nMar 16 10:57:13 DESKTOP-74TFSO9 systemd[1]: session-22.scope: Deactivated successfully.\nMar 16 10:57:14 DESKTOP-74TFSO9 systemd[1]: Started session-23.scope - Session 23 of User ygb.\nMar 16 10:57:14 DESKTOP-74TFSO9 systemd[1]: session-23.scope: Deactivated successfully.",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-019",
+    "category": "filesystem",
+    "mode": "monolithic",
+    "query": "create a file at /tmp/aoss-test.txt with the content 'hello world'",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 0.62,
+    "commands_generated": 1,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "echo 'hello world' > /tmp/aoss-test.txt"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "echo 'hello world' > /tmp/aoss-test.txt",
+        "status": "SUCCESS",
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-020",
+    "category": "filesystem",
+    "mode": "monolithic",
+    "query": "create a directory called /tmp/aoss-workdir",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 0.59,
+    "commands_generated": 1,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "mkdir -p /tmp/aoss-workdir"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "mkdir -p /tmp/aoss-workdir",
+        "status": "SUCCESS",
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-021",
+    "category": "filesystem",
+    "mode": "monolithic",
+    "query": "list all files larger than 10MB in the /var directory",
+    "status": "FAILED (Planner)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 0.23,
+    "commands_generated": 0,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {},
+    "execution_history": []
+  },
+  {
+    "test_id": "FT-022",
+    "category": "filesystem",
+    "mode": "monolithic",
+    "query": "compress the /tmp/aoss-workdir directory into a tar.gz archive at /tmp/aoss-workdir.tar.gz",
+    "status": "FAILED (Execution)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 0.72,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "cd /tmp"
+        },
+        {
+          "step": 2,
+          "command": "tar -czf aoss-workdir.tar.gz aoss-workdir"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "cd /tmp",
+        "status": "SUCCESS",
+        "stdout": "Changed directory to: /tmp",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "tar -czf aoss-workdir.tar.gz aoss-workdir",
+        "status": "FAILED",
+        "stdout": "tar: aoss-workdir: Cannot stat: No such file or directory\ntar: Exiting with failure status due to previous errors",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-023",
+    "category": "filesystem",
+    "mode": "monolithic",
+    "query": "find all .log files in /var/log older than 7 days and list them",
+    "status": "FAILED (Execution)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 0.75,
+    "commands_generated": 1,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "find /var/log -type f -name '*.log' -mtime +7 -print"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "find /var/log -type f -name '*.log' -mtime +7 -print",
+        "status": "FAILED",
+        "stdout": "/var/log/landscape/sysinfo.log\n/var/log/nginx/error.log\n/var/log/nginx/access.log\n/var/log/bootstrap.log\nfind: ‘/var/log/private’: Permission denied\n/var/log/unattended-upgrades/unattended-upgrades-shutdown.log\nfind: ‘/var/log/pods’: Permission denied",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-024",
+    "category": "filesystem",
+    "mode": "monolithic",
+    "query": "check the permissions of the /etc/passwd file",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 0.95,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "ls -l /etc/passwd"
+        },
+        {
+          "step": 2,
+          "command": "stat /etc/passwd"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "ls -l /etc/passwd",
+        "status": "SUCCESS",
+        "stdout": "-rw-r--r-- 1 root root 1543 Oct  6 09:15 /etc/passwd",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "stat /etc/passwd",
+        "status": "SUCCESS",
+        "stdout": "File: /etc/passwd\n  Size: 1543      \tBlocks: 8          IO Block: 4096   regular file\nDevice: 8,48\tInode: 46427       Links: 1\nAccess: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)\nAccess: 2026-03-16 06:52:50.318245593 +0000\nModify: 2025-10-06 09:15:18.880560237 +0000\nChange: 2025-10-06 09:15:18.888561327 +0000\n Birth: 2025-10-06 09:15:18.880560237 +0000",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-025",
+    "category": "networking",
+    "mode": "monolithic",
+    "query": "show all open ports on this machine",
+    "status": "FAILED (Execution)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 0.88,
+    "commands_generated": 3,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "netstat -tlnp"
+        },
+        {
+          "step": 2,
+          "command": "ss -tlnp"
+        },
+        {
+          "step": 3,
+          "command": "lsof -i"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "netstat -tlnp",
+        "status": "FAILED",
+        "stdout": "bash: line 1: netstat: command not found",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-026",
+    "category": "networking",
+    "mode": "monolithic",
+    "query": "check if google.com is reachable by sending 4 ping packets",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 4.5,
+    "commands_generated": 1,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "ping -c 4 google.com"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "ping -c 4 google.com",
+        "status": "SUCCESS",
+        "stdout": "PING google.com (142.250.67.14) 56(84) bytes of data.\n64 bytes from lcboma-au-in-f14.1e100.net (142.250.67.14): icmp_seq=1 ttl=113 time=6.98 ms\n64 bytes from lcboma-au-in-f14.1e100.net (142.250.67.14): icmp_seq=2 ttl=113 time=6.59 ms\n64 bytes from lcboma-au-in-f14.1e100.net (142.250.67.14): icmp_seq=3 ttl=113 time=6.06 ms\n64 bytes from lcboma-au-in-f14.1e100.net (142.250.67.14): icmp_seq=4 ttl=113 time=6.28 ms\n\n--- google.com ping statistics ---\n4 packets transmitted, 4 received, 0% packet loss, time 3004ms\nrtt min/avg/max/mdev = 6.062/6.476/6.978/0.343 ms",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-027",
+    "category": "networking",
+    "mode": "monolithic",
+    "query": "display the current network interface configuration and IP addresses",
+    "status": "FAILED (Execution)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 0.84,
+    "commands_generated": 5,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "ip addr show"
+        },
+        {
+          "step": 2,
+          "command": "ip link show"
+        },
+        {
+          "step": 3,
+          "command": "netstat -i"
+        },
+        {
+          "step": 4,
+          "command": "ifconfig -a"
+        },
+        {
+          "step": 5,
+          "command": "ip route show"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "ip addr show",
+        "status": "SUCCESS",
+        "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n    inet 127.0.0.1/8 scope host lo\n       valid_lft forever preferred_lft forever\n    inet 10.255.255.254/32 brd 10.255.255.254 scope global lo\n       valid_lft forever preferred_lft forever\n    inet6 ::1/128 scope host \n       valid_lft forever preferred_lft forever\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1420 qdisc mq state UP group default qlen 1000\n    link/ether 00:15:5d:8e:6a:15 brd ff:ff:ff:ff:ff:ff\n    inet 172.26.95.101/20 brd 172.26.95.255 scope global eth0\n       valid_lft forever preferred_lft forever\n    inet6 fe80::215:5dff:fe8e:6a15/64 scope link \n       valid_lft forever preferred_lft forever\n3: br-4b16d0377017: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default \n    link/ether 06:5b:21:cf:63:d6 brd ff:ff:ff:ff:ff:ff\n    inet 172.19.0.1/16 brd 172.19.255.255 scope global br-4b16d0377017\n       valid_lft forever preferred_lft forever\n    inet6 fe80::45b:21ff:fecf:63d6/64 scope link \n       valid_lft forever preferred_lft forever\n4: br-61f8dfa0ec00: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default \n    link/ether b6:d7:8a:45:b9:20 brd ff:ff:ff:ff:ff:ff\n    inet 192.168.58.1/24 brd 192.168.58.255 scope global br-61f8dfa0ec00\n       valid_lft forever preferred_lft forever\n5: br-7fcf31e80b12: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default \n    link/ether 36:49:bf:82:29:00 brd ff:ff:ff:ff:ff:ff\n    inet 172.20.0.1/16 brd 172.20.255.255 scope global br-7fcf31e80b12\n       valid_lft forever preferred_lft forever\n    inet6 fe80::3449:bfff:fe82:2900/64 scope link \n       valid_lft forever preferred_lft forever\n6: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default \n    link/ether ba:38:09:b9:39:84 brd ff:ff:ff:ff:ff:ff\n    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0\n       valid_lft forever preferred_lft forever\n7: br-d8ea09a6c7c8: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default \n    link/ether 26:57:de:68:97:84 brd ff:ff:ff:ff:ff:ff\n    inet 172.18.0.1/16 brd 172.18.255.255 scope global br-d8ea09a6c7c8\n       valid_lft forever preferred_lft forever\n8: vethea79777@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7fcf31e80b12 state UP group default \n    link/ether 36:0a:ac:d0:17:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0\n    inet6 fe80::340a:acff:fed0:1703/64 scope link \n       valid_lft forever preferred_lft forever\n9: veth84dbe3b@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7fcf31e80b12 state UP group default \n    link/ether da:37:b2:99:a7:0e brd ff:ff:ff:ff:ff:ff link-netnsid 1\n    inet6 fe80::d837:b2ff:fe99:a70e/64 scope link \n       valid_lft forever preferred_lft forever\n10: veth29b6053@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-4b16d0377017 state UP group default \n    link/ether 42:36:16:95:0c:ae brd ff:ff:ff:ff:ff:ff link-netnsid 2\n    inet6 fe80::4036:16ff:fe95:cae/64 scope link \n       valid_lft forever preferred_lft forever\n11: vethe66d2a0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7fcf31e80b12 state UP group default \n    link/ether 36:7f:ef:09:76:67 brd ff:ff:ff:ff:ff:ff link-netnsid 3\n    inet6 fe80::347f:efff:fe09:7667/64 scope link \n       valid_lft forever preferred_lft forever\n12: flannel.1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue state UNKNOWN group default \n    link/ether fe:a0:5e:d8:67:45 brd ff:ff:ff:ff:ff:ff\n    inet 10.42.0.0/32 scope global flannel.1\n       valid_lft forever preferred_lft forever\n    inet6 fe80::fca0:5eff:fed8:6745/64 scope link \n       valid_lft forever preferred_lft forever\n13: cni0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue state UP group default qlen 1000\n    link/ether ce:fb:cf:a9:10:6f brd ff:ff:ff:ff:ff:ff\n    inet 10.42.0.1/24 brd 10.42.0.255 scope global cni0\n       valid_lft forever preferred_lft forever\n    inet6 fe80::ccfb:cfff:fea9:106f/64 scope link \n       valid_lft forever preferred_lft forever\n14: veth7d48b10d@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue master cni0 state UP group default \n    link/ether 0e:af:c6:40:e4:b7 brd ff:ff:ff:ff:ff:ff link-netns cni-083f5d7d-e8e0-cc16-17b8-255dbc748c11\n    inet6 fe80::caf:c6ff:fe40:e4b7/64 scope link \n       valid_lft forever preferred_lft forever\n15: veth5eca217a@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue master cni0 state UP group default \n    link/ether a6:63:b8:a9:fb:8e brd ff:ff:ff:ff:ff:ff link-netns cni-35285e5d-7507-dfe1-6a55-407f37403d6b\n    inet6 fe80::a463:b8ff:fea9:fb8e/64 scope link \n       valid_lft forever preferred_lft forever\n16: veth907ccd5e@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue master cni0 state UP group default \n    link/ether 72:5b:0d:91:ac:54 brd ff:ff:ff:ff:ff:ff link-netns cni-6a3b587f-4794-1d98-2262-29964febdd90\n    inet6 fe80::705b:dff:fe91:ac54/64 scope link \n       valid_lft forever preferred_lft forever\n17: veth4ff06eb0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue master cni0 state UP group default \n    link/ether 4e:71:e6:29:66:f8 brd ff:ff:ff:ff:ff:ff link-netns cni-92921f81-cbaf-4dcb-2e5b-369708088d60\n    inet6 fe80::4c71:e6ff:fe29:66f8/64 scope link \n       valid_lft forever preferred_lft forever",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "ip link show",
+        "status": "SUCCESS",
+        "stdout": "1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000\n    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00\n2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1420 qdisc mq state UP mode DEFAULT group default qlen 1000\n    link/ether 00:15:5d:8e:6a:15 brd ff:ff:ff:ff:ff:ff\n3: br-4b16d0377017: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default \n    link/ether 06:5b:21:cf:63:d6 brd ff:ff:ff:ff:ff:ff\n4: br-61f8dfa0ec00: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default \n    link/ether b6:d7:8a:45:b9:20 brd ff:ff:ff:ff:ff:ff\n5: br-7fcf31e80b12: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default \n    link/ether 36:49:bf:82:29:00 brd ff:ff:ff:ff:ff:ff\n6: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default \n    link/ether ba:38:09:b9:39:84 brd ff:ff:ff:ff:ff:ff\n7: br-d8ea09a6c7c8: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default \n    link/ether 26:57:de:68:97:84 brd ff:ff:ff:ff:ff:ff\n8: vethea79777@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7fcf31e80b12 state UP mode DEFAULT group default \n    link/ether 36:0a:ac:d0:17:03 brd ff:ff:ff:ff:ff:ff link-netnsid 0\n9: veth84dbe3b@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7fcf31e80b12 state UP mode DEFAULT group default \n    link/ether da:37:b2:99:a7:0e brd ff:ff:ff:ff:ff:ff link-netnsid 1\n10: veth29b6053@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-4b16d0377017 state UP mode DEFAULT group default \n    link/ether 42:36:16:95:0c:ae brd ff:ff:ff:ff:ff:ff link-netnsid 2\n11: vethe66d2a0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-7fcf31e80b12 state UP mode DEFAULT group default \n    link/ether 36:7f:ef:09:76:67 brd ff:ff:ff:ff:ff:ff link-netnsid 3\n12: flannel.1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue state UNKNOWN mode DEFAULT group default \n    link/ether fe:a0:5e:d8:67:45 brd ff:ff:ff:ff:ff:ff\n13: cni0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue state UP mode DEFAULT group default qlen 1000\n    link/ether ce:fb:cf:a9:10:6f brd ff:ff:ff:ff:ff:ff\n14: veth7d48b10d@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue master cni0 state UP mode DEFAULT group default \n    link/ether 0e:af:c6:40:e4:b7 brd ff:ff:ff:ff:ff:ff link-netns cni-083f5d7d-e8e0-cc16-17b8-255dbc748c11\n15: veth5eca217a@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue master cni0 state UP mode DEFAULT group default \n    link/ether a6:63:b8:a9:fb:8e brd ff:ff:ff:ff:ff:ff link-netns cni-35285e5d-7507-dfe1-6a55-407f37403d6b\n16: veth907ccd5e@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue master cni0 state UP mode DEFAULT group default \n    link/ether 72:5b:0d:91:ac:54 brd ff:ff:ff:ff:ff:ff link-netns cni-6a3b587f-4794-1d98-2262-29964febdd90\n17: veth4ff06eb0@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1370 qdisc noqueue master cni0 state UP mode DEFAULT group default \n    link/ether 4e:71:e6:29:66:f8 brd ff:ff:ff:ff:ff:ff link-netns cni-92921f81-cbaf-4dcb-2e5b-369708088d60",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "netstat -i",
+        "status": "FAILED",
+        "stdout": "bash: line 1: netstat: command not found",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-028",
+    "category": "networking",
+    "mode": "monolithic",
+    "query": "perform a DNS lookup for github.com",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 1.39,
+    "commands_generated": 3,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "dig github.com"
+        },
+        {
+          "step": 2,
+          "command": "host github.com"
+        },
+        {
+          "step": 3,
+          "command": "nslookup github.com"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "dig github.com",
+        "status": "SUCCESS",
+        "stdout": "; <<>> DiG 9.18.39-0ubuntu0.24.04.2-Ubuntu <<>> github.com\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 59569\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; OPT PSEUDOSECTION:\n; EDNS: version: 0, flags:; udp: 1232\n;; QUESTION SECTION:\n;github.com.\t\t\tIN\tA\n\n;; ANSWER SECTION:\ngithub.com.\t\t60\tIN\tA\t20.207.73.82\n\n;; Query time: 47 msec\n;; SERVER: 10.255.255.254#53(10.255.255.254) (UDP)\n;; WHEN: Mon Mar 16 10:57:26 UTC 2026\n;; MSG SIZE  rcvd: 55",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "host github.com",
+        "status": "SUCCESS",
+        "stdout": "github.com has address 20.207.73.82\ngithub.com mail is handled by 5 alt2.aspmx.l.google.com.\ngithub.com mail is handled by 10 alt3.aspmx.l.google.com.\ngithub.com mail is handled by 5 alt1.aspmx.l.google.com.\ngithub.com mail is handled by 1 aspmx.l.google.com.\ngithub.com mail is handled by 10 alt4.aspmx.l.google.com.",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "nslookup github.com",
+        "status": "SUCCESS",
+        "stdout": "Server:\t\t10.255.255.254\nAddress:\t10.255.255.254#53\n\nNon-authoritative answer:\nName:\tgithub.com\nAddress: 20.207.73.82",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-029",
+    "category": "deployment",
+    "mode": "monolithic",
+    "query": "clone the repository https://github.com/octocat/Hello-World.git into /tmp/hello-world",
+    "status": "FAILED (Execution)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 1.17,
+    "commands_generated": 7,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "mkdir -p /tmp/hello-world"
+        },
+        {
+          "step": 2,
+          "command": "cd /tmp/hello-world"
+        },
+        {
+          "step": 3,
+          "command": "git init"
+        },
+        {
+          "step": 4,
+          "command": "git remote add origin https://github.com/octocat/Hello-World.git"
+        },
+        {
+          "step": 5,
+          "command": "git fetch origin"
+        },
+        {
+          "step": 6,
+          "command": "git checkout -t origin/main"
+        },
+        {
+          "step": 7,
+          "command": "git pull origin main"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "mkdir -p /tmp/hello-world",
+        "status": "SUCCESS",
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "cd /tmp/hello-world",
+        "status": "SUCCESS",
+        "stdout": "Changed directory to: /tmp/hello-world",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "git init",
+        "status": "FAILED",
+        "stdout": "bash: line 1: git: command not found",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-030",
+    "category": "deployment",
+    "mode": "monolithic",
+    "query": "run a simple python web server on port 8000 in the background serving /tmp",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 2.97,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "cd /tmp"
+        },
+        {
+          "step": 2,
+          "command": "python3 -m http.server 8000 &"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "cd /tmp",
+        "status": "SUCCESS",
+        "stdout": "Changed directory to: /tmp",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "python3 -m http.server 8000 &",
+        "status": "SUCCESS",
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-031",
+    "category": "deployment",
+    "mode": "monolithic",
+    "query": "deploy my streamlit app from `https://github.com/streamlit/streamlit-example.git`",
+    "status": "FAILED (Execution)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 10.89,
+    "commands_generated": 7,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y git python3-pip"
+        },
+        {
+          "step": 3,
+          "command": "git clone https://github.com/streamlit/streamlit-example.git"
+        },
+        {
+          "step": 4,
+          "command": "cd streamlit-example"
+        },
+        {
+          "step": 5,
+          "command": "pip3 install -r requirements.txt"
+        },
+        {
+          "step": 6,
+          "command": "pip3 install streamlit"
+        },
+        {
+          "step": 7,
+          "command": "streamlit run app.py"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt update",
+        "status": "SUCCESS",
+        "stdout": "0% [Working]            Get:1 https://aquasecurity.github.io/trivy-repo/deb noble InRelease [3061 B]\n0% [Connecting to download.docker.com] [Connected to deb.nodesource.com (104.200% [Connecting to download.docker.com] [Connected to deb.nodesource.com (104.20                                                                               Hit:2 https://download.docker.com/linux/ubuntu noble InRelease\n0% [Connected to deb.nodesource.com (104.20.45.190)] [Connecting to archive.ubu1yash2raj\n0% [Connected to deb.nodesource.com (104.20.45.190)] [Waiting for headers] [Wai                                                                               Hit:3 http://archive.ubuntu.com/ubuntu noble InRelease\n                                                                               0% [Connected to deb.nodesource.com (104.20.45.190)] [Waiting for headers]                                                                          Hit:4 http://security.ubuntu.com/ubuntu noble-security InRelease\n0% [Connected to deb.nodesource.com (104.20.45.190)] [Waiting for headers]                                                                          0% [Waiting for headers] [Waiting for headers]                                              Hit:5 https://deb.nodesource.com/node_22.x nodistro InRelease\n                                              0% [Waiting for headers]0% [Waiting for headers]                        Hit:6 http://archive.ubuntu.com/ubuntu noble-updates InRelease\n                        0% [Working]0% [Waiting for headers]                        Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease\n                        0% [Working]0% [Working]0% [Working]100% [Working]              Fetched 3061 B in 1s (4019 B/s)\nReading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 36%Reading package lists... 36%Reading package lists... 44%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 55%Reading package lists... 55%Reading package lists... 58%Reading package lists... 58%Reading package lists... 62%Reading package lists... 62%Reading package lists... 64%Reading package lists... 64%Reading package lists... 71%Reading package lists... 71%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 81%Reading package lists... 81%Reading package lists... 83%Reading package lists... 83%Reading package lists... 86%Reading package lists... 86%Reading package lists... 87%Reading package lists... 87%Reading package lists... 94%Reading package lists... 94%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\n124 packages can be upgraded. Run 'apt list --upgradable' to see them.\nW: https://aquasecurity.github.io/trivy-repo/deb/dists/noble/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install -y git python3-pip",
+        "status": "SUCCESS",
+        "stdout": "Reading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%1yash2raj\nBuilding dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\npython3-pip is already the newest version (24.0+dfsg-1ubuntu1.3).\nThe following packages were automatically installed and are no longer required:\n  gfortran gfortran-13 gfortran-13-x86-64-linux-gnu gfortran-x86-64-linux-gnu\n  libblas-dev libbz2-dev libestr0 libfastjson4 libgfortran-13-dev libgfortran5\n  libjpeg-dev libjpeg-turbo8-dev libjpeg8-dev libjq1 liblapack-dev liblapack3\n  libllvm19 liblzma-dev libnl-genl-3-200 libonig5 libpng-dev libpng-tools\n  libreadline-dev libtcl8.6 libtk8.6 libxss1 nginx-common r-doc-html zip\nUse 'sudo apt autoremove' to remove them.\nSuggested packages:\n  git-daemon-run | git-daemon-sysvinit git-doc git-email git-gui gitk gitweb\n  git-cvs git-mediawiki git-svn\nThe following NEW packages will be installed:\n  git\n0 upgraded, 1 newly installed, 0 to remove and 124 not upgraded.\nNeed to get 3680 kB of archives.\nAfter this operation, 22.2 MB of additional disk space will be used.\n0% [Working]            Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 git amd64 1:2.43.0-1ubuntu7.3 [3680 kB]\n0% [1 git 13.4 kB/3680 kB 0%]                             2% [1 git 112 kB/3680 kB 3%]15% [1 git 711 kB/3680 kB 19%]                              100% [Working]              Fetched 3680 kB in 2s (2115 kB/s)\n\n\u001b7\u001b8Selecting previously unselected package git.\n(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 62821 files and directories currently installed.)\nPreparing to unpack .../git_1%3a2.43.0-1ubuntu7.3_amd64.deb ...\n\u001b7Progress: [  0%] [..........................................................] \u001b8\u001b7Progress: [ 20%] [###########...............................................] \u001b8Unpacking git (1:2.43.0-1ubuntu7.3) ...\n\u001b7Progress: [ 40%] [#######################...................................] \u001b8Setting up git (1:2.43.0-1ubuntu7.3) ...\n\u001b7Progress: [ 60%] [##################################........................] \u001b8\u001b7Progress: [ 80%] [##############################################............] \u001b8\n\u001b7\u001b8",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "git clone https://github.com/streamlit/streamlit-example.git",
+        "status": "SUCCESS",
+        "stdout": "Cloning into 'streamlit-example'...\nremote: Enumerating objects: 25, done.\nremote: Total 25 (delta 0), reused 0 (delta 0), pack-reused 25 (from 1)\nReceiving objects:   4% (1/25)Receiving objects:   8% (2/25)Receiving objects:  12% (3/25)Receiving objects:  16% (4/25)Receiving objects:  20% (5/25)Receiving objects:  24% (6/25)Receiving objects:  28% (7/25)Receiving objects:  32% (8/25)Receiving objects:  36% (9/25)Receiving objects:  40% (10/25)Receiving objects:  44% (11/25)Receiving objects:  48% (12/25)Receiving objects:  52% (13/25)Receiving objects:  56% (14/25)Receiving objects:  60% (15/25)Receiving objects:  64% (16/25)Receiving objects:  68% (17/25)Receiving objects:  72% (18/25)Receiving objects:  76% (19/25)Receiving objects:  80% (20/25)Receiving objects:  84% (21/25)Receiving objects:  88% (22/25)Receiving objects:  92% (23/25)Receiving objects:  96% (24/25)Receiving objects: 100% (25/25)Receiving objects: 100% (25/25), 6.36 KiB | 930.00 KiB/s, done.\nResolving deltas:   0% (0/5)Resolving deltas:  20% (1/5)Resolving deltas:  40% (2/5)Resolving deltas:  60% (3/5)Resolving deltas:  80% (4/5)Resolving deltas: 100% (5/5)Resolving deltas: 100% (5/5), done.",
+        "stderr": ""
+      },
+      {
+        "step": 4,
+        "command": "cd streamlit-example",
+        "status": "SUCCESS",
+        "stdout": "Changed directory to: /home/ygb/streamlit-example",
+        "stderr": ""
+      },
+      {
+        "step": 5,
+        "command": "pip3 install -r requirements.txt",
+        "status": "FAILED",
+        "stdout": "error: externally-managed-environment\n\n× This environment is externally managed\n╰─> To install Python packages system-wide, try apt install\n    python3-xyz, where xyz is the package you are trying to\n    install.\n    \n    If you wish to install a non-Debian-packaged Python package,\n    create a virtual environment using python3 -m venv path/to/venv.\n    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make\n    sure you have python3-full installed.\n    \n    If you wish to install a non-Debian packaged Python application,\n    it may be easiest to use pipx install xyz, which will manage a\n    virtual environment for you. Make sure you have pipx installed.\n    \n    See /usr/share/doc/python3.12/README.venv for more information.\n\nnote: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.\nhint: See PEP 668 for the detailed specification.",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-032",
+    "category": "deployment",
+    "mode": "monolithic",
+    "query": "First, run a simple python web server on port 8000 in the background. Second, configure nginx as a reverse proxy to it.",
+    "status": "FAILED (Planner)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 0.62,
+    "commands_generated": 0,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {},
+    "execution_history": []
+  },
+  {
+    "test_id": "FT-033",
+    "category": "error_handling",
+    "mode": "monolithic",
+    "query": "run 'foobar123'",
+    "status": "PASSED (Expected Fail)",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 0.54,
+    "commands_generated": 1,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "foobar123"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "foobar123",
+        "status": "FAILED",
+        "stdout": "bash: line 1: foobar123: command not found",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-034",
+    "category": "error_handling",
+    "mode": "monolithic",
+    "query": "install a package called definitely-not-a-real-package-xyz",
+    "status": "PASSED (Expected Fail)",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 5.97,
+    "commands_generated": 2,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "sudo apt update"
+        },
+        {
+          "step": 2,
+          "command": "sudo apt install -y definitely-not-a-real-package-xyz"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "sudo apt update",
+        "status": "SUCCESS",
+        "stdout": "0% [Working]            Hit:1 https://download.docker.com/linux/ubuntu noble InRelease\n0% [Waiting for headers] [Waiting for headers] [Connecting to archive.ubuntu.co                                                                               Get:2 https://aquasecurity.github.io/trivy-repo/deb noble InRelease [3061 B]\n0% [Waiting for headers] [Connecting to archive.ubuntu.com (91.189.92.23)] [Con                                                                               Hit:3 https://deb.nodesource.com/node_22.x nodistro InRelease\n0% [Connecting to archive.ubuntu.com (91.189.92.23)] [Connecting to security.ub0% [Connecting to archive.ubuntu.com (91.189.92.23)] [Connecting to security.ub1yash2raj\n                                                                               Hit:4 http://archive.ubuntu.com/ubuntu noble InRelease\n                                                                               0% [Waiting for headers]                        Hit:5 http://security.ubuntu.com/ubuntu noble-security InRelease\n0% [Waiting for headers]0% [Waiting for headers]                        Hit:6 http://archive.ubuntu.com/ubuntu noble-updates InRelease\n                        0% [Working]0% [Waiting for headers]                        Hit:7 http://archive.ubuntu.com/ubuntu noble-backports InRelease\n                        0% [Working]0% [Working]0% [Working]0% [Working]100% [Working]              Fetched 3061 B in 1s (2601 B/s)\nReading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 0%Reading package lists... 3%Reading package lists... 3%Reading package lists... 4%Reading package lists... 4%Reading package lists... 26%Reading package lists... 36%Reading package lists... 36%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 50%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 51%Reading package lists... 53%Reading package lists... 55%Reading package lists... 55%Reading package lists... 58%Reading package lists... 58%Reading package lists... 62%Reading package lists... 62%Reading package lists... 64%Reading package lists... 64%Reading package lists... 71%Reading package lists... 71%Reading package lists... 76%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 77%Reading package lists... 81%Reading package lists... 81%Reading package lists... 83%Reading package lists... 83%Reading package lists... 86%Reading package lists... 86%Reading package lists... 87%Reading package lists... 87%Reading package lists... 94%Reading package lists... 94%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... 99%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%Building dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\n124 packages can be upgraded. Run 'apt list --upgradable' to see them.\nW: https://aquasecurity.github.io/trivy-repo/deb/dists/noble/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "sudo apt install -y definitely-not-a-real-package-xyz",
+        "status": "FAILED",
+        "stdout": "Reading package lists... 0%Reading package lists... 100%Reading package lists... Done\nBuilding dependency tree... 0%Building dependency tree... 0%Building dependency tree... 50%Building dependency tree... 50%1yash2raj\nBuilding dependency tree... Done\nReading state information... 0% Reading state information... 0%Reading state information... Done\nE: Unable to locate package definitely-not-a-real-package-xyz",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-035",
+    "category": "error_handling",
+    "mode": "monolithic",
+    "query": "show me the environment variables on this system",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 0.74,
+    "commands_generated": 3,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "printenv"
+        },
+        {
+          "step": 2,
+          "command": "env"
+        },
+        {
+          "step": 3,
+          "command": "set"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "printenv",
+        "status": "SUCCESS",
+        "stdout": "SHELL=/bin/bash\nPWD=/home/ygb\nLOGNAME=ygb\nXDG_SESSION_TYPE=tty\nHOME=/home/ygb\nLANG=C.UTF-8\nSSH_CONNECTION=172.26.80.1 64952 172.26.95.101 22\nXDG_SESSION_CLASS=user\nTERM=vt100\nUSER=ygb\nSHLVL=0\nXDG_SESSION_ID=39\nXDG_RUNTIME_DIR=/run/user/1000\nSSH_CLIENT=172.26.80.1 64952 22\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\nDBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus\nSSH_TTY=/dev/pts/2\nOLDPWD=/home/ygb\n_=/usr/bin/printenv",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "env",
+        "status": "SUCCESS",
+        "stdout": "SHELL=/bin/bash\nPWD=/home/ygb\nLOGNAME=ygb\nXDG_SESSION_TYPE=tty\nHOME=/home/ygb\nLANG=C.UTF-8\nSSH_CONNECTION=172.26.80.1 64952 172.26.95.101 22\nXDG_SESSION_CLASS=user\nTERM=vt100\nUSER=ygb\nSHLVL=0\nXDG_SESSION_ID=39\nXDG_RUNTIME_DIR=/run/user/1000\nSSH_CLIENT=172.26.80.1 64952 22\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\nDBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus\nSSH_TTY=/dev/pts/2\nOLDPWD=/home/ygb\n_=/usr/bin/env",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "set",
+        "status": "SUCCESS",
+        "stdout": "BASH=/usr/bin/bash\nBASHOPTS=checkwinsize:cmdhist:complete_fullquote:extquote:force_fignore:globasciiranges:globskipdots:hostcomplete:interactive_comments:patsub_replacement:progcomp:promptvars:sourcepath\nBASH_ALIASES=()\nBASH_ARGC=([0]=\"0\")\nBASH_ARGV=()\nBASH_CMDS=()\nBASH_EXECUTION_STRING='cd /home/ygb && set'\nBASH_LINENO=()\nBASH_LOADABLES_PATH=/usr/local/lib/bash:/usr/lib/bash:/opt/local/lib/bash:/usr/pkg/lib/bash:/opt/pkg/lib/bash:.\nBASH_SOURCE=()\nBASH_VERSINFO=([0]=\"5\" [1]=\"2\" [2]=\"21\" [3]=\"1\" [4]=\"release\" [5]=\"x86_64-pc-linux-gnu\")\nBASH_VERSION='5.2.21(1)-release'\nDBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus\nDIRSTACK=()\nEUID=1000\nGROUPS=()\nHOME=/home/ygb\nHOSTNAME=DESKTOP-74TFSO9\nHOSTTYPE=x86_64\nIFS=$' \\t\\n'\nLANG=C.UTF-8\nLOGNAME=ygb\nMACHTYPE=x86_64-pc-linux-gnu\nOLDPWD=/home/ygb\nOPTERR=1\nOPTIND=1\nOSTYPE=linux-gnu\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\nPIPESTATUS=([0]=\"0\")\nPPID=8766\nPS4='+ '\nPWD=/home/ygb\nSHELL=/bin/bash\nSHELLOPTS=braceexpand:hashall:interactive-comments\nSHLVL=1\nSSH_CLIENT='172.26.80.1 64952 22'\nSSH_CONNECTION='172.26.80.1 64952 172.26.95.101 22'\nSSH_TTY=/dev/pts/2\nTERM=vt100\nUID=1000\nUSER=ygb\nXDG_RUNTIME_DIR=/run/user/1000\nXDG_SESSION_CLASS=user\nXDG_SESSION_ID=39\nXDG_SESSION_TYPE=tty\n_=/home/ygb",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-036",
+    "category": "error_handling",
+    "mode": "monolithic",
+    "query": "check if port 22 is open on localhost",
+    "status": "FAILED (Execution)",
+    "plan_correct": false,
+    "execution_success": false,
+    "execution_time_s": 120.81,
+    "commands_generated": 5,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "nc -z localhost 22"
+        },
+        {
+          "step": 2,
+          "command": "telnet localhost 22"
+        },
+        {
+          "step": 3,
+          "command": "netstat -tlnp | grep 22"
+        },
+        {
+          "step": 4,
+          "command": "ss -tlnp | grep 22"
+        },
+        {
+          "step": 5,
+          "command": "nmap -p 22 localhost"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "nc -z localhost 22",
+        "status": "SUCCESS",
+        "stdout": "Connection to localhost (127.0.0.1) 22 port [tcp/ssh] succeeded!",
+        "stderr": ""
+      },
+      {
+        "step": 2,
+        "command": "telnet localhost 22",
+        "status": "SUCCESS",
+        "stdout": "Trying 127.0.0.1...\nConnected to localhost.\nEscape character is '^]'.\nSSH-2.0-OpenSSH_9.6p1 Ubuntu-3ubuntu13.15\nConnection closed by foreign host.",
+        "stderr": ""
+      },
+      {
+        "step": 3,
+        "command": "netstat -tlnp | grep 22",
+        "status": "FAILED",
+        "stdout": "bash: line 1: netstat: command not found",
+        "stderr": ""
+      }
+    ]
+  },
+  {
+    "test_id": "FT-037",
+    "category": "error_handling",
+    "mode": "monolithic",
+    "query": "what is the current kernel version of this system?",
+    "status": "PASSED",
+    "plan_correct": true,
+    "execution_success": true,
+    "execution_time_s": 0.87,
+    "commands_generated": 1,
+    "policy_violation": false,
+    "blocked_by_policy": false,
+    "plan": {
+      "env": {},
+      "plan": [
+        {
+          "step": 1,
+          "command": "uname -r"
+        }
+      ]
+    },
+    "execution_history": [
+      {
+        "step": 1,
+        "command": "uname -r",
+        "status": "SUCCESS",
+        "stdout": "6.6.87.2-microsoft-standard-WSL2",
+        "stderr": ""
+      }
+    ]
+  }
+]

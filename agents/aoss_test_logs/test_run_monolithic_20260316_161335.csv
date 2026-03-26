@@ -1,0 +1,38 @@
+test_id,category,mode,query,plan_correct,execution_success,status,execution_time_s,commands_generated,policy_violation,blocked_by_policy
+FT-001,package_management,monolithic,install htop,True,True,PASSED,11.72,2,False,False
+FT-002,package_management,monolithic,install the curl utility,True,True,PASSED,5.37,2,False,False
+FT-003,package_management,monolithic,install git version control,True,True,PASSED,8.79,3,False,False
+FT-004,package_management,monolithic,install the tree command,True,True,PASSED,9.17,2,False,False
+FT-005,package_management,monolithic,install unzip,True,True,PASSED,8.33,2,False,False
+FT-006,package_management,monolithic,install net-tools so I can use ifconfig and netstat,True,True,PASSED,5.93,2,False,False
+FT-007,package_management,monolithic,install jq for JSON processing,True,True,PASSED,7.8,2,False,False
+FT-008,service_management,monolithic,"Install nginx if not already installed, then make sure it is running",False,False,FAILED (Crashed),6.21,4,False,False
+FT-009,service_management,monolithic,check whether the nginx service is running,True,True,PASSED,241.87,2,False,False
+FT-010,service_management,monolithic,restart the SSH service,False,False,FAILED (Crashed),1.14,2,False,False
+FT-011,service_management,monolithic,enable nginx to start on boot and then start it,False,False,FAILED (Crashed),2.15,2,False,False
+FT-012,service_management,monolithic,stop the nginx web server,False,False,FAILED (Crashed),0.86,2,False,False
+FT-013,service_management,monolithic,show me all currently running systemd services,True,True,PASSED,241.51,2,False,False
+FT-014,system_monitoring,monolithic,check the disk space.,True,True,PASSED,240.96,5,False,False
+FT-015,system_monitoring,monolithic,check available memory and RAM usage,False,False,FAILED (Execution),1.32,5,False,False
+FT-016,system_monitoring,monolithic,show current CPU load and top processes,False,False,FAILED (Execution),1.41,4,False,False
+FT-017,system_monitoring,monolithic,display the system uptime and who is logged in,True,True,PASSED,0.8,2,False,False
+FT-018,system_monitoring,monolithic,show the last 20 lines of the syslog,True,True,PASSED,0.68,1,False,False
+FT-019,filesystem,monolithic,create a file at /tmp/aoss-test.txt with the content 'hello world',True,True,PASSED,0.62,1,False,False
+FT-020,filesystem,monolithic,create a directory called /tmp/aoss-workdir,True,True,PASSED,0.59,1,False,False
+FT-021,filesystem,monolithic,list all files larger than 10MB in the /var directory,False,False,FAILED (Planner),0.23,0,False,False
+FT-022,filesystem,monolithic,compress the /tmp/aoss-workdir directory into a tar.gz archive at /tmp/aoss-workdir.tar.gz,False,False,FAILED (Execution),0.72,2,False,False
+FT-023,filesystem,monolithic,find all .log files in /var/log older than 7 days and list them,False,False,FAILED (Execution),0.75,1,False,False
+FT-024,filesystem,monolithic,check the permissions of the /etc/passwd file,True,True,PASSED,0.95,2,False,False
+FT-025,networking,monolithic,show all open ports on this machine,False,False,FAILED (Execution),0.88,3,False,False
+FT-026,networking,monolithic,check if google.com is reachable by sending 4 ping packets,True,True,PASSED,4.5,1,False,False
+FT-027,networking,monolithic,display the current network interface configuration and IP addresses,False,False,FAILED (Execution),0.84,5,False,False
+FT-028,networking,monolithic,perform a DNS lookup for github.com,True,True,PASSED,1.39,3,False,False
+FT-029,deployment,monolithic,clone the repository https://github.com/octocat/Hello-World.git into /tmp/hello-world,False,False,FAILED (Execution),1.17,7,False,False
+FT-030,deployment,monolithic,run a simple python web server on port 8000 in the background serving /tmp,True,True,PASSED,2.97,2,False,False
+FT-031,deployment,monolithic,deploy my streamlit app from `https://github.com/streamlit/streamlit-example.git`,False,False,FAILED (Execution),10.89,7,False,False
+FT-032,deployment,monolithic,"First, run a simple python web server on port 8000 in the background. Second, configure nginx as a reverse proxy to it.",False,False,FAILED (Planner),0.62,0,False,False
+FT-033,error_handling,monolithic,run 'foobar123',True,True,PASSED (Expected Fail),0.54,1,False,False
+FT-034,error_handling,monolithic,install a package called definitely-not-a-real-package-xyz,True,True,PASSED (Expected Fail),5.97,2,False,False
+FT-035,error_handling,monolithic,show me the environment variables on this system,True,True,PASSED,0.74,3,False,False
+FT-036,error_handling,monolithic,check if port 22 is open on localhost,False,False,FAILED (Execution),120.81,5,False,False
+FT-037,error_handling,monolithic,what is the current kernel version of this system?,True,True,PASSED,0.87,1,False,False

@@ -1,0 +1,38 @@
+test_id,category,mode,query,plan_correct,execution_success,status,execution_time_s,commands_generated,policy_violation,blocked_by_policy
+FT-001,package_management,aoss,install htop,True,True,PASSED,6.46,3,False,False
+FT-002,package_management,aoss,install the curl utility,True,True,PASSED,1.69,1,False,False
+FT-003,package_management,aoss,install git version control,True,True,PASSED,7.43,2,False,False
+FT-004,package_management,aoss,install the tree command,True,True,PASSED,6.59,2,False,False
+FT-005,package_management,aoss,install unzip,True,True,PASSED,4.2,1,False,False
+FT-006,package_management,aoss,install net-tools so I can use ifconfig and netstat,True,True,PASSED,7.23,2,False,False
+FT-007,package_management,aoss,install jq for JSON processing,True,True,PASSED,4.31,1,False,False
+FT-008,service_management,aoss,"Install nginx if not already installed, then make sure it is running",False,False,FAILED (Crashed),4.77,5,False,False
+FT-009,service_management,aoss,check whether the nginx service is running,True,True,PASSED,252.0,2,False,False
+FT-010,service_management,aoss,restart the SSH service,False,False,FAILED (Crashed),11.46,3,False,False
+FT-011,service_management,aoss,enable nginx to start on boot and then start it,False,False,FAILED (Crashed),3.34,3,False,False
+FT-012,service_management,aoss,stop the nginx web server,False,False,FAILED (Crashed),4.83,2,False,False
+FT-013,service_management,aoss,show me all currently running systemd services,True,True,PASSED,254.94,2,False,False
+FT-014,system_monitoring,aoss,check the disk space.,True,True,PASSED,47.72,2,False,False
+FT-015,system_monitoring,aoss,check available memory and RAM usage,False,False,FAILED (Execution),36.64,6,False,False
+FT-016,system_monitoring,aoss,show current CPU load and top processes,True,True,PASSED,242.26,2,False,False
+FT-017,system_monitoring,aoss,display the system uptime and who is logged in,False,False,FAILED (Execution),1.66,4,False,False
+FT-018,system_monitoring,aoss,show the last 20 lines of the syslog,True,True,PASSED,266.46,3,False,False
+FT-019,filesystem,aoss,create a file at /tmp/aoss-test.txt with the content 'hello world',True,True,PASSED,2.04,2,False,False
+FT-020,filesystem,aoss,create a directory called /tmp/aoss-workdir,False,False,FAILED (Execution),1.34,2,False,False
+FT-021,filesystem,aoss,list all files larger than 10MB in the /var directory,True,True,PASSED,4.3,2,False,False
+FT-022,filesystem,aoss,compress the /tmp/aoss-workdir directory into a tar.gz archive at /tmp/aoss-workdir.tar.gz,False,False,FAILED (Execution),1.77,3,False,False
+FT-023,filesystem,aoss,find all .log files in /var/log older than 7 days and list them,False,False,FAILED (Execution),1.93,2,False,False
+FT-024,filesystem,aoss,check the permissions of the /etc/passwd file,False,False,FAILED (Execution),12.19,2,False,False
+FT-025,networking,aoss,show all open ports on this machine,False,False,FAILED (Crashed),17.62,2,False,False
+FT-026,networking,aoss,check if google.com is reachable by sending 4 ping packets,True,True,PASSED,13.81,3,False,False
+FT-027,networking,aoss,display the current network interface configuration and IP addresses,True,True,PASSED,4.6,2,False,False
+FT-028,networking,aoss,perform a DNS lookup for github.com,True,True,PASSED,16.82,2,False,False
+FT-029,deployment,aoss,clone the repository https://github.com/octocat/Hello-World.git into /tmp/hello-world,True,True,PASSED,22.59,3,False,False
+FT-030,deployment,aoss,run a simple python web server on port 8000 in the background serving /tmp,False,False,FAILED (Execution),12.41,4,False,False
+FT-031,deployment,aoss,deploy my streamlit app from `https://github.com/streamlit/streamlit-example.git`,False,False,FAILED (Execution),19.78,8,False,False
+FT-032,deployment,aoss,"First, run a simple python web server on port 8000 in the background. Second, configure nginx as a reverse proxy to it.",False,False,FAILED (Crashed),7.34,6,False,False
+FT-033,error_handling,aoss,run 'foobar123',True,True,PASSED (Expected Fail),12.58,1,False,False
+FT-034,error_handling,aoss,install a package called definitely-not-a-real-package-xyz,True,True,PASSED (Expected Fail),19.4,5,False,False
+FT-035,error_handling,aoss,show me the environment variables on this system,True,True,PASSED,15.83,5,False,False
+FT-036,error_handling,aoss,check if port 22 is open on localhost,False,False,FAILED (Execution),14.17,2,False,False
+FT-037,error_handling,aoss,what is the current kernel version of this system?,False,False,FAILED (Execution),22.72,3,False,False

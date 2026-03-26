@@ -27,27 +27,44 @@ class RemoteExecutor:
             
         self.client.connect(**connect_kwargs)
 
-    def execute_step(self, command):
+    def execute_step(self, command, timeout=30):
         if not self.client:
             raise Exception("Client not connected")
 
-        # use get_pty=True to handle sudo if needed (though we rely on valid sudoers usually)
-        # and to capture combined output better
-        stdin, stdout, stderr = self.client.exec_command(command, get_pty=True)
-        
-        # Determine success roughly by exit status
-        exit_status = stdout.channel.recv_exit_status()
-        
-        out_str = stdout.read().decode('utf-8', errors='replace')
-        err_str = stderr.read().decode('utf-8', errors='replace')
-        
-        return {
-            "command": command,
-            "exit_code": exit_status,
-            "stdout": out_str,
-            "stderr": err_str,
-            "status": "Success" if exit_status == 0 else "Failed"
-        }
+        MAX_OUTPUT = 180  # Truncate output to prevent memory bloat
+
+        try:
+            stdin, stdout, stderr = self.client.exec_command(command, get_pty=True, timeout=timeout)
+            
+            # Set channel timeout so reads don't block forever
+            stdout.channel.settimeout(timeout)
+            
+            exit_status = stdout.channel.recv_exit_status()
+            
+            out_str = stdout.read().decode('utf-8', errors='replace')
+            err_str = stderr.read().decode('utf-8', errors='replace')
+            
+            # Truncate if too large
+            if len(out_str) > MAX_OUTPUT:
+                out_str = out_str[:MAX_OUTPUT] + "\n... (output truncated)"
+            if len(err_str) > MAX_OUTPUT:
+                err_str = err_str[:MAX_OUTPUT] + "\n... (output truncated)"
+            
+            return {
+                "command": command,
+                "exit_code": exit_status,
+                "stdout": out_str,
+                "stderr": err_str,
+                "status": "Success" if exit_status == 0 else "Failed"
+            }
+        except Exception as e:
+            return {
+                "command": command,
+                "exit_code": 1,
+                "stdout": "",
+                "stderr": f"Command timed out or failed: {str(e)}",
+                "status": "Failed"
+            }
 
     def close(self):
         if self.client:

@@ -66,7 +66,7 @@ class PlannerAgent:
         {query}
         """
 
-    def generate_plan(self, query: str, model: str = "llama-3.3-70b-versatile", agent_type: str = "general", server_context: dict = {}):
+    def generate_plan(self, query: str, model: str = "openai/gpt-oss-120b", agent_type: str = "general", server_context: dict = {}):
         try:
             print(f"Planning | Model: {model} | Agent: {agent_type}")
             

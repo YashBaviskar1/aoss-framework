@@ -361,68 +361,63 @@ def execute_plan_stream(request: schemas.ExecuteRequest, db: Session = Depends(g
         # 4. Generate Summary & UPDATE KNOWLEDGE BASE
         agent_summary = None
         if results:
+            # Notify: Summarizing (so frontend shows progress instead of appearing stuck)
+            yield json.dumps({"type": "summarizing"}) + "\n"
+            
+            # A. Summary — wrap individually so one failure doesn't kill everything
             try:
-                # Notify: Summarizing
-                yield json.dumps({"type": "summarizing"}) + "\n"
-                
-                # A. Summary
                 agent_summary = planner.summarize_execution(
                     query=request.query,
                     results=results,
                     model="llama-3.3-70b-versatile"
                 )
-                
-                # B. Update Knowledge Base (The Memory)
+            except Exception as e:
+                print(f"Summarization failed: {e}")
+                agent_summary = "Summary generation failed."
+            
+            # Notify: Summary Ready (send immediately so UI updates)
+            yield json.dumps({
+                "type": "agent_summary",
+                "content": agent_summary
+            }) + "\n"
+            
+            # B. Update Knowledge Base — non-critical, don't block stream
+            try:
                 current_metadata = server.server_metadata or {}
                 new_metadata = planner.update_knowledge_base(
                     current_context=current_metadata,
                     execution_logs=results,
                     model="llama-3.3-70b-versatile"
                 )
-                
-                # We need a new session context to update DB safely inside generator? 
-                # Actually, the 'server' object is attached to 'db' session passed in Depends(get_db).
-                # But 'yield' suspends execution. AnyIO/FastAPI threading might be tricky with db session lifespan.
-                # However, usually the request session is open until response closes.
-                # We should use a fresh session or careful handling. 
-                # For simplicity here, we assume the session is valid or re-query if needed.
-                # Re-querying is safer to avoid detached instance issues.
-                
-                # Use a separate temporary DB session for the update to avoid conflicts with streaming response transaction
-                # (FastAPI Depends(get_db) usually closes after yield... wait, StreamingResponse works differently)
-                # We will try using the existing 'db' session. If it fails, we handle it.
-                
                 server.server_metadata = new_metadata
                 db.add(server)
-                db.commit() # Commit the new state
-
-                # Notify: Summary Ready
-                yield json.dumps({
-                    "type": "agent_summary",
-                    "content": agent_summary
-                }) + "\n"
-
+                db.commit()
             except Exception as e:
-                print(f"Post-execution processing failed: {e}")
+                print(f"Knowledge base update failed: {e}")
 
         # 5. Save Logs
-        new_log = models.ExecutionLog(
-            user_id=server.user_id,
-            server_id=server.id,
-            query=request.query,
-            plan=[step.model_dump() for step in request.plan],
-            execution_results=results,
-            agent_summary=agent_summary,
-            status=final_status
-        )
-        db.add(new_log)
-        db.commit()
-        db.refresh(new_log)
+        try:
+            new_log = models.ExecutionLog(
+                user_id=server.user_id,
+                server_id=server.id,
+                query=request.query,
+                plan=[step.model_dump() for step in request.plan],
+                execution_results=results,
+                agent_summary=agent_summary,
+                status=final_status
+            )
+            db.add(new_log)
+            db.commit()
+            db.refresh(new_log)
+            log_id = str(new_log.id)
+        except Exception as e:
+            print(f"Log save failed: {e}")
+            log_id = "error"
 
         # Final Event
         yield json.dumps({
             "type": "complete",
-            "log_id": str(new_log.id),
+            "log_id": log_id,
             "final_status": final_status
         }) + "\n"
 

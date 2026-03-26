@@ -71,6 +71,7 @@ export default function ChatOrchestrator() {
     ];
 
     const MODELS = [
+        { id: 'openai/gpt-oss-120b', name: 'GPT-OSS (120B)' },
         { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 (70B)' },
         { id: 'llama3-70b-8192', name: 'Llama 3 (70B)' },
         { id: 'mixtral-8x7b-32768', name: 'Mixtral 8x7B' },
